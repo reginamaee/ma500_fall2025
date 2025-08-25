@@ -1,0 +1,336 @@
+# R Basics & Fundamentals {.unnumbered}
+
+## R Markdown {.unnumbered}
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+Important commands when using RMarkdown: Use the `/` to quick insert markdown elements: R code chunk, Heading/Format Options, etc.
+
+In-line code notation: \` \<- symbol with \~ on keyboard?
+
+## Let's move onto R Basics!
+
+## Comments
+
+It is recommended to always comment/annotate your code to make concepts clear. In R, we use the `#` symbol to indicate a comment.
+
+```{r class.output="bg-warning"}
+# this is a comment 
+
+#' 
+#' this is a multi-line comment
+#' 
+```
+
+## Using R as a calculator
+
+```{r calculator}
+# in either a script or the console, you can use it to solve basic arithmentic
+1 / 200 * 30
+sin(pi/2)
+```
+
+## R Packages
+
+The `base` installation of R consists of many in-house `functions` and `commands`, but more specialized techniques would require the installation of packages. A few packages that you should have for this course and I would recommend downloading are:
+
+-   `ggplot2`
+
+-   `MASS`
+
+-   `stats`
+
+-   `tidyverse`/`dplyr`
+
+*Note:* If you are using a mac, some development packages would require you to install `XQuartz` or `XCode`. If issues come up with installing a package or getting a package to work, please let me know so I can help you out!
+
+Find more packages here: <https://cran.r-project.org/>
+
+```{r installing_packages, eval=FALSE}
+# how to install packages
+install.packages("MASS")
+```
+
+```{r source_package}
+# calling the package after installation
+library("MASS")
+```
+
+```{r update_package, eval=FALSE}
+# updating packages/all packages
+update.packages()
+```
+
+## Directories
+
+When you run RStudio, your session is typically associated with a *working directory.* This is the default location where your files are imported or saved.
+
+```{r}
+# check your working directory with this function
+getwd()
+```
+
+```{r, eval=FALSE}
+setwd("/insertFilePathHere")
+```
+
+## Variables
+
+You can save and create new objects to store your results by using `<-` (as opposed to the conventional `=` which is used with `named function assignments`.)
+
+```{r storing_object, class.output="bg-warning"}
+
+# store the result of 4*3 into x
+
+x <- 4 * 3
+
+# print x (assignment alone does not print output)
+print(x)
+```
+
+Note: R is a *dynamic language*, so the types and values can easily be changed. (type checks are done during run-time)
+
+```{r change_type}
+# x is now a of type character
+x <- "statistics"
+```
+
+## R data types
+
+A **data type** describes the kind of values a variable can hold and how R will interpret and use those values in calculations, comparisons, and functions. Choosing/creating the right data type is important because it affects how R stores information and what operations you can perform.
+
+R data types include:
+
+-   **`numeric`**:
+
+    -   `double` values with decimals
+
+    -   `int` whole numbers
+
+-   **`character`** – text or strings (`"Hello"`)
+
+-   **`logical`** – TRUE/FALSE values
+
+-   **`factor`** – categorical data (`"A"`, `"B"`)
+
+Use the `class()` function to determine what data type your variable is:
+
+```{r check_class}
+class(2L)
+class(2)
+```
+
+## Data Vectors
+
+An **R data vector** is a collection of observations or measurements concerning a single variable **of the same data type** (all numeric, all character, all logical, etc.). The `c()` function takes individual values and *combines them into a single vector*.
+
+::: callout-example
+### Example 
+
+In 2021, the average temperature in Guam for each month was 80.7, 81.4, 81.5, 82.6, 82.6, 83.7, 83.4, 81.8, 82.5, 81.4, 82.0, and 81.0. Store these values in a vector named `temp`.
+
+*Solution:*
+
+```{r storing_vector}
+temp <- c(80.7, 81.4, 81.5, 82.6, 82.6, 83.7, 83.4, 81.8, 82.5, 81.4, 82.0, 81.0)
+
+```
+:::
+
+```{r length_vector}
+# returns the length of temp 
+length(temp)
+```
+
+```{r sum_vector}
+# we can perform these function because all values in temp is a numeric value
+sum(temp)
+```
+
+```{r avg_vector}
+mean(temp)
+```
+
+In the case you have a `NA` in your vector, `sum()` and `mean()` will return `NA`. To bypass that, you need to include the argument: `na.rm = TRUE`.
+
+### Attributes
+
+Vectors can be assigned **attributes** or **names.**
+
+```{r assigning_vect_names}
+months <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "July",
+    "Aug", "Sep", "Oct", "Nov", "Dec")
+
+names(temp) <- months
+print(temp)
+```
+
+### Indexing
+
+You can call a specific value in the `temp` vector by referencing its respective name.
+
+```{r indexing_name}
+# get the average temperature in May
+temp["May"]
+```
+
+OR, you can index the vector by referencing its numeric index value.
+
+```{r indexing_val}
+
+# grabs the first value
+temp[1]
+
+# grab the first 4 values
+temp[1:4]
+```
+
+### Operators
+
+**Operators** are symbols that tell R what kind of computation to perform on values or variables. They are the building blocks for calculations, comparisons, and logical expressions.
+
+#### Comparison:
+
+-   `>` greater than
+-   `<` less than
+-   `<=` less than or equal to
+-   `>=` greater than or equal to
+-   `==` equal to
+-   `!=` not equal to
+
+```         
+Example: 
+
+What months have an higher average temperature than August?
+```
+
+```{r compare_operator}
+temp[temp > temp["Aug"]]
+```
+
+Let's break the line of code down:
+
+-   `temp['Aug']` : refers to the temperature in August.
+
+-   `temp > temp['Aug']` : checks all values of the `temp` vector to check if this statement is true
+
+-   `temp[temp > temp['Aug']]`: returns only the months & values where the second bullet is true.
+
+#### Logical
+
+-   `&` AND
+-   `|` OR
+-   `!` NOT
+
+```         
+Example: 
+
+What FALL months have an higher average temperature than August?
+```
+
+```{r or_operator_example}
+
+# let's define a vector that contains the fall months 
+
+fall <- c("Sep", "Oct", "Nov")
+temp[temp > temp["Aug"] | names(temp) %in% fall]
+```
+
+-   `names(temp)` : calls the attributes of the `temp` vector
+
+-   `%in%` : a special operator that checks if elements exist in a vector
+
+-   `names(temp) %in% fall` : checks which attributes are in the `fall` vector
+
+```         
+What month had the highest average temperature?
+```
+
+```{r equal_operator}
+temp[temp == max(temp)]
+```
+
+OR if we want just the name of the month, we can index the value from the names attribute
+
+```{r}
+names(temp)[temp == max(temp)]
+```
+
+```         
+What is the average temperature in the summer months?
+```
+
+```{r}
+temp[c("Jun", "July", "Aug")]
+
+summer_months <- c("Jun", "July", "Aug")
+summer_temps <- temp[summer_months]
+
+average_summer <- mean(summer_temps)
+print(average_summer)
+```
+
+## Vector Operations
+
+With vectors, you can utilize element-wise basic arithmetic.
+
+For example, if we want to add 2 degrees to every temperature in the `temp` data vector, then we can define that as:
+
+```{r add_vector}
+temp <- temp + 2
+```
+
+```         
+Example: 
+
+Convert all temperatures from Fahrenheit to Celcius.
+```
+
+We are going to apply this formula:
+
+$$
+C = \frac{5}{9}*(t - 32)
+$$
+
+to all values in our `temp` vector.
+
+```{r convert_vector}
+temp_celcius <- (5/9) * (temp - 32)
+```
+
+```{r}
+print(temp_celcius)
+mean(temp_celcius)
+```
+
+All attributes are retained and all values are converted.
+
+## Sequences and Repetition
+
+`R` has in-house functions that allow you to create a sequence of values (or repeat).
+
+We will be using `seq` and `rep`, and you can read up for help on the documentation by using ?function in R. This pulls up the documentation and example usage
+
+## Sequence
+
+Without a function, the easiest way to create a sequence with intervals of 1 is using the colon operator
+
+```{r}
+print(1:10)
+```
+
+For more flexible sequences, we can use the `seq` function:
+
+```         
+Example: 
+
+Create a list of every 3rd value from 1 to 20
+```
+
+```{r}
+seq(from = 1, to = 20, by = 3)
+```
+
+Note: This will *always* include the `from` value, but NOT the `to` value. This is dependent on the `by` number.

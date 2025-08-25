@@ -1,0 +1,9 @@
+# R/RStudio Installation Guide {.unnumbered}
+
+## Installing R {.unnumbered}
+
+To install R, begin by visiting the Comprehensive R Archive Network (CRAN) here: <https://cran.r-project.org/.> Select and download the appropriate R binary package for your operating system— whether Windows, macOS, or Linux. For Mac users, please be sure that you install the correct package binary associated with your processor (e.g., Intel or Apple Silicon).
+
+## Installing RStudio {.unnumbered}
+
+RStudio is the most widely used integrated development environment (IDE) for R programming. You can download the free version here: <https://posit.co/downloads/.> Whie you have the option to use alternative IDEs, such as VS Code with the Rtools extention or the base R GUI, it is recommended to use RStudio as the course material will primarily be demonstrated using this IDE. This will ensure you can easily follow along with the course content!

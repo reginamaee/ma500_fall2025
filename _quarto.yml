@@ -1,0 +1,26 @@
+project:
+  type: book
+
+book:
+  title: "MA500: Introduction to R"
+  chapters:
+    - index.qmd
+    - 01_install.qmd
+    - 03_Basics.qmd
+
+
+bibliography: references.bib
+
+format:
+  html:
+    theme:
+      - minty
+    css: styles.css
+    highlight-style: tango
+    code-fold: show
+    code-summary: "hide code"
+  pdf:
+    documentclass: scrreprt
+
+editor: visual
+

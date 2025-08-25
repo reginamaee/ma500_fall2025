@@ -1,0 +1,162 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "MA500: Introduction to R",
+    "section": "",
+    "text": "MA-500: Introduction to R\nFANUCHÅNAN 2025: 8/20/2025 - 10/11/2025\nInstructor Information\nRegina-Mae Dominguez | dominguezr@triton.uog.edu\nOffice Hours & Location: Online by Appointments",
+    "crumbs": [
+      "MA-500: Introduction to R"
+    ]
+  },
+  {
+    "objectID": "index.html#course-introduction",
+    "href": "index.html#course-introduction",
+    "title": "MA500: Introduction to R",
+    "section": "Course Introduction",
+    "text": "Course Introduction\nThis markdown site will include notes, guides, and resources, while Moodle will be the central hub for the course as well as the platform for uploading and submitting homework assignments. As the course progresses, this site will be regularly updated to ensure it’s helpful, easy to navigate, and accessible whenever you need a reference. While this resource is designed to be useful, I strongly encourage you to take your own notes for a more personalized and detailed study guide.",
+    "crumbs": [
+      "MA-500: Introduction to R"
+    ]
+  },
+  {
+    "objectID": "01_install.html",
+    "href": "01_install.html",
+    "title": "R/RStudio Installation Guide",
+    "section": "",
+    "text": "Installing R\nTo install R, begin by visiting the Comprehensive R Archive Network (CRAN) here: https://cran.r-project.org/. Select and download the appropriate R binary package for your operating system— whether Windows, macOS, or Linux. For Mac users, please be sure that you install the correct package binary associated with your processor (e.g., Intel or Apple Silicon).",
+    "crumbs": [
+      "R/RStudio Installation Guide"
+    ]
+  },
+  {
+    "objectID": "01_install.html#installing-rstudio",
+    "href": "01_install.html#installing-rstudio",
+    "title": "R/RStudio Installation Guide",
+    "section": "Installing RStudio",
+    "text": "Installing RStudio\nRStudio is the most widely used integrated development environment (IDE) for R programming. You can download the free version here: https://posit.co/downloads/. Whie you have the option to use alternative IDEs, such as VS Code with the Rtools extention or the base R GUI, it is recommended to use RStudio as the course material will primarily be demonstrated using this IDE. This will ensure you can easily follow along with the course content!",
+    "crumbs": [
+      "R/RStudio Installation Guide"
+    ]
+  },
+  {
+    "objectID": "03_Basics.html",
+    "href": "03_Basics.html",
+    "title": "R Basics & Fundamentals",
+    "section": "",
+    "text": "R Markdown\nThis is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.\nWhen you click the Knit button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:\nImportant commands when using RMarkdown: Use the / to quick insert markdown elements: R code chunk, Heading/Format Options, etc.\nIn-line code notation: ` &lt;- symbol with ~ on keyboard?",
+    "crumbs": [
+      "R Basics & Fundamentals"
+    ]
+  },
+  {
+    "objectID": "03_Basics.html#lets-move-onto-r-basics",
+    "href": "03_Basics.html#lets-move-onto-r-basics",
+    "title": "R Basics & Fundamentals",
+    "section": "Let’s move onto R Basics!",
+    "text": "Let’s move onto R Basics!",
+    "crumbs": [
+      "R Basics & Fundamentals"
+    ]
+  },
+  {
+    "objectID": "03_Basics.html#comments",
+    "href": "03_Basics.html#comments",
+    "title": "R Basics & Fundamentals",
+    "section": "Comments",
+    "text": "Comments\nIt is recommended to always comment/annotate your code to make concepts clear. In R, we use the # symbol to indicate a comment.\n\n\nhide code\n# this is a comment \n\n#' \n#' this is a multi-line comment\n#'",
+    "crumbs": [
+      "R Basics & Fundamentals"
+    ]
+  },
+  {
+    "objectID": "03_Basics.html#using-r-as-a-calculator",
+    "href": "03_Basics.html#using-r-as-a-calculator",
+    "title": "R Basics & Fundamentals",
+    "section": "Using R as a calculator",
+    "text": "Using R as a calculator\n\n\nhide code\n# in either a script or the console, you can use it to solve basic arithmentic\n1 / 200 * 30\n\n\n[1] 0.15\n\n\nhide code\nsin(pi/2)\n\n\n[1] 1",
+    "crumbs": [
+      "R Basics & Fundamentals"
+    ]
+  },
+  {
+    "objectID": "03_Basics.html#r-packages",
+    "href": "03_Basics.html#r-packages",
+    "title": "R Basics & Fundamentals",
+    "section": "R Packages",
+    "text": "R Packages\nThe base installation of R consists of many in-house functions and commands, but more specialized techniques would require the installation of packages. A few packages that you should have for this course and I would recommend downloading are:\n\nggplot2\nMASS\nstats\ntidyverse/dplyr\n\nNote: If you are using a mac, some development packages would require you to install XQuartz or XCode. If issues come up with installing a package or getting a package to work, please let me know so I can help you out!\nFind more packages here: https://cran.r-project.org/\n\n\nhide code\n# how to install packages\ninstall.packages(\"MASS\")\n\n\n\n\nhide code\n# calling the package after installation\nlibrary(\"MASS\")\n\n\n\n\nhide code\n# updating packages/all packages\nupdate.packages()",
+    "crumbs": [
+      "R Basics & Fundamentals"
+    ]
+  },
+  {
+    "objectID": "03_Basics.html#directories",
+    "href": "03_Basics.html#directories",
+    "title": "R Basics & Fundamentals",
+    "section": "Directories",
+    "text": "Directories\nWhen you run RStudio, your session is typically associated with a working directory. This is the default location where your files are imported or saved.\n\n\nhide code\n# check your working directory with this function\ngetwd()\n\n\n[1] \"/Users/rdominguez/ma500_fa25_q\"\n\n\n\n\nhide code\nsetwd(\"/insertFilePathHere\")",
+    "crumbs": [
+      "R Basics & Fundamentals"
+    ]
+  },
+  {
+    "objectID": "03_Basics.html#variables",
+    "href": "03_Basics.html#variables",
+    "title": "R Basics & Fundamentals",
+    "section": "Variables",
+    "text": "Variables\nYou can save and create new objects to store your results by using &lt;- (as opposed to the conventional = which is used with named function assignments.)\n\n\nhide code\n# store the result of 4*3 into x\n\nx &lt;- 4 * 3\n\n# print x (assignment alone does not print output)\nprint(x)\n\n\n[1] 12\n\n\nNote: R is a dynamic language, so the types and values can easily be changed. (type checks are done during run-time)\n\n\nhide code\n# x is now a of type character\nx &lt;- \"statistics\"",
+    "crumbs": [
+      "R Basics & Fundamentals"
+    ]
+  },
+  {
+    "objectID": "03_Basics.html#r-data-types",
+    "href": "03_Basics.html#r-data-types",
+    "title": "R Basics & Fundamentals",
+    "section": "R data types",
+    "text": "R data types\nA data type describes the kind of values a variable can hold and how R will interpret and use those values in calculations, comparisons, and functions. Choosing/creating the right data type is important because it affects how R stores information and what operations you can perform.\nR data types include:\n\nnumeric:\n\ndouble values with decimals\nint whole numbers\n\ncharacter – text or strings (\"Hello\")\nlogical – TRUE/FALSE values\nfactor – categorical data (\"A\", \"B\")\n\nUse the class() function to determine what data type your variable is:\n\n\nhide code\nclass(2L)\n\n\n[1] \"integer\"\n\n\nhide code\nclass(2)\n\n\n[1] \"numeric\"",
+    "crumbs": [
+      "R Basics & Fundamentals"
+    ]
+  },
+  {
+    "objectID": "03_Basics.html#data-vectors",
+    "href": "03_Basics.html#data-vectors",
+    "title": "R Basics & Fundamentals",
+    "section": "Data Vectors",
+    "text": "Data Vectors\nAn R data vector is a collection of observations or measurements concerning a single variable of the same data type (all numeric, all character, all logical, etc.). The c() function takes individual values and combines them into a single vector.\n\nExample\nIn 2021, the average temperature in Guam for each month was 80.7, 81.4, 81.5, 82.6, 82.6, 83.7, 83.4, 81.8, 82.5, 81.4, 82.0, and 81.0. Store these values in a vector named temp.\n\n\nhide code\ntemp &lt;- c(80.7, 81.4, 81.5, 82.6, 82.6, 83.7, 83.4, 81.8, 82.5, 81.4, 82.0, 81.0)\n\n\n\n\n\nhide code\n# returns the length of temp \nlength(temp)\n\n\n[1] 12\n\n\n\n\nhide code\n# we can perform these function because all values in temp is a numeric value\nsum(temp)\n\n\n[1] 984.6\n\n\n\n\nhide code\nmean(temp)\n\n\n[1] 82.05\n\n\nIn the case you have a NA in your vector, sum() and mean() will return NA. To bypass that, you need to include the argument: na.rm = TRUE.\n\nAttributes\nVectors can be assigned attributes or names.\n\n\nhide code\nmonths &lt;- c(\"Jan\", \"Feb\", \"Mar\", \"Apr\", \"May\", \"Jun\", \"July\",\n    \"Aug\", \"Sep\", \"Oct\", \"Nov\", \"Dec\")\n\nnames(temp) &lt;- months\nprint(temp)\n\n\n Jan  Feb  Mar  Apr  May  Jun July  Aug  Sep  Oct  Nov  Dec \n80.7 81.4 81.5 82.6 82.6 83.7 83.4 81.8 82.5 81.4 82.0 81.0 \n\n\n\n\nIndexing\nYou can call a specific value in the temp vector by referencing its respective name.\n\n\nhide code\n# get the average temperature in May\ntemp[\"May\"]\n\n\n May \n82.6 \n\n\nOR, you can index the vector by referencing its numeric index value.\n\n\nhide code\n# grabs the first value\ntemp[1]\n\n\n Jan \n80.7 \n\n\nhide code\n# grab the first 4 values\ntemp[1:4]\n\n\n Jan  Feb  Mar  Apr \n80.7 81.4 81.5 82.6 \n\n\n\n\nOperators\nOperators are symbols that tell R what kind of computation to perform on values or variables. They are the building blocks for calculations, comparisons, and logical expressions.\n\nComparison:\n\n&gt; greater than\n&lt; less than\n&lt;= less than or equal to\n&gt;= greater than or equal to\n== equal to\n!= not equal to\n\nExample: \n\nWhat months have an higher average temperature than August?\n\n\nhide code\ntemp[temp &gt; temp[\"Aug\"]]\n\n\n Apr  May  Jun July  Sep  Nov \n82.6 82.6 83.7 83.4 82.5 82.0 \n\n\nLet’s break the line of code down:\n\ntemp['Aug'] : refers to the temperature in August.\ntemp &gt; temp['Aug'] : checks all values of the temp vector to check if this statement is true\ntemp[temp &gt; temp['Aug']]: returns only the months & values where the second bullet is true.\n\n\n\nLogical\n\n& AND\n| OR\n! NOT\n\nExample: \n\nWhat FALL months have an higher average temperature than August?\n\n\nhide code\n# let's define a vector that contains the fall months \n\nfall &lt;- c(\"Sep\", \"Oct\", \"Nov\")\ntemp[temp &gt; temp[\"Aug\"] | names(temp) %in% fall]\n\n\n Apr  May  Jun July  Sep  Oct  Nov \n82.6 82.6 83.7 83.4 82.5 81.4 82.0 \n\n\n\nnames(temp) : calls the attributes of the temp vector\n%in% : a special operator that checks if elements exist in a vector\nnames(temp) %in% fall : checks which attributes are in the fall vector\n\nWhat month had the highest average temperature?\n\n\nhide code\ntemp[temp == max(temp)]\n\n\n Jun \n83.7 \n\n\nOR if we want just the name of the month, we can index the value from the names attribute\n\n\nhide code\nnames(temp)[temp == max(temp)]\n\n\n[1] \"Jun\"\n\n\nWhat is the average temperature in the summer months?\n\n\nhide code\ntemp[c(\"Jun\", \"July\", \"Aug\")]\n\n\n Jun July  Aug \n83.7 83.4 81.8 \n\n\nhide code\nsummer_months &lt;- c(\"Jun\", \"July\", \"Aug\")\nsummer_temps &lt;- temp[summer_months]\n\naverage_summer &lt;- mean(summer_temps)\nprint(average_summer)\n\n\n[1] 82.96667",
+    "crumbs": [
+      "R Basics & Fundamentals"
+    ]
+  },
+  {
+    "objectID": "03_Basics.html#vector-operations",
+    "href": "03_Basics.html#vector-operations",
+    "title": "R Basics & Fundamentals",
+    "section": "Vector Operations",
+    "text": "Vector Operations\nWith vectors, you can utilize element-wise basic arithmetic.\nFor example, if we want to add 2 degrees to every temperature in the temp data vector, then we can define that as:\n\n\nhide code\ntemp &lt;- temp + 2\n\n\nExample: \n\nConvert all temperatures from Fahrenheit to Celcius.\nWe are going to apply this formula:\n\\[\nC = \\frac{5}{9}*(t - 32)\n\\]\nto all values in our temp vector.\n\n\nhide code\ntemp_celcius &lt;- (5/9) * (temp - 32)\n\n\n\n\nhide code\nprint(temp_celcius)\n\n\n     Jan      Feb      Mar      Apr      May      Jun     July      Aug \n28.16667 28.55556 28.61111 29.22222 29.22222 29.83333 29.66667 28.77778 \n     Sep      Oct      Nov      Dec \n29.16667 28.55556 28.88889 28.33333 \n\n\nhide code\nmean(temp_celcius)\n\n\n[1] 28.91667\n\n\nAll attributes are retained and all values are converted.",
+    "crumbs": [
+      "R Basics & Fundamentals"
+    ]
+  },
+  {
+    "objectID": "03_Basics.html#sequences-and-repetition",
+    "href": "03_Basics.html#sequences-and-repetition",
+    "title": "R Basics & Fundamentals",
+    "section": "Sequences and Repetition",
+    "text": "Sequences and Repetition\nR has in-house functions that allow you to create a sequence of values (or repeat).\nWe will be using seq and rep, and you can read up for help on the documentation by using ?function in R. This pulls up the documentation and example usage",
+    "crumbs": [
+      "R Basics & Fundamentals"
+    ]
+  },
+  {
+    "objectID": "03_Basics.html#sequence",
+    "href": "03_Basics.html#sequence",
+    "title": "R Basics & Fundamentals",
+    "section": "Sequence",
+    "text": "Sequence\nWithout a function, the easiest way to create a sequence with intervals of 1 is using the colon operator\n\n\nhide code\nprint(1:10)\n\n\n [1]  1  2  3  4  5  6  7  8  9 10\n\n\nFor more flexible sequences, we can use the seq function:\nExample: \n\nCreate a list of every 3rd value from 1 to 20\n\n\nhide code\nseq(from = 1, to = 20, by = 3)\n\n\n[1]  1  4  7 10 13 16 19\n\n\nNote: This will always include the from value, but NOT the to value. This is dependent on the by number.",
+    "crumbs": [
+      "R Basics & Fundamentals"
+    ]
+  }
+]
