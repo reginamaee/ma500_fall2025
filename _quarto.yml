@@ -7,7 +7,6 @@ book:
   chapters:
     - index.qmd
     - 01_install.qmd
-    - 03_Basics.qmd
 
 
 bibliography: references.bib
