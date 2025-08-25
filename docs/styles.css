@@ -1,0 +1,99 @@
+:root {
+    /* Quarto/Bootstrap defaults (system UI stack) */
+    --bs-font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto,
+                          "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+                          "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+                          "Noto Color Emoji";
+    --bs-body-font-family: var(--bs-font-sans-serif);
+    --bs-headings-font-family: var(--bs-font-sans-serif);
+  }
+  
+  /* Make sure everything actually uses them */
+  html, body {
+    font-family: var(--bs-body-font-family) !important;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--bs-headings-font-family) !important;
+  }
+  
+  /* Optional: ensure nav/sidebar/toc also swap fonts */
+  .navbar, .sidebar, .sidebar nav, .toc, .navbar-brand {
+    font-family: var(--bs-body-font-family) !important;
+  }
+
+  pre code {
+    white-space: pre-wrap;   /* wrap text */
+    word-wrap: break-word;   /* break long words if needed */
+    overflow-x: hidden;      /* no horizontal scroll */
+  }
+
+  .sidebar .nav-link.active {
+    font-weight: bold !important;
+  }
+  .sidebar .nav-item.show > .nav-link {
+    font-weight: bold !important;
+  }
+
+/* Let the button sit outside the code area */
+details.code-fold {
+  position: relative;
+  margin-top: 1.5em;    /* space above the block for the button */
+  padding-top: 0;       /* no extra padding inside */
+}
+
+/* Style the button */
+details.code-fold > summary {
+  position: absolute;
+  top: -1.8em;          /* move it above the code block */
+  right: 0;
+  background: #7caa90;
+  color: #fff;
+  padding: 2px 10px;
+  border-radius: 4px;
+  border: none;
+  font-size: 0.8em;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Remove the default triangle marker */
+details.code-fold > summary::-webkit-details-marker { display: none; }
+details.code-fold > summary::marker { content: ""; }
+
+/* Hover / active */
+details.code-fold > summary:hover { background: #5e8d74; }
+details[open].code-fold > summary { background: #6ea487; }
+
+/* Keep code wrapping optional */
+details.code-fold pre code {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-x: hidden;
+}
+
+
+code:not(pre code) {
+  background: #fafafa;
+  color: #5e8d74;
+  font-weight: bold;
+  font-family: monospace;
+}
+
+
+/* Custom callout */
+.callout-example {
+  border-left: 4px solid #7caa90;      /* your primary green */
+  background: rgba(236, 250, 229, 0.5); /* soft green background */
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 6px;
+}
+
+/* Optional: custom heading inside */
+.callout-custom .callout-title,
+.callout-custom h2,
+.callout-custom h3 {
+  font-weight: bold;
+  color: #2c7a5e;
+  margin-top: 0;
+}

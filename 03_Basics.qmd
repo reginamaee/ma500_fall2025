@@ -127,7 +127,7 @@ class(2)
 An **R data vector** is a collection of observations or measurements concerning a single variable **of the same data type** (all numeric, all character, all logical, etc.). The `c()` function takes individual values and *combines them into a single vector*.
 
 ::: callout-example
-### Example 
+### Example
 
 In 2021, the average temperature in Guam for each month was 80.7, 81.4, 81.5, 82.6, 82.6, 83.7, 83.4, 81.8, 82.5, 81.4, 82.0, and 81.0. Store these values in a vector named `temp`.
 
@@ -200,15 +200,17 @@ temp[1:4]
 -   `==` equal to
 -   `!=` not equal to
 
-```         
-Example: 
+::: callout-example
+### Example:
 
-What months have an higher average temperature than August?
-```
+What months have a higher average temperature compared to August?
 
-```{r compare_operator}
-temp[temp > temp["Aug"]]
+*Solution:*
+
+```{r}
+temp[temp < temp["Aug"]]
 ```
+:::
 
 Let's break the line of code down:
 
