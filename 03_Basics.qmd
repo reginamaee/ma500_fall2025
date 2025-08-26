@@ -80,7 +80,7 @@ setwd("/insertFilePathHere")
 
 You can save and create new objects to store your results by using `<-` (as opposed to the conventional `=` which is used with `named function assignments`.)
 
-```{r storing_object, class.output="bg-warning"}
+```{r storing_object}
 
 # store the result of 4*3 into x
 
@@ -226,19 +226,20 @@ Let's break the line of code down:
 -   `|` OR
 -   `!` NOT
 
-```         
-Example: 
+::: callout-example
+### Example - using or operator:
 
-What FALL months have an higher average temperature than August?
-```
+What FALL months have a higher average temperature than August?
+
+*Solution:*
 
 ```{r or_operator_example}
-
 # let's define a vector that contains the fall months 
 
 fall <- c("Sep", "Oct", "Nov")
 temp[temp > temp["Aug"] | names(temp) %in% fall]
 ```
+:::
 
 -   `names(temp)` : calls the attributes of the `temp` vector
 
@@ -246,23 +247,30 @@ temp[temp > temp["Aug"] | names(temp) %in% fall]
 
 -   `names(temp) %in% fall` : checks which attributes are in the `fall` vector
 
-```         
-What month had the highest average temperature?
-```
+::: callout-example
+### Example - using equals operator:
 
-```{r equal_operator}
+What month had the highest average temperature?
+
+*Solution:*
+
+```{r equals_op}
 temp[temp == max(temp)]
 ```
 
-OR if we want just the name of the month, we can index the value from the names attribute
+OR if we want just the name of the month, we can index the value from the names attribute:
 
-```{r}
+```{r equals_op_two}
 names(temp)[temp == max(temp)]
 ```
+:::
 
-```         
+::: callout-example
+### Example
+
 What is the average temperature in the summer months?
-```
+
+*Solution:*
 
 ```{r}
 temp[c("Jun", "July", "Aug")]
@@ -272,7 +280,9 @@ summer_temps <- temp[summer_months]
 
 average_summer <- mean(summer_temps)
 print(average_summer)
+
 ```
+:::
 
 ## Vector Operations
 
@@ -284,11 +294,10 @@ For example, if we want to add 2 degrees to every temperature in the `temp` data
 temp <- temp + 2
 ```
 
-```         
-Example: 
+::: callout-example
+### Example - Vector Operation
 
-Convert all temperatures from Fahrenheit to Celcius.
-```
+Convert all temperatures in our `temp` vector from Fahrenheit to Celsius.
 
 We are going to apply this formula:
 
@@ -298,16 +307,20 @@ $$
 
 to all values in our `temp` vector.
 
+*Solution:*
+
 ```{r convert_vector}
 temp_celcius <- (5/9) * (temp - 32)
 ```
 
-```{r}
-print(temp_celcius)
-mean(temp_celcius)
-```
-
 All attributes are retained and all values are converted.
+:::
+
+```         
+Example: 
+
+Convert all temperatures from Fahrenheit to Celciu
+```
 
 ## Sequences and Repetition
 
@@ -315,7 +328,7 @@ All attributes are retained and all values are converted.
 
 We will be using `seq` and `rep`, and you can read up for help on the documentation by using ?function in R. This pulls up the documentation and example usage
 
-## Sequence
+### Sequence
 
 Without a function, the easiest way to create a sequence with intervals of 1 is using the colon operator
 
@@ -325,14 +338,73 @@ print(1:10)
 
 For more flexible sequences, we can use the `seq` function:
 
-```         
-Example: 
+::: callout-example
+### Example - Sequence List
 
-Create a list of every 3rd value from 1 to 20
-```
+Create a list of every 3rd value from `1` to `20`
 
-```{r}
+```{r seq}
 seq(from = 1, to = 20, by = 3)
 ```
 
 Note: This will *always* include the `from` value, but NOT the `to` value. This is dependent on the `by` number.
+:::
+
+Instead of specifying a `by` number, you can specify how many numbers you would like in between with `length.out` - this would be equally spaced.
+
+```{r}
+seq(from = 1, to = 10, length.out = 20)
+```
+
+For decreasing, set `` `by` `` to be a negative value and switch the `from` and `to` values.
+
+```{r}
+seq(from = 10, to = 1, by = -3)
+```
+
+## Random Sampling
+
+The [`sample()`](https://rdrr.io/r/base/sample.html) function takes a sample from the specified elements of `x` with or without replacement.
+
+::: callout-example
+### Example - Creating a sample 
+
+Create a random sample of `20` values ranging from `1` to `100` with replacement.
+
+```{r sample_ex}
+sample(1:100, 20, replace = T)
+```
+:::
+
+Note: running the above code again will not give you the same output:
+
+```{r}
+sample(1:100, 20, replace = T)
+```
+
+If you would like to replicate the same results every time, we have to set a seed by using the `set.seed(x)` function, where `x` is any arbitrary number.
+
+```{r}
+set.seed(415)
+sample(1:100, 20, replace = T)
+```
+
+### Repetition 
+
+To repeat values in a vector, use the `rep()` function.
+
+```{r rep_ex_1}
+# repeat 1 four times 
+rep(x = 1, times = 4)
+
+# repeat 1 to 5, 10 times
+rep(1:5, times = 10)
+
+# repeat 1, 2, 5, 7 each values twice
+rep(x = c(1, 2, 5, 7), times = 3, each = 2)
+
+# repeat each element in x by specified vector time (1
+# once, 2 four times, 5, once, and 7 twice)
+rep(x = c(1, 2, 5, 7), times = c(1, 4, 1, 2))
+
+```

@@ -1,8 +1,8 @@
 {
-  "hash": "f89d2cae73031aafc1d0dc4ae48f295e",
+  "hash": "bf1b661e08e2a7a00d30041a20e479d9",
   "result": {
     "engine": "knitr",
-    "markdown": "# Preface {.unnumbered}\n\nThis is a Quarto book.\n\nTo learn more about Quarto books visit <https://quarto.org/docs/books>.\n\n\n\n\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\n1 + 1\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n[1] 2\n```\n\n\n:::\n:::\n",
+    "markdown": "\n\n\n\n\n\n\n\n\n\\# MA-500: Introduction to R {.unnumbered}\n\nFANUCHÅNAN 2025: 8/20/2025 - 10/11/2025\n\n**Instructor Information**\n\nRegina-Mae Dominguez \\| dominguezr\\@triton.uog.edu\n\n**Office Hours & Location:** Online by Appointments\n\n## Course Introduction {.unnumbered}\n\nThis `markdown` site will include notes, guides, and resources, while Moodle will be the central hub for the course as well as the platform for uploading and submitting homework assignments. As the course progresses, this site will be regularly updated to ensure it's helpful, easy to navigate, and accessible whenever you need a reference. While this resource is designed to be useful, I ***strongly*** encourage you to take your own notes for a more personalized and detailed study guide.\n",
     "supporting": [],
     "filters": [
       "rmarkdown/pagebreak.lua"
