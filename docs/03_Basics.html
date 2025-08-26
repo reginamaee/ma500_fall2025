@@ -211,10 +211,25 @@ window.Quarto = {
   <li><a href="#attributes" id="toc-attributes" class="nav-link" data-scroll-target="#attributes">Attributes</a></li>
   <li><a href="#indexing" id="toc-indexing" class="nav-link" data-scroll-target="#indexing">Indexing</a></li>
   <li><a href="#operators" id="toc-operators" class="nav-link" data-scroll-target="#operators">Operators</a></li>
+  <li><a href="#example-1" id="toc-example-1" class="nav-link" data-scroll-target="#example-1">Example:</a></li>
+  <li><a href="#example---using-or-operator" id="toc-example---using-or-operator" class="nav-link" data-scroll-target="#example---using-or-operator">Example - using or operator:</a></li>
+  <li><a href="#example---using-equals-operator" id="toc-example---using-equals-operator" class="nav-link" data-scroll-target="#example---using-equals-operator">Example - using equals operator:</a></li>
+  <li><a href="#example-2" id="toc-example-2" class="nav-link" data-scroll-target="#example-2">Example</a></li>
   </ul></li>
-  <li><a href="#vector-operations" id="toc-vector-operations" class="nav-link" data-scroll-target="#vector-operations">Vector Operations</a></li>
-  <li><a href="#sequences-and-repetition" id="toc-sequences-and-repetition" class="nav-link" data-scroll-target="#sequences-and-repetition">Sequences and Repetition</a></li>
+  <li><a href="#vector-operations" id="toc-vector-operations" class="nav-link" data-scroll-target="#vector-operations">Vector Operations</a>
+  <ul class="collapse">
+  <li><a href="#example---vector-operation" id="toc-example---vector-operation" class="nav-link" data-scroll-target="#example---vector-operation">Example - Vector Operation</a></li>
+  </ul></li>
+  <li><a href="#sequences-and-repetition" id="toc-sequences-and-repetition" class="nav-link" data-scroll-target="#sequences-and-repetition">Sequences and Repetition</a>
+  <ul class="collapse">
   <li><a href="#sequence" id="toc-sequence" class="nav-link" data-scroll-target="#sequence">Sequence</a></li>
+  <li><a href="#example---sequence-list" id="toc-example---sequence-list" class="nav-link" data-scroll-target="#example---sequence-list">Example - Sequence List</a></li>
+  </ul></li>
+  <li><a href="#random-sampling" id="toc-random-sampling" class="nav-link" data-scroll-target="#random-sampling">Random Sampling</a>
+  <ul class="collapse">
+  <li><a href="#example---creating-a-sample" id="toc-example---creating-a-sample" class="nav-link" data-scroll-target="#example---creating-a-sample">Example - Creating a sample</a></li>
+  <li><a href="#repetition" id="toc-repetition" class="nav-link" data-scroll-target="#repetition">Repetition</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -327,7 +342,7 @@ window.Quarto = {
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "/Users/rdominguez/ma500_fa25_q"</code></pre>
+<pre><code>[1] "/Users/rdominguez/Documents/MA500/Fall25/ma500_fall2025"</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -351,7 +366,7 @@ window.Quarto = {
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre class="bg-warning"><code>[1] 12</code></pre>
+<pre><code>[1] 12</code></pre>
 </div>
 </div>
 <p>Note: R is a <em>dynamic language</em>, so the types and values can easily be changed. (type checks are done during run-time)</p>
@@ -401,6 +416,7 @@ window.Quarto = {
 <section id="example" class="level3 callout-example">
 <h3 class="anchored" data-anchor-id="example">Example</h3>
 <p>In 2021, the average temperature in Guam for each month was 80.7, 81.4, 81.5, 82.6, 82.6, 83.7, 83.4, 81.8, 82.5, 81.4, 82.0, and 81.0. Store these values in a vector named <code>temp</code>.</p>
+<p><em>Solution:</em></p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>hide code</summary>
@@ -505,26 +521,29 @@ window.Quarto = {
 <li><code>==</code> equal to</li>
 <li><code>!=</code> not equal to</li>
 </ul>
-<pre><code>Example: 
-
-What months have an higher average temperature than August?</code></pre>
+</section>
+</section>
+<section id="example-1" class="level3 callout-example">
+<h3 class="anchored" data-anchor-id="example-1">Example:</h3>
+<p>What months have a higher average temperature compared to August?</p>
+<p><em>Solution:</em></p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>hide code</summary>
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>temp[temp <span class="sc">&gt;</span> temp[<span class="st">"Aug"</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>temp[temp <span class="sc">&lt;</span> temp[<span class="st">"Aug"</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code> Apr  May  Jun July  Sep  Nov 
-82.6 82.6 83.7 83.4 82.5 82.0 </code></pre>
+<pre><code> Jan  Feb  Mar  Oct  Dec 
+80.7 81.4 81.5 81.4 81.0 </code></pre>
 </div>
 </div>
+</section>
 <p>Let’s break the line of code down:</p>
 <ul>
 <li><p><code>temp['Aug']</code> : refers to the temperature in August.</p></li>
 <li><p><code>temp &gt; temp['Aug']</code> : checks all values of the <code>temp</code> vector to check if this statement is true</p></li>
 <li><p><code>temp[temp &gt; temp['Aug']]</code>: returns only the months &amp; values where the second bullet is true.</p></li>
 </ul>
-</section>
 <section id="logical" class="level4">
 <h4 class="anchored" data-anchor-id="logical">Logical</h4>
 <ul>
@@ -532,53 +551,63 @@ What months have an higher average temperature than August?</code></pre>
 <li><code>|</code> OR</li>
 <li><code>!</code> NOT</li>
 </ul>
-<pre><code>Example: 
-
-What FALL months have an higher average temperature than August?</code></pre>
+</section>
+<section id="example---using-or-operator" class="level3 callout-example">
+<h3 class="anchored" data-anchor-id="example---using-or-operator">Example - using or operator:</h3>
+<p>What FALL months have a higher average temperature than August?</p>
+<p><em>Solution:</em></p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>hide code</summary>
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># let's define a vector that contains the fall months </span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>fall <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Sep"</span>, <span class="st">"Oct"</span>, <span class="st">"Nov"</span>)</span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>temp[temp <span class="sc">&gt;</span> temp[<span class="st">"Aug"</span>] <span class="sc">|</span> <span class="fu">names</span>(temp) <span class="sc">%in%</span> fall]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># let's define a vector that contains the fall months </span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>fall <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Sep"</span>, <span class="st">"Oct"</span>, <span class="st">"Nov"</span>)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>temp[temp <span class="sc">&gt;</span> temp[<span class="st">"Aug"</span>] <span class="sc">|</span> <span class="fu">names</span>(temp) <span class="sc">%in%</span> fall]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code> Apr  May  Jun July  Sep  Oct  Nov 
 82.6 82.6 83.7 83.4 82.5 81.4 82.0 </code></pre>
 </div>
 </div>
+</section>
 <ul>
 <li><p><code>names(temp)</code> : calls the attributes of the <code>temp</code> vector</p></li>
 <li><p><code>%in%</code> : a special operator that checks if elements exist in a vector</p></li>
 <li><p><code>names(temp) %in% fall</code> : checks which attributes are in the <code>fall</code> vector</p></li>
 </ul>
-<pre><code>What month had the highest average temperature?</code></pre>
+<section id="example---using-equals-operator" class="level3 callout-example">
+<h3 class="anchored" data-anchor-id="example---using-equals-operator">Example - using equals operator:</h3>
+<p>What month had the highest average temperature?</p>
+<p><em>Solution:</em></p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>hide code</summary>
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>temp[temp <span class="sc">==</span> <span class="fu">max</span>(temp)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>temp[temp <span class="sc">==</span> <span class="fu">max</span>(temp)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code> Jun 
 83.7 </code></pre>
 </div>
 </div>
-<p>OR if we want just the name of the month, we can index the value from the names attribute</p>
+<p>OR if we want just the name of the month, we can index the value from the names attribute:</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>hide code</summary>
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(temp)[temp <span class="sc">==</span> <span class="fu">max</span>(temp)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(temp)[temp <span class="sc">==</span> <span class="fu">max</span>(temp)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Jun"</code></pre>
 </div>
 </div>
-<pre><code>What is the average temperature in the summer months?</code></pre>
+</section>
+<section id="example-2" class="level3 callout-example">
+<h3 class="anchored" data-anchor-id="example-2">Example</h3>
+<p>What is the average temperature in the summer months?</p>
+<p><em>Solution:</em></p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>hide code</summary>
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>temp[<span class="fu">c</span>(<span class="st">"Jun"</span>, <span class="st">"July"</span>, <span class="st">"Aug"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>temp[<span class="fu">c</span>(<span class="st">"Jun"</span>, <span class="st">"July"</span>, <span class="st">"Aug"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code> Jun July  Aug 
@@ -586,17 +615,16 @@ What FALL months have an higher average temperature than August?</code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>hide code</summary>
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>summer_months <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Jun"</span>, <span class="st">"July"</span>, <span class="st">"Aug"</span>)</span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>summer_temps <span class="ot">&lt;-</span> temp[summer_months]</span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>average_summer <span class="ot">&lt;-</span> <span class="fu">mean</span>(summer_temps)</span>
-<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(average_summer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>summer_months <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Jun"</span>, <span class="st">"July"</span>, <span class="st">"Aug"</span>)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>summer_temps <span class="ot">&lt;-</span> temp[summer_months]</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>average_summer <span class="ot">&lt;-</span> <span class="fu">mean</span>(summer_temps)</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(average_summer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 82.96667</code></pre>
 </div>
 </div>
-</section>
 </section>
 </section>
 <section id="vector-operations" class="level2">
@@ -606,77 +634,164 @@ What FALL months have an higher average temperature than August?</code></pre>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>hide code</summary>
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>temp <span class="ot">&lt;-</span> temp <span class="sc">+</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>temp <span class="ot">&lt;-</span> temp <span class="sc">+</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<pre><code>Example: 
-
-Convert all temperatures from Fahrenheit to Celcius.</code></pre>
+<section id="example---vector-operation" class="level3 callout-example">
+<h3 class="anchored" data-anchor-id="example---vector-operation">Example - Vector Operation</h3>
+<p>Convert all temperatures in our <code>temp</code> vector from Fahrenheit to Celsius.</p>
 <p>We are going to apply this formula:</p>
 <p><span class="math display">\[
 C = \frac{5}{9}*(t - 32)
 \]</span></p>
 <p>to all values in our <code>temp</code> vector.</p>
+<p><em>Solution:</em></p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>hide code</summary>
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>temp_celcius <span class="ot">&lt;-</span> (<span class="dv">5</span><span class="sc">/</span><span class="dv">9</span>) <span class="sc">*</span> (temp <span class="sc">-</span> <span class="dv">32</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>temp_celcius <span class="ot">&lt;-</span> (<span class="dv">5</span><span class="sc">/</span><span class="dv">9</span>) <span class="sc">*</span> (temp <span class="sc">-</span> <span class="dv">32</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-</div>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>hide code</summary>
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(temp_celcius)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>     Jan      Feb      Mar      Apr      May      Jun     July      Aug 
-28.16667 28.55556 28.61111 29.22222 29.22222 29.83333 29.66667 28.77778 
-     Sep      Oct      Nov      Dec 
-29.16667 28.55556 28.88889 28.33333 </code></pre>
-</div>
-<details open="" class="code-fold">
-<summary>hide code</summary>
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(temp_celcius)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 28.91667</code></pre>
-</div>
 </div>
 <p>All attributes are retained and all values are converted.</p>
+</section>
+<pre><code>Example: 
+
+Convert all temperatures from Fahrenheit to Celciu</code></pre>
 </section>
 <section id="sequences-and-repetition" class="level2">
 <h2 class="anchored" data-anchor-id="sequences-and-repetition">Sequences and Repetition</h2>
 <p><code>R</code> has in-house functions that allow you to create a sequence of values (or repeat).</p>
 <p>We will be using <code>seq</code> and <code>rep</code>, and you can read up for help on the documentation by using ?function in R. This pulls up the documentation and example usage</p>
-</section>
-<section id="sequence" class="level2">
-<h2 class="anchored" data-anchor-id="sequence">Sequence</h2>
+<section id="sequence" class="level3">
+<h3 class="anchored" data-anchor-id="sequence">Sequence</h3>
 <p>Without a function, the easiest way to create a sequence with intervals of 1 is using the colon operator</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>hide code</summary>
-<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
 </div>
 </div>
 <p>For more flexible sequences, we can use the <code>seq</code> function:</p>
-<pre><code>Example: 
-
-Create a list of every 3rd value from 1 to 20</code></pre>
+</section>
+<section id="example---sequence-list" class="level3 callout-example">
+<h3 class="anchored" data-anchor-id="example---sequence-list">Example - Sequence List</h3>
+<p>Create a list of every 3rd value from <code>1</code> to <code>20</code></p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>hide code</summary>
-<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">1</span>, <span class="at">to =</span> <span class="dv">20</span>, <span class="at">by =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">1</span>, <span class="at">to =</span> <span class="dv">20</span>, <span class="at">by =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1]  1  4  7 10 13 16 19</code></pre>
 </div>
 </div>
 <p>Note: This will <em>always</em> include the <code>from</code> value, but NOT the <code>to</code> value. This is dependent on the <code>by</code> number.</p>
+</section>
+<p>Instead of specifying a <code>by</code> number, you can specify how many numbers you would like in between with <code>length.out</code> - this would be equally spaced.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">1</span>, <span class="at">to =</span> <span class="dv">10</span>, <span class="at">length.out =</span> <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1]  1.000000  1.473684  1.947368  2.421053  2.894737  3.368421  3.842105
+ [8]  4.315789  4.789474  5.263158  5.736842  6.210526  6.684211  7.157895
+[15]  7.631579  8.105263  8.578947  9.052632  9.526316 10.000000</code></pre>
+</div>
+</div>
+<p>For decreasing, set <code>`by`</code> to be a negative value and switch the <code>from</code> and <code>to</code> values.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">10</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">by =</span> <span class="sc">-</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10  7  4  1</code></pre>
+</div>
+</div>
+</section>
+<section id="random-sampling" class="level2">
+<h2 class="anchored" data-anchor-id="random-sampling">Random Sampling</h2>
+<p>The <a href="https://rdrr.io/r/base/sample.html"><code>sample()</code></a> function takes a sample from the specified elements of <code>x</code> with or without replacement.</p>
+<section id="example---creating-a-sample" class="level3 callout-example">
+<h3 class="anchored" data-anchor-id="example---creating-a-sample">Example - Creating a sample</h3>
+<p>Create a random sample of <code>20</code> values ranging from <code>1</code> to <code>100</code> with replacement.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, <span class="dv">20</span>, <span class="at">replace =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 93 54 90 73 23 82 38 18 89 66 31 76 53 11 32  5 71 87 72  8</code></pre>
+</div>
+</div>
+</section>
+<p>Note: running the above code again will not give you the same output:</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, <span class="dv">20</span>, <span class="at">replace =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 82 86 91 37 23 58 77  3 37 74 87  2 28 69 64 47 57 17 33 84</code></pre>
+</div>
+</div>
+<p>If you would like to replicate the same results every time, we have to set a seed by using the <code>set.seed(x)</code> function, where <code>x</code> is any arbitrary number.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">415</span>)</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, <span class="dv">20</span>, <span class="at">replace =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1]  2 94 70 11 91 35 56 47 34 39  1 18 60 29 68  9 70 45 53 67</code></pre>
+</div>
+</div>
+<section id="repetition" class="level3">
+<h3 class="anchored" data-anchor-id="repetition">Repetition</h3>
+<p>To repeat values in a vector, use the <code>rep()</code> function.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="co"># repeat 1 four times </span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rep</span>(<span class="at">x =</span> <span class="dv">1</span>, <span class="at">times =</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 1 1 1</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="co"># repeat 1 to 5, 10 times</span></span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">times =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 1 2 3 4 5 1 2 3 4 5 1 2 3 4 5 1 2 3 4 5 1 2 3 4 5 1 2 3 4 5 1 2 3 4 5 1 2 3
+[39] 4 5 1 2 3 4 5 1 2 3 4 5</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="co"># repeat 1, 2, 5, 7 each values twice</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rep</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">7</span>), <span class="at">times =</span> <span class="dv">3</span>, <span class="at">each =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 1 1 2 2 5 5 7 7 1 1 2 2 5 5 7 7 1 1 2 2 5 5 7 7</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co"># repeat each element in x by specified vector time (1</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="co"># once, 2 four times, 5, once, and 7 twice)</span></span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rep</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">7</span>), <span class="at">times =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 2 2 2 5 7 7</code></pre>
+</div>
+</div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

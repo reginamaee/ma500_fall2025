@@ -367,7 +367,7 @@ seq(from = 10, to = 1, by = -3)
 The [`sample()`](https://rdrr.io/r/base/sample.html) function takes a sample from the specified elements of `x` with or without replacement.
 
 ::: callout-example
-### Example - Creating a sample 
+### Example - Creating a sample
 
 Create a random sample of `20` values ranging from `1` to `100` with replacement.
 
@@ -389,7 +389,7 @@ set.seed(415)
 sample(1:100, 20, replace = T)
 ```
 
-### Repetition 
+### Repetition
 
 To repeat values in a vector, use the `rep()` function.
 

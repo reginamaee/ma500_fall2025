@@ -31,7 +31,7 @@ You add comments using the `#` (pound) key
 #'
 ```
 
----
+------------------------------------------------------------------------
 
 ### R Basics and Fundamentals
 
@@ -63,6 +63,7 @@ And essentially, in your console window or in your script, you can use R as a ca
 
 sin(pi/2)
 ```
+
 ------------------------------------------------------------------------
 
 ### Directories
