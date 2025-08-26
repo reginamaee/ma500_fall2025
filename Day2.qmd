@@ -1,0 +1,437 @@
+---
+format: live-revealjs
+title: "MA-500 Intro to R"
+engine: knitr
+theme: simple
+scrolling: FALSE
+scrollable: FALSE
+---
+
+{{< include _extensions/r-wasm/live/_knitr.qmd >}} {{< include ./_extensions/r-wasm/live/_gradethis.qmd >}}
+
+------------------------------------------------------------------------
+
+### RStudio I
+
+### R Basics and Fundamentals
+
+You add comments using the `#` (pound) key
+
+```{webr}
+#| caption: Adding comments
+#| autorun: true
+#| runbutton: false 
+
+# This is how you can add comments
+
+#'
+#' This is how you can add multi
+#' line comments
+#' 
+#'
+```
+
+---
+
+### R Basics and Fundamentals
+
+And essentially, in your console window or in your script, you can use R as a calculator.
+
+```{webr}
+#| edit: false
+#| caption: Basic Arithmetic
+#| autorun: true
+#| runbutton: false 
+
+1 + 1
+```
+
+```{webr}
+#| edit: false
+#| caption: Basic Arithmetic
+#| autorun: true
+#| runbutton: false 
+
+1 / 200 * 30
+```
+
+```{webr}
+#| edit: false
+#| caption: Basic Arithmetic
+#| autorun: true
+#| runbutton: false 
+
+sin(pi/2)
+```
+------------------------------------------------------------------------
+
+### Directories
+
+R sessions are tied to a *working directory.*
+
+```{webr}
+#| edit: false
+#| caption: Working directories
+#| autorun: true
+#| runbutton: false 
+# check your working directory
+getwd()
+
+```
+
+You can change your working directory with this command:
+
+```{webr}
+#| edit: true
+#| caption: Changing directory 
+
+
+
+
+```
+
+------------------------------------------------------------------------
+
+### R Packages
+
+Base installation of `R` comes with tons of features and in-house functions. But, in some cases, you may need to install more. For this class, you will need:
+
+::: incremental
+-   `ggplot2`
+-   `tidyverse`
+-   `MASS`
+:::
+
+------------------------------------------------------------------------
+
+### R Packages
+
+You can install new packages by using this line of code here:
+
+```{r, echo = TRUE, eval = FALSE}
+# install packages with this line:
+install.packages("packageNameHere")
+```
+
+You can `source` by:
+
+```{r, echo = TRUE, eval = FALSE}
+# source packages with this line:
+library("packageNameHere")
+```
+
+------------------------------------------------------------------------
+
+### Directories
+
+When you run `RStudio`, your session is associated with a *working directory.*
+
+```{r, echo = TRUE, eval = TRUE}
+# check your working directory
+getwd()
+```
+
+Changing your working directory:
+
+```{r,echo = TRUE, eval = FALSE}
+setwd("/insertFilePathHere")
+```
+
+------------------------------------------------------------------------
+
+### Variables
+
+You can create variables by using `<-` to store your results.
+
+```{webr}
+#| edit: true
+#| caption: Variable Assignment
+#| min-lines: 3
+
+
+
+
+```
+
+::: callout-tip
+Use **meaningful** variable names.
+
+It is also best to use *lowercase, underscores,* or *camelCase.* Try and avoid spaces or special characters.
+
+*ex*: `student_name` or `studentName`
+:::
+
+------------------------------------------------------------------------
+
+### R Data Types
+
+A **data type** describes the kind of values a variable can hold. This is important for interpretation and how the values can be utilized.
+
+Several data types include:
+
+::: incremental
+-   `numeric`: `double` or `int`
+-   `character`: text or strings ("Hello")
+-   `logical` : TRUE/FALSE
+-   `factor`: categorical data ("A", "B")
+:::
+
+------------------------------------------------------------------------
+
+### R Data Types
+
+Use the `class()` function to determine what data type your variable is.
+
+```{webr}
+#| edit: true
+#| caption: R Data Types
+
+```
+
+------------------------------------------------------------------------
+
+### Data Vectors
+
+A data vector is a collection of observations that are of the **same type.**
+
+::: callout
+**Example:** In 2021, the average temperature in Guam for each month was 80.7, 81.4, 81.5, 82.6, 82.6, 83.7, 83.4, 81.8, 82.5, 81.4, 82.0, and 81.0. Store these values in a vector named `temp`.
+:::
+
+```{webr}
+#| edit: true
+#| caption: Data Vector ex1
+
+```
+
+------------------------------------------------------------------------
+
+### Data Vectors
+
+Vectors can be assigned **attributes** or **names.**
+
+```{webr}
+#| edit: true
+#| caption: Data Vector ex2
+#| min-lines: 4
+
+```
+
+------------------------------------------------------------------------
+
+### Data Vectors
+
+**Indexing** a vector can be done multiple ways.
+
+```{webr}
+#| edit: true
+#| caption: indexing_vector_name
+#| min-lines: 3
+
+```
+
+OR
+
+```{webr}
+#| edit: true
+#| caption: indexing_vector_value
+#| min-lines: 3
+```
+
+------------------------------------------------------------------------
+
+### Operators
+
+**Operators** are functions/symbols that tell `R` what sort of `computation` to perform.
+
+**Comparison operators:**
+
+::: incremental
+-   `>` : greater than
+-   `<` : less than
+-   `>=` : greater than or equal to
+-   `<=` : less than or equal to
+-   `==` : is equal to
+-   `!=` : does not equal
+:::
+
+------------------------------------------------------------------------
+
+### Using Operators
+
+::: callout
+**Example:** Which months record warmer average temperatures than August?
+:::
+
+```{webr}
+#| edit: true
+#| caption: using_operators
+#| min-lines: 3
+
+```
+
+------------------------------------------------------------------------
+
+### Operators
+
+**Logical operators:**
+
+::: incremental
+-   `&` AND
+-   `|` OR
+-   `!` NOT
+:::
+
+------------------------------------------------------------------------
+
+### Using Operators
+
+::: callout
+**Example:** What **FALL** months have warmer average temperatures than August?
+:::
+
+```{webr}
+#| edit: true
+#| caption: using_operators_two
+#| min-lines: 3
+```
+
+------------------------------------------------------------------------
+
+### Using Operators
+
+::: callout
+**Example:** Which month had the highest average temperature?
+:::
+
+```{webr}
+#| edit: true
+#| min-lines: 3
+```
+
+------------------------------------------------------------------------
+
+### Using Operators
+
+::: callout
+**Example:** What is the average temperature in the summer months?
+:::
+
+```{webr}
+#| edit: true
+#| min-lines: 3
+```
+
+------------------------------------------------------------------------
+
+### Using Operators
+
+::: callout
+**Exercise:**
+
+a). What month has the lowest average temperature in 2021?
+
+b). Return all months with an average temperature less than `82`.
+:::
+
+```{webr}
+#| exercise: ex_1_a
+#| caption: exercise 1a
+#| min-lines: 3
+
+```
+
+```{webr}
+#| exercise: ex_1_a
+#| check: true 
+gradethis::grade_this_code(correct = "Great job!", 
+                           incorrect = "Not quite. Try again!")
+```
+
+```{webr}
+#| exercise: ex_1_a
+#| solution: true
+names(temp)[temp == min(temp)]
+```
+
+```{webr}
+#| exercise: ex_1_b
+#| caption: exercise 1b
+#| min-lines: 3
+
+```
+
+```{webr}
+#| exercise: ex_1_b
+#| check: true 
+gradethis::grade_this_code(correct = "Great job!", 
+                           incorrect = "Not quite. Try again!")
+```
+
+```{webr}
+#| exercise: ex_1_b
+#| solution: true
+names(temp)[temp < 82]
+```
+
+------------------------------------------------------------------------
+
+### Vector Operations
+
+You can utilize *element-wise* operations onto **vectors.**
+
+```{r, echo = TRUE, eval = FALSE}
+# adds two to each element in temp
+temp <- temp + 2
+```
+
+------------------------------------------------------------------------
+
+### Vector Operations
+
+::: callout
+**Example:** Convert all temperatures in our `temp` vector from Fahrenheit to Celcius. Use the formula $$C = \frac{5}{9}*(t-32)$$
+:::
+
+```{webr}
+#| edit: true
+#| min-lines: 3
+```
+
+------------------------------------------------------------------------
+
+### Sequences
+
+::: callout
+**Example:** Return all values from `1` to `10`.
+:::
+
+```{webr}
+#| edit: true
+```
+
+Use the `seq()` function for more flexible operations.
+
+```{webr}
+#| edit: true
+```
+
+------------------------------------------------------------------------
+
+### Random Sampling
+
+The [`sample()`](https://rdrr.io/r/base/sample.html) function takes a sample from the specified elements of `x` with or without replacement.
+
+```{webr}
+#| edit: true
+```
+
+------------------------------------------------------------------------
+
+### Repetition
+
+To repeat values, use `rep()`
+
+```{webr}
+#| edit: true
+```
