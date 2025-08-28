@@ -90,13 +90,46 @@ code:not(pre code) {
 }
 
 /* Optional: custom heading inside */
-.callout-custom .callout-title,
+.callout-custom .example,
 .callout-custom h2,
 .callout-custom h3 {
   font-weight: bold;
   color: #2c7a5e;
   margin-top: 0;
 }
+
+/* Accent + layout (yours) */
+.callout-case_study {
+  --cs-accent: #eaabd1;
+  border-left: 4px solid var(--cs-accent);
+  background: rgba(234, 171, 209, 0.12);
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 6px;
+}
+
+/* Ensure the callout shows an icon (emoji example) */
+.callout-case_study .callout-icon::before {
+  content: "📝";
+  color: var(--cs-accent);
+}
+
+/* Inline code ONLY (not code blocks) */
+.callout-case_study :not(pre) > code {
+  color: #7c5454;     
+  background: rgba(234, 171, 209, 0.22);            /* pink tint */
+  border: 1px solid rgba(234, 171, 209, 0.50);
+  padding: .1rem .30rem;
+  border-radius: .35rem;
+  font-size: 0.95em;
+}
+
+/* Optional: a slightly stronger tint for dark mode */
+.quarto-dark .callout.callout-case_study :not(pre) > code {
+  background: rgba(234, 171, 209, 0.30);
+  border-color: rgba(234, 171, 209, 0.60);
+}
+
 
 /* Plain text outputs from chunks (stdout) */
 .cell-output pre,

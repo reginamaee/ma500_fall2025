@@ -1,0 +1,27 @@
+/* New variant that keeps Quarto's default callout layout */
+.reveal .callout.callout-pink {
+    /* win against theme defaults */
+    border-left-color: #ff69b4 !important;
+    /* set a variable many themes use for tints */
+    --callout-accent: #ff69b4;
+  }
+  
+  /* icon color */
+  .reveal .callout.callout-pink .callout-icon {
+    color: #ff69b4 !important;
+  }
+  
+  /* title bar tint (works across themes) */
+  .reveal .callout.callout-pink .callout-title {
+    background: color-mix(in srgb, #ff69b4 14%, transparent) !important;
+  }
+  
+  /* if you *also* put .callout-important on it, this ensures pink wins */
+  .reveal .callout.callout-important.callout-pink,
+  .reveal .callout.callout-important.callout-pink .callout-icon,
+  .reveal .callout.callout-important.callout-pink .callout-title {
+    border-left-color: #ff69b4 !important;
+    color: #ff69b4 !important;
+    background: color-mix(in srgb, #ff69b4 14%, transparent) !important;
+  }
+  

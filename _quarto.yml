@@ -8,7 +8,7 @@ book:
     - index.qmd
     - 01_install.qmd
     - 03_Basics.qmd
-
+    - 04_CLF.qmd
 
 bibliography: references.bib
 

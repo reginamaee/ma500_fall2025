@@ -1,0 +1,214 @@
+# Conditionals, Loops, and Functions {.unnumbered}
+
+When you need to control the flow and logic of your code, you can use conditional statements, loops, or functions.
+
+-   **Conditionals (e.g., `if`, `else if`, `else`)** let you run certain sections of code only if a specific condition is true. This is useful when you want your program to make decisions or take different paths depending on the situation.
+
+-   **Functions** let you **group code into reusable blocks**. Instead of repeating the same code in multiple places, you can define it once and call it whenever you need. Functions can also take inputs (arguments) and return outputs (results).
+
+-   **Loops (e.g., `for`, `while`)** allow you to repeat sections of code multiple times without writing them out again. This is especially helpful when performing the same task on many items, such as processing each value in a dataset. (*Note: we won't be going over the while loop in this class)*
+
+## Templates
+
+### If-Else
+
+```{r if_else, eval = FALSE}
+if (condition) {
+ do something
+} else if (condition2) {
+ do something
+} else {
+do this instead
+}
+```
+
+### Functions
+
+```{r functions, eval = FALSE}
+
+#' purpose of this function
+#'
+#' @param arg1 define arg1
+#' @param arg2 define arg2
+#'
+#' @return description 
+function_name <- function(arg1, arg2, ...) {
+  
+  # do something here with arg1 and arg2
+  
+  # Step 3: Return the result
+  return(result)
+}
+
+
+# Call (use) the function
+function_name(value1, value2)
+
+```
+
+### Loops
+
+```{r loop, eval = FALSE}
+for (loopindex in vector) {
+  do this
+}
+```
+
+## If-else
+
+::: callout-example
+#### Example:
+
+Write an `if-else` statement that prints the letter grade based off of the numeric scores.
+
+-   **A**: `90` or higher
+-   **B**: `75`-`89`
+-   **C**: less than `75`
+
+*Solution:*
+
+```{r}
+score <- 80
+
+if (score >= 90) {
+  print("A") 
+} else if (score >= 75) {
+  print("B")
+} else {
+  print("C")
+}
+```
+:::
+
+## Functions
+
+Let us extend our `if-else` statement from above and put it into a defined function that takes the numeric score as an input and outputs its respective letter grade.
+
+::: callout-example
+#### Example:
+
+Write a function that assigns the letter grade based off of the numeric scores.
+
+-   **A**: `90` or higher
+-   **B**: `75`-`89`
+-   **C**: less than `75`
+
+*Solution:*
+
+```{r}
+#' This function returns a letter grade based off of their numeric grade.
+#' 
+#' param @score numeric score from 0-100
+#' return A,B,C
+get_grade <- function(score) {
+  if (score >= 90) {
+  grade <- "A"
+} else if (score >= 75) {
+  grade <- "B"
+} else {
+  grade <- "C"
+}
+  return(grade)
+}
+
+# call the function
+get_grade(80)
+get_grade(100)
+get_grade(8)
+```
+:::
+
+### Recursive Functions
+
+A `recursive function` is a function that calls itself to solve smaller instances of the same problem. It’s particularly useful for tasks that can be broken down into simpler, repetitive sub-tasks.
+
+::: callout-example
+#### Example:
+
+Calculate the `factorial` of a non-negative integer n,
+
+$$n! = n \times (n - 1) \times (n - 2) \times . . . \times 2 \times 1 $$
+
+*Solution:*
+
+```{r}
+#' Calculate the factorial of a given integer using recursion
+#'
+#' @param n non-negative integer
+#' @return n!
+factorial_recursive <- function(n) {
+ if(n == 0) {
+  return(1)
+ } else {
+  return(n * factorial_recursive(n-1))
+ }
+}
+
+factorial_recursive(6)
+```
+:::
+
+Note: `R` already has a base function called `factorial`.
+
+## Case Study: GovGuam Tax Revenue
+
+Let’s examine the table showing Government of Guam tax revenue from 2017-2022 from the [2023 Guam Statistical Yearbook](https://bsp.guam.gov/wp-bsp-content/uploads/2025/01/2023-Guam-Statistical-Yearbook-Final.pdf).
+
+![](images/clipboard-3553642164.png){width="1200"}
+
+::: callout-case_study
+***To-dos:*****\***
+
+-   Make two separate vectors: one for the dollar amounts in each category (excluding the total) for 2022, and another for 2021.
+
+-   Add attributes to each vector that describe what the values represent (the category or description).
+
+-   Find the difference in tax revenue between 2021 and 2022 in each category.
+
+-   Build two vectors that calculate what percent of the total revenue comes from each category for 2022 and 2021.
+
+-   Write a function that takes in a percentage value (e.g., the share of a tax category) and classifies it into these categories:
+
+    -   `> 30%` : Large Share
+    -   `> 10%` : Medium Share
+    -   `< 10%` : Small Share
+
+-   Use a for loop to categorize each value in our vectors.
+:::
+
+1.  Make two separate vectors: one for the dollar amounts in each category (excluding the total) for 2022, and another for 2021.
+
+```{r}
+# 2021 tax rev values
+tr_21 <- c(352818, 296806, 65110, 35612, 12372, 10100, 34978, 3519, 3761, 1395, 0)
+
+# 2022 tax rev values
+tr_22 <- c(372492, 327115, 76141, 35794, 18169, 9353, 31643, 4953, 3562, 1473, 0)
+```
+
+2.  Add attributes to each vector that describe what the values represent (the category or description).
+
+```{r}
+categories <- c("Income", "Gross Receipts", "Section 30 Federal income tax", "Property", "Hotel Occupancy", "Liquid Fuel", "Tabacco", "Alcoholic Beverages", "Excise", "Lmited Gaming", "Other")
+
+names(tr_21) <- categories
+names(tr_22) <- categories
+```
+
+3.  Find the difference in tax revenue between 2021 and 2022 in each category.
+
+```{r}
+diff_taxRev <- tr_22 - tr_21
+```
+
+4.  Build two vectors that calculate what percent of the total revenue comes from each category for 2022 and 2021.
+
+```{r}
+# grab the total number of tax revenue from all categories for both years
+total_22 <- sum(tr_22)
+total_21 <- sum(tr_21)
+
+# divide each category by total and multiply by 100 to get percent
+pct_tr_21 <- tr_21/total_21 * 100
+pct_tr_22 <- tr_22/total_22 * 100
+```

@@ -1,6 +1,7 @@
 {
   "index.qmd": {
-    "index.html": "fba01ea8"
+    "index.html": "fba01ea8",
+    "index.tex": "43998934"
   },
   "intro.qmd": {
     "intro.html": "6d6d6e78"
@@ -16,5 +17,11 @@
   },
   "03_Basics.qmd": {
     "03_Basics.html": "abf04d7b"
+  },
+  "Day2.qmd": {
+    "Day2.html": "30504766"
+  },
+  "04_CLF.qmd": {
+    "04_CLF.html": "da54408d"
   }
 }

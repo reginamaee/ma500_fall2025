@@ -1,17 +1,32 @@
 ---
-format: live-revealjs
+format: 
+  live-revealjs:
+    auto-animate: true
+    auto-animate-duration: 0.5
+    auto-animate-easing: ease-in-out
+    code-line-numbers: true
+    css: reveal_style.css
 title: "MA-500 Intro to R"
 engine: knitr
-theme: simple
 scrolling: FALSE
 scrollable: FALSE
 ---
 
-{{< include _extensions/r-wasm/live/_knitr.qmd >}} {{< include ./_extensions/r-wasm/live/_gradethis.qmd >}}
+{{< include _extensions/r-wasm/live/_knitr.qmd >}}
+
+{{< include ./_extensions/r-wasm/live/_gradethis.qmd >}}
 
 ------------------------------------------------------------------------
 
-### RStudio I
+### Announcements
+
+-   `Homework 1` will be uploaded on Moodle by tomorrow morning and will be due by next week Friday, **September 5.**
+
+-   **Reminder:** Datasets for final project approval is due by: **September 16**
+
+-   Note: all submissions now should be in `.Rmd (RMarkdown)`
+
+------------------------------------------------------------------------
 
 ### R Basics and Fundamentals
 
@@ -435,4 +450,244 @@ To repeat values, use `rep()`
 
 ```{webr}
 #| edit: true
+```
+
+------------------------------------------------------------------------
+
+### Conditionals, Loops, and Functions
+
+When you need to **control the flow and logic of your code**, you can use conditional statements, loops, or functions.
+
+------------------------------------------------------------------------
+
+## Conditionals
+
+-   **Conditionals (e.g., `if`, `else if`, `else`)** let you run certain sections of code only if a specific condition is true. This is useful when you want your program to make decisions or take different paths depending on the situation.
+
+------------------------------------------------------------------------
+
+## Conditionals {auto-animate="true"}
+
+:::{data-id = "if-else"}
+
+```{r, echo=TRUE, eval = FALSE}
+if (condition) {
+ do if TRUE 
+} else {
+do if FALSE
+}
+
+```
+
+:::
+
+------------------------------------------------------------------------
+
+## Conditionals {auto-animate="true"}
+
+:::{data-id = "if-else"}
+
+```{r, echo=TRUE, eval = FALSE}
+if (condition) {
+ do something
+} else if (condition2) {
+ do something
+} else {
+do this instead
+}
+```
+
+:::
+
+------------------------------------------------------------------------
+
+### Conditionals
+
+::: callout
+**Example:** Write an `if-else` statement that prints the letter grade based off of the numeric scores.
+
+-   **A**: `90` or higher
+-   **B**: `75`-`89`
+-   **C**: less than `75`
+:::
+
+```{webr}
+#| edit: true
+#| min-lines: 3
+```
+
+------------------------------------------------------------------------
+
+### Functions
+
+-   **Functions** let you **group code into reusable blocks**. Instead of repeating the same code in multiple places, you can define it once and call it whenever you need. Functions can also take inputs (arguments) and return outputs (results).
+
+------------------------------------------------------------------------
+
+### Functions {auto-animate="true"}
+
+:::{data-id = "function"}
+
+```{r, echo = TRUE, eval = FALSE}
+# Define a function
+function_name <- function(arg1, arg2, ...) {
+  
+  # do something here with arg1 and arg2
+  
+  # Step 3: Return the result
+  return(result)
+}
+
+
+# Call (use) the function
+function_name(value1, value2)
+
+```
+
+:::
+
+------------------------------------------------------------------------
+
+### Functions {auto-animate="true"}
+
+:::{data-id = "function"}
+
+```{r, echo = TRUE, eval = FALSE}
+#' purpose of this function
+#'
+#' @param arg1 define arg1
+#' @param arg2 define arg2
+#'
+#' @return description 
+function_name <- function(arg1, arg2, ...) {
+  
+  # do something here with arg1 and arg2
+  
+  # Step 3: Return the result
+  return(result)
+}
+
+
+# Call (use) the function
+function_name(value1, value2)
+
+```
+
+:::
+
+------------------------------------------------------------------------
+
+### Functions
+
+::: callout
+**Example:** Write a function that assigns the letter grade based off of the numeric scores.
+
+-   **A**: `90` or higher
+-   **B**: `75`-`89`
+-   **C**: less than `75`
+:::
+
+```{webr}
+#| edit: true
+#| min-lines: 3
+```
+
+------------------------------------------------------------------------
+
+### Recursive Functions
+
+A `recursive function` is a function that calls itself to solve smaller instances of the same problem. It’s particularly useful for tasks that can be broken down into simpler, repetitive sub-tasks
+
+------------------------------------------------------------------------
+
+### Factorials
+
+::: callout
+**Example:** Calculate the `factorial` of a non-negative integer n,
+
+$$n! = n \times (n - 1) \times (n - 2) \times . . . \times 2 \times 1 $$
+:::
+
+------------------------------------------------------------------------
+
+### Factorials
+
+::: callout
+**Example:** Calculate the `factorial` of a non-negative integer n,
+
+$$n! = n \times (n - 1) \times (n - 2) \times . . . \times 2 \times 1 $$
+:::
+
+```{r, echo = TRUE}
+#' Calculate the factorial of a given integer using recursion
+#'
+#' @param n non-negative integer
+#' @return n!
+factorial_recursive <- function(n) {
+ if(n == 0) {
+  return(1)
+ } else {
+  return(n * factorial_recursive(n-1))
+ }
+}
+```
+
+```{webr}
+#| edit: true
+#| min-lines: 4
+```
+
+------------------------------------------------------------------------
+
+### Loops
+
+-   **Loops (e.g., `for`, `while`)** allow you to repeat sections of code multiple times without writing them out again. This is especially helpful when performing the same task on many items, such as processing each value in a dataset.
+
+```{r, eval=FALSE, echo = TRUE}
+for (loopindex in vector) {
+  do this
+}
+```
+
+------------------------------------------------------------------------
+
+## Case Study: GovGuam Tax Revenue
+
+Let’s examine the table showing Government of Guam tax revenue from 2017-2022 from the [2023 Guam Statistical Yearbook](https://bsp.guam.gov/wp-bsp-content/uploads/2025/01/2023-Guam-Statistical-Yearbook-Final.pdf).
+
+![](images/clipboard-3553642164.png){width="1200px"}
+
+------------------------------------------------------------------------
+
+## Case Study: GovGuam Tax Revenue
+
+::: {.callout .callout-pink title="To do"}
+-   Make two separate vectors: one for the dollar amounts in each category (excluding the total) for 2022, and another for 2021. Note: When copying the numbers, do not use commas for formatting — a comma will be interpreted as separating values.
+
+-   Add attributes to each vector that describe what the values represent (the category or description).
+
+-   Find the difference in tax revenue between 2021 and 2022 in each category.
+
+-   Build two vectors that calculate what percent of the total revenue comes from each category for 2022 and 2021.
+
+-   Write a function that takes in a percentage value (e.g., the share of a tax category) and classifies it into these categories:
+
+    -   `> 30%` : Large Share
+    -   `> 10%` : Medium Share
+    -   `< 10%` : Small Share
+
+-   Use a for loop to categorize each value in our vectors.
+:::
+
+------------------------------------------------------------------------
+
+### Case Study: GovGuam Tax Revenue
+
+![](images/clipboard-3553642164.png){width="1200px"}
+
+-   Make two separate vectors: one for the dollar amounts in each category (excluding the total) for 2022, and another for 2021.
+
+```{webr}
+#| edit: true
+#| min-lines: 5
 ```
