@@ -463,27 +463,9 @@ window.Quarto = {
 <ol start="3" type="1">
 <li>Find the difference in tax revenue between 2021 and 2022 in each category.</li>
 </ol>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>hide code</summary>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>diff_taxRev <span class="ot">&lt;-</span> tr_22 <span class="sc">-</span> tr_21</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
 <ol start="4" type="1">
 <li>Build two vectors that calculate what percent of the total revenue comes from each category for 2022 and 2021.</li>
 </ol>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>hide code</summary>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># grab the total number of tax revenue from all categories for both years</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>total_22 <span class="ot">&lt;-</span> <span class="fu">sum</span>(tr_22)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>total_21 <span class="ot">&lt;-</span> <span class="fu">sum</span>(tr_21)</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co"># divide each category by total and multiply by 100 to get percent</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>pct_tr_21 <span class="ot">&lt;-</span> tr_21<span class="sc">/</span>total_21 <span class="sc">*</span> <span class="dv">100</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>pct_tr_22 <span class="ot">&lt;-</span> tr_22<span class="sc">/</span>total_22 <span class="sc">*</span> <span class="dv">100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
 
 
 </section>

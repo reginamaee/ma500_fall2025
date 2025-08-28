@@ -197,13 +197,13 @@ names(tr_22) <- categories
 
 3.  Find the difference in tax revenue between 2021 and 2022 in each category.
 
-```{r}
+```{r, echo = FALSE, eval = FALSE}
 diff_taxRev <- tr_22 - tr_21
 ```
 
 4.  Build two vectors that calculate what percent of the total revenue comes from each category for 2022 and 2021.
 
-```{r}
+```{r, echo = FALSE, eval = FALSE}
 # grab the total number of tax revenue from all categories for both years
 total_22 <- sum(tr_22)
 total_21 <- sum(tr_21)
