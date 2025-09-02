@@ -9,6 +9,9 @@ book:
     - 01_install.qmd
     - 03_Basics.qmd
     - 04_CLF.qmd
+    
+execute: 
+  error: true
 
 bibliography: references.bib
 
@@ -16,6 +19,9 @@ format:
   html:
     theme:
       - minty
+    include-in-header: 
+      - text: |
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     css: styles.css
     highlight-style: tango
     code-fold: show

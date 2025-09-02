@@ -1,0 +1,22 @@
+# Introduction to Dataframes {.unnumbered}
+
+### What is a `data.frame`?
+
+A `data.frame` in `R` is a data structure used to store data in a tabular form. It is very similar to a spreadsheet, excel sheet, or SQL table within R. You can also think of it as a collection of multiple data vectors. A `data.frame` is two-dimensional, meaning it has rows and columns where:
+
+-   each *row* represents an observation
+-   each *column* represents a variable, attribute, or feature.
+
+### What is `tidyverse`?
+
+`Tidyverse` is a collection of packages to help with cleaning, transformation, visualization, and analysis. (A few packages in `Tidyverse` include `dplyr`, `ggplot2`, `tidyr`, and `readr`). In this class, we will be using this collection for data wrangling, cleaning, and transforming.
+
+You can install tidyverse by running: `install.packages("tidyverse")`.
+
+### What is `ggplot2`?
+
+This is *the* R package for data visualization. This suite provides an easy way to visualize your data with: bar charts, scatter plots, time trends, etc. Writing ggplot code comprises of these components: the data being visualized, the aesthetics (how you would like the variables to be mapped), and geometric objects (the shapes that represent the data).
+
+## Creating a Data.frame
+
+You can build a `data.frame` either by defining it within R or by reading data from a `.csv` or `.xlsx` file.

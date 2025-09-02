@@ -101,6 +101,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -215,6 +216,11 @@ window.Quarto = {
   <li><a href="#recursive-functions" id="toc-recursive-functions" class="nav-link" data-scroll-target="#recursive-functions">Recursive Functions</a></li>
   </ul></li>
   <li><a href="#case-study-govguam-tax-revenue" id="toc-case-study-govguam-tax-revenue" class="nav-link" data-scroll-target="#case-study-govguam-tax-revenue">Case Study: GovGuam Tax Revenue</a></li>
+  <li><a href="#lists-vs.-vectors" id="toc-lists-vs.-vectors" class="nav-link" data-scroll-target="#lists-vs.-vectors">Lists vs.&nbsp;Vectors</a>
+  <ul class="collapse">
+  <li><a href="#the-apply-family" id="toc-the-apply-family" class="nav-link" data-scroll-target="#the-apply-family">The <code>apply()</code> family</a></li>
+  </ul></li>
+  <li><a href="#vectorized-functions" id="toc-vectorized-functions" class="nav-link" data-scroll-target="#vectorized-functions">Vectorized Functions</a></li>
   </ul>
 </nav>
     </div>
@@ -302,8 +308,7 @@ window.Quarto = {
 </section>
 <section id="if-else-1" class="level2">
 <h2 class="anchored" data-anchor-id="if-else-1">If-else</h2>
-<section id="example" class="level4 callout-example">
-<h4 class="anchored" data-anchor-id="example">Example:</h4>
+<div class="callout-example">
 <p>Write an <code>if-else</code> statement that prints the letter grade based off of the numeric scores.</p>
 <ul>
 <li><strong>A</strong>: <code>90</code> or higher</li>
@@ -328,13 +333,12 @@ window.Quarto = {
 <pre><code>[1] "B"</code></pre>
 </div>
 </div>
-</section>
+</div>
 </section>
 <section id="functions-1" class="level2">
 <h2 class="anchored" data-anchor-id="functions-1">Functions</h2>
 <p>Let us extend our <code>if-else</code> statement from above and put it into a defined function that takes the numeric score as an input and outputs its respective letter grade.</p>
-<section id="example-1" class="level4 callout-example">
-<h4 class="anchored" data-anchor-id="example-1">Example:</h4>
+<div class="callout-example">
 <p>Write a function that assigns the letter grade based off of the numeric scores.</p>
 <ul>
 <li><strong>A</strong>: <code>90</code> or higher</li>
@@ -381,12 +385,11 @@ window.Quarto = {
 <pre><code>[1] "C"</code></pre>
 </div>
 </div>
-</section>
+</div>
 <section id="recursive-functions" class="level3">
 <h3 class="anchored" data-anchor-id="recursive-functions">Recursive Functions</h3>
 <p>A <code>recursive function</code> is a function that calls itself to solve smaller instances of the same problem. It’s particularly useful for tasks that can be broken down into simpler, repetitive sub-tasks.</p>
-<section id="example-2" class="level4 callout-example">
-<h4 class="anchored" data-anchor-id="example-2">Example:</h4>
+<div class="callout-example">
 <p>Calculate the <code>factorial</code> of a non-negative integer n,</p>
 <p><span class="math display">\[n! = n \times (n - 1) \times (n - 2) \times . . . \times 2 \times 1 \]</span></p>
 <p><em>Solution:</em></p>
@@ -411,7 +414,7 @@ window.Quarto = {
 <pre><code>[1] 720</code></pre>
 </div>
 </div>
-</section>
+</div>
 <p>Note: <code>R</code> already has a base function called <code>factorial</code>.</p>
 </section>
 </section>
@@ -457,15 +460,406 @@ window.Quarto = {
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>categories <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Income"</span>, <span class="st">"Gross Receipts"</span>, <span class="st">"Section 30 Federal income tax"</span>, <span class="st">"Property"</span>, <span class="st">"Hotel Occupancy"</span>, <span class="st">"Liquid Fuel"</span>, <span class="st">"Tabacco"</span>, <span class="st">"Alcoholic Beverages"</span>, <span class="st">"Excise"</span>, <span class="st">"Lmited Gaming"</span>, <span class="st">"Other"</span>)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(tr_21) <span class="ot">&lt;-</span> categories</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(tr_22) <span class="ot">&lt;-</span> categories</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(tr_22) <span class="ot">&lt;-</span> categories</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="do">## -- OR</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>tr_21 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Income"</span> <span class="ot">=</span> <span class="dv">352818</span>, <span class="st">"Gross Receipts"</span> <span class="ot">=</span> <span class="dv">296806</span>, <span class="st">"Section 30 Federal income tax"</span> <span class="ot">=</span> <span class="dv">65110</span>, </span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Property"</span> <span class="ot">=</span> <span class="dv">35612</span>, <span class="st">"Hotel Occupancy"</span> <span class="ot">=</span> <span class="dv">12372</span>, <span class="st">"Liquid Fuel"</span> <span class="ot">=</span> <span class="dv">10100</span>, <span class="st">"Tabacco"</span> <span class="ot">=</span> <span class="dv">34978</span>, </span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Alcoholic Beverages"</span> <span class="ot">=</span> <span class="dv">3519</span>, <span class="st">"Excise"</span> <span class="ot">=</span> <span class="dv">3761</span>, <span class="st">"Lmited Gaming"</span> <span class="ot">=</span> <span class="dv">1395</span>, <span class="st">"Other"</span> <span class="ot">=</span> <span class="dv">0</span>)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>tr_22 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Income"</span> <span class="ot">=</span> <span class="dv">372492</span>, <span class="st">"Gross Receipts"</span> <span class="ot">=</span> <span class="dv">327115</span>, <span class="st">"Section 30 Federal income tax"</span> <span class="ot">=</span> <span class="dv">76141</span>, </span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Property"</span> <span class="ot">=</span> <span class="dv">35794</span>, <span class="st">"Hotel Occupancy"</span> <span class="ot">=</span> <span class="dv">18169</span>, <span class="st">"Liquid Fuel"</span> <span class="ot">=</span> <span class="dv">9353</span>, <span class="st">"Tabacco"</span> <span class="ot">=</span> <span class="dv">31643</span>, </span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Alcoholic Beverages"</span> <span class="ot">=</span> <span class="dv">4953</span>, <span class="st">"Excise"</span> <span class="ot">=</span> <span class="dv">3562</span>, <span class="st">"Lmited Gaming"</span> <span class="ot">=</span> <span class="dv">1473</span>, <span class="st">"Other"</span> <span class="ot">=</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <ol start="3" type="1">
 <li>Find the difference in tax revenue between 2021 and 2022 in each category.</li>
 </ol>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>diff_taxRev <span class="ot">&lt;-</span> tr_22 <span class="sc">-</span> tr_21</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
 <ol start="4" type="1">
 <li>Build two vectors that calculate what percent of the total revenue comes from each category for 2022 and 2021.</li>
 </ol>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># grab the total number of tax revenue from all categories for both years</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>total_22 <span class="ot">&lt;-</span> <span class="fu">sum</span>(tr_22)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>total_21 <span class="ot">&lt;-</span> <span class="fu">sum</span>(tr_21)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co"># divide each category by total and multiply by 100 to get percent</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>pct_tr_21 <span class="ot">&lt;-</span> tr_21<span class="sc">/</span>total_21 <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>pct_tr_22 <span class="ot">&lt;-</span> tr_22<span class="sc">/</span>total_22 <span class="sc">*</span> <span class="dv">100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<ol start="5" type="1">
+<li>Write a function that takes in a percentage value and classifies it into these categories: <code>&gt;30%</code>: Large Share, <code>&gt;10%</code>: Medium Share, <code>&lt;10%</code>: Small Share</li>
+</ol>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' This function groups the share sizes based off of a percentage value.</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co">#' </span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co">#'@param percent_val a percentage value representing tax revenue</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co">#'@return string of either "Large", "Medium", "Small Share"</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>categorize_tax <span class="ot">&lt;-</span> <span class="cf">function</span>(percent_val) {</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (percent_val <span class="sc">&gt;</span> <span class="dv">30</span>) {</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    share <span class="ot">&lt;-</span> <span class="st">"Large Share"</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (percent_val <span class="sc">&gt;</span> <span class="dv">10</span>) {</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    share <span class="ot">&lt;-</span> <span class="st">"Medium Share"</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    share <span class="ot">&lt;-</span> <span class="st">"Small Share"</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(share)</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="co"># test each possible case</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="fu">categorize_tax</span>(<span class="dv">40</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Large Share"</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">categorize_tax</span>(<span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Medium Share"</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">categorize_tax</span>(<span class="dv">9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Small Share"</code></pre>
+</div>
+</div>
+<ol start="5" type="1">
+<li>Use a for loop to categorize each value in our vectors. Check how many of each share we have.</li>
+</ol>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>share_categories <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (pct <span class="cf">in</span> pct_tr_21) {</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  share_categories <span class="ot">&lt;-</span> <span class="fu">append</span>(share_categories, <span class="fu">categorize_tax</span>(pct))</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="lists-vs.-vectors" class="level2">
+<h2 class="anchored" data-anchor-id="lists-vs.-vectors">Lists vs.&nbsp;Vectors</h2>
+<p>A <strong><em>vector</em></strong> is a one dimensional array of elements that must be the SAME type. Almost all data in <code>R</code> is stored in a vector.</p>
+<p>A <strong><em>list</em></strong> <strong>is a recursive vector</strong>, meaning a list can contain multiple vectors or other lists. Lists can contain lists of vectors or lists of dataframes. Lists can contain any data-type.</p>
+<div class="callout-example">
+<p>Create/Define a list.</p>
+<p><em>Solution:</em></p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># vector num: numeric</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>num <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">8</span>,<span class="dv">9</span>,<span class="dv">2</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># vector char: character </span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>char <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Apple"</span>, <span class="st">"Banana"</span>)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co"># list: l combination of num and char</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>l <span class="ot">&lt;-</span> <span class="fu">list</span>(num, char)</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(l)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+[1] 1 8 9 2
+
+[[2]]
+[1] "Apple"  "Banana"</code></pre>
+</div>
+</div>
+</div>
+<div class="callout-example">
+<p>Indexing a list:</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># returns the first element of the list </span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co"># single bracket - returns as a list</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(l[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+[1] 1 8 9 2</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># double bracker - returns back the vector</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(l[[<span class="dv">1</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 8 9 2</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># returns the second element of the list</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(l[<span class="dv">2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+[1] "Apple"  "Banana"</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(l[[<span class="dv">2</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Apple"  "Banana"</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># returns the 3rd element of the vector in the first element of the list</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(l[[<span class="dv">1</span>]][<span class="dv">3</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 9</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># setting names in the list</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(l) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"num"</span>, <span class="st">"char"</span>)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="co"># indexing using names</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(l<span class="sc">$</span>num[<span class="dv">3</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 9</code></pre>
+</div>
+</div>
+</div>
+<section id="the-apply-family" class="level3">
+<h3 class="anchored" data-anchor-id="the-apply-family">The <code>apply()</code> family</h3>
+<p>The <code>apply()</code> family are several functions in R that provide a way to apply functions across different data structures without the need to write explicit loops. These functions allow you to work more efficiently with vectors, lists, dataframes, and in a much cleaner way.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 13%">
+<col style="width: 10%">
+<col style="width: 63%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Input</th>
+<th>Output</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>apply()</code></td>
+<td><ul>
+<li><p>Matrix</p></li>
+<li><p>Dataframe</p></li>
+</ul></td>
+<td><ul>
+<li><p>Vector</p></li>
+<li><p>Array</p></li>
+</ul></td>
+<td>Applies a specified function across rows or columns</td>
+</tr>
+<tr class="even">
+<td><code>lapply()</code></td>
+<td><ul>
+<li><p>List</p></li>
+<li><p>Vector</p></li>
+</ul></td>
+<td><ul>
+<li>List</li>
+</ul></td>
+<td>Applies a function to each element; always returns a list</td>
+</tr>
+<tr class="odd">
+<td><code>sapply()</code></td>
+<td><ul>
+<li>List</li>
+</ul>
+<!-- -->
+<ul>
+<li>Vector</li>
+</ul></td>
+<td><ul>
+<li><p>Vector</p></li>
+<li><p>Matrix</p></li>
+<li><p>List</p></li>
+</ul></td>
+<td>same as <code>sapply()</code> but returns the most simplified version it can return</td>
+</tr>
+</tbody>
+</table>
+<p>Let’s use some of the functions above to categorize our tax revenue percentage vectors with the above <code>share_categories()</code> function.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>categories <span class="ot">&lt;-</span> <span class="fu">lapply</span>(pct_tr_21, categorize_tax)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(categories)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>$Income
+[1] "Large Share"
+
+$`Gross Receipts`
+[1] "Large Share"
+
+$`Section 30 Federal income tax`
+[1] "Small Share"
+
+$Property
+[1] "Small Share"
+
+$`Hotel Occupancy`
+[1] "Small Share"
+
+$`Liquid Fuel`
+[1] "Small Share"
+
+$Tabacco
+[1] "Small Share"
+
+$`Alcoholic Beverages`
+[1] "Small Share"
+
+$Excise
+[1] "Small Share"
+
+$`Lmited Gaming`
+[1] "Small Share"
+
+$Other
+[1] "Small Share"</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(categories)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "list"</code></pre>
+</div>
+</div>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>categories_sapply <span class="ot">&lt;-</span> <span class="fu">sapply</span>(pct_tr_21, categorize_tax)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(categories_sapply)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>                       Income                Gross Receipts 
+                "Large Share"                 "Large Share" 
+Section 30 Federal income tax                      Property 
+                "Small Share"                 "Small Share" 
+              Hotel Occupancy                   Liquid Fuel 
+                "Small Share"                 "Small Share" 
+                      Tabacco           Alcoholic Beverages 
+                "Small Share"                 "Small Share" 
+                       Excise                 Lmited Gaming 
+                "Small Share"                 "Small Share" 
+                        Other 
+                "Small Share" </code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(categories_sapply)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "character"</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="vectorized-functions" class="level2">
+<h2 class="anchored" data-anchor-id="vectorized-functions">Vectorized Functions</h2>
+<p>Most base <code>R</code> functions are <em>vectorized,</em> meaning they automatically apply the function or operation to every element in a vector provided.</p>
+<p>Our function <code>categorize_tax</code> is NOT vectorized. You can see below that we can an error if we try to input the ENTIRE percent vector into the function.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Caution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">categorize_tax</span>(pct_tr_21)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-error">
+<pre><code>Error in if (percent_val &gt; 30) {: the condition has length &gt; 1</code></pre>
+</div>
+</div>
+</div>
+</div>
+<p>To make our <code>categorize_tax</code> function vectorized, we need to adjust the code. Rather than using nested <code>if-else</code> statements, we can use <code>ifelse()</code>, which is the vectorized version and works element-wise across an entire vector.</p>
+<section id="non-vectorized-function-vs-vectorized-function" class="level4 callout-example">
+<h4 class="anchored" data-anchor-id="non-vectorized-function-vs-vectorized-function">Non-Vectorized Function vs Vectorized Function</h4>
+<p><em>Before vectorizing: (we need to run a loop using this function to do element-wise operations on it)</em></p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' This function groups the share sizes based off of a percentage value.</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="co">#' </span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="co">#'@param percent_val a percentage value representing tax revenue</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="co">#'@return string of either "Large", "Medium", "Small Share"</span></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>categorize_tax <span class="ot">&lt;-</span> <span class="cf">function</span>(percent_val) {</span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (percent_val <span class="sc">&gt;</span> <span class="dv">30</span>) {</span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>    share <span class="ot">&lt;-</span> <span class="st">"Large Share"</span></span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (percent_val <span class="sc">&gt;</span> <span class="dv">10</span>) {</span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>    share <span class="ot">&lt;-</span> <span class="st">"Medium Share"</span></span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>    share <span class="ot">&lt;-</span> <span class="st">"Small Share"</span></span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(share)</span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p><em>After vectoring: we can directly provide this function our vector and it will automatically perform element wise operations on it because the inner <code>ifelse()</code></em> <em>is a vectorized function.</em></p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' This function groups the share sizes based off of a percentage value.</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="co">#' </span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="co">#'@param percent_val a percentage value representing tax revenue</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="co">#'@return string of either "Large", "Medium", "Small Share"</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>categorize_tax_v <span class="ot">&lt;-</span> <span class="cf">function</span>(percent_val) {</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ifelse</span>(</span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>    percent_val <span class="sc">&gt;</span> <span class="dv">30</span>, <span class="st">"Large Share"</span>,</span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ifelse</span>(percent_val <span class="sc">&gt;</span> <span class="dv">10</span>, <span class="st">"Medium Share"</span>, <span class="st">"Small Share"</span>)</span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a><span class="fu">categorize_tax_v</span>(pct_tr_21)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>                       Income                Gross Receipts 
+                "Large Share"                 "Large Share" 
+Section 30 Federal income tax                      Property 
+                "Small Share"                 "Small Share" 
+              Hotel Occupancy                   Liquid Fuel 
+                "Small Share"                 "Small Share" 
+                      Tabacco           Alcoholic Beverages 
+                "Small Share"                 "Small Share" 
+                       Excise                 Lmited Gaming 
+                "Small Share"                 "Small Share" 
+                        Other 
+                "Small Share" </code></pre>
+</div>
+</div>
+</section>
 
 
 </section>

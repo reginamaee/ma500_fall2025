@@ -1,27 +1,52 @@
-/* New variant that keeps Quarto's default callout layout */
-.reveal .callout.callout-pink {
-    /* win against theme defaults */
-    border-left-color: #ff69b4 !important;
-    /* set a variable many themes use for tints */
-    --callout-accent: #ff69b4;
-  }
-  
-  /* icon color */
-  .reveal .callout.callout-pink .callout-icon {
-    color: #ff69b4 !important;
-  }
-  
-  /* title bar tint (works across themes) */
-  .reveal .callout.callout-pink .callout-title {
-    background: color-mix(in srgb, #ff69b4 14%, transparent) !important;
-  }
-  
-  /* if you *also* put .callout-important on it, this ensures pink wins */
-  .reveal .callout.callout-important.callout-pink,
-  .reveal .callout.callout-important.callout-pink .callout-icon,
-  .reveal .callout.callout-important.callout-pink .callout-title {
-    border-left-color: #ff69b4 !important;
-    color: #ff69b4 !important;
-    background: color-mix(in srgb, #ff69b4 14%, transparent) !important;
-  }
-  
+/*********************************************/
+/* callout example */
+.callout-example {
+  border-left: 4px solid #7caa90;
+  background: rgba(236, 250, 229, 0.5);
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 6px;
+}
+
+/* Optional: style the title */
+.callout-example .callout-title::before {
+  content: "✨ Example ";
+  font-weight: bold;
+  margin-right: 0.4rem;
+}
+
+/*********************************************/
+
+.callout-recall {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-left: 4px solid #F39237;
+  background: rgba(253, 253, 253, 0.5);
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 6px;
+}
+
+/* If the title element exists but is empty, insert default text */
+.callout-recall .callout-title:empty::before {
+  content: "Recall";
+}
+
+/* If there is no header at all, create one (requires :has support) */
+.callout-recall:not(:has(.callout-header))::before {
+  content: "↻ Recall";   /* fallback with icon */
+  display: block;
+  font-weight: 500;
+  font-size: 0.7em;
+  font-weight: bold;
+  color: "gray";
+  padding: .55rem .9rem;
+  background: color-mix(in srgb, #F39237 14%, transparent);
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  margin: -1rem -1rem .6rem; /* aligns with your padding */
+}
+
+
+
+
+/*********************************************/

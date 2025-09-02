@@ -1,0 +1,869 @@
+---
+format: 
+  live-revealjs:
+    theme: default
+    auto-animate: true
+    auto-animate-duration: 0.5
+    auto-animate-easing: ease-in-out
+    code-line-numbers: true
+    css: reveal_style.css
+    include-in-header:
+      text: |
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+title: "MA-500 Intro to R"
+engine: knitr
+scrolling: FALSE
+scrollable: FALSE
+---
+
+{{< include _extensions/r-wasm/live/_knitr.qmd >}}
+
+{{< include ./_extensions/r-wasm/live/_gradethis.qmd >}}
+
+------------------------------------------------------------------------
+
+### Announcements
+
+-   `Homework 1` is due on Friday, **September 5.**
+
+    -   Note: all submissions now should be in `.Rmd (RMarkdown)`
+
+-   **Reminder:** Data sets for final project approval is due by: **September 16**
+
+    -   Please email it to me: dominguezr\@triton.uog.edu
+
+-   **Reminder**: Office hours are by appointment, please email if needed!
+
+------------------------------------------------------------------------
+
+### R Basics and Fundamentals
+
+You add comments using the `#` (pound) key
+
+```{webr}
+#| caption: Adding comments
+#| autorun: true
+#| runbutton: false 
+
+# This is how you can add comments
+
+#'
+#' This is how you can add multi
+#' line comments
+#' 
+#'
+```
+
+------------------------------------------------------------------------
+
+### R Basics and Fundamentals
+
+And essentially, in your console window or in your script, you can use R as a calculator.
+
+```{webr}
+#| edit: false
+#| caption: Basic Arithmetic
+#| autorun: true
+#| runbutton: false 
+
+1 + 1
+```
+
+```{webr}
+#| edit: false
+#| caption: Basic Arithmetic
+#| autorun: true
+#| runbutton: false 
+
+1 / 200 * 30
+```
+
+```{webr}
+#| edit: false
+#| caption: Basic Arithmetic
+#| autorun: true
+#| runbutton: false 
+
+sin(pi/2)
+```
+
+------------------------------------------------------------------------
+
+### Directories
+
+R sessions are tied to a *working directory.*
+
+```{webr}
+#| edit: false
+#| caption: Working directories
+#| autorun: true
+#| runbutton: false 
+# check your working directory
+getwd()
+
+```
+
+You can change your working directory with this command:
+
+```{webr}
+#| edit: true
+#| caption: Changing directory 
+
+
+
+
+```
+
+------------------------------------------------------------------------
+
+### R Packages
+
+Base installation of `R` comes with tons of features and in-house functions. But, in some cases, you may need to install more. For this class, you will need:
+
+::: incremental
+-   `ggplot2`
+-   `tidyverse`
+-   `MASS`
+:::
+
+------------------------------------------------------------------------
+
+### R Packages
+
+You can install new packages by using this line of code here:
+
+```{r, echo = TRUE, eval = FALSE}
+# install packages with this line:
+install.packages("packageNameHere")
+```
+
+You can `source` by:
+
+```{r, echo = TRUE, eval = FALSE}
+# source packages with this line:
+library("packageNameHere")
+```
+
+------------------------------------------------------------------------
+
+### Directories
+
+When you run `RStudio`, your session is associated with a *working directory.*
+
+```{r, echo = TRUE, eval = TRUE}
+# check your working directory
+getwd()
+```
+
+Changing your working directory:
+
+```{r,echo = TRUE, eval = FALSE}
+setwd("/insertFilePathHere")
+```
+
+------------------------------------------------------------------------
+
+### Variables
+
+You can create variables by using `<-` to store your results.
+
+```{webr}
+#| edit: true
+#| caption: Variable Assignment
+#| min-lines: 3
+
+
+
+
+```
+
+::: callout-tip
+Use **meaningful** variable names.
+
+It is also best to use *lowercase, underscores,* or *camelCase.* Try and avoid spaces or special characters.
+
+*ex*: `student_name` or `studentName`
+:::
+
+------------------------------------------------------------------------
+
+### R Data Types
+
+A **data type** describes the kind of values a variable can hold. This is important for interpretation and how the values can be utilized.
+
+Several data types include:
+
+::: incremental
+-   `numeric`: `double` or `int`
+-   `character`: text or strings ("Hello")
+-   `logical` : TRUE/FALSE
+-   `factor`: categorical data ("A", "B")
+:::
+
+------------------------------------------------------------------------
+
+### R Data Types
+
+Use the `class()` function to determine what data type your variable is.
+
+```{webr}
+#| edit: true
+#| caption: R Data Types
+
+```
+
+------------------------------------------------------------------------
+
+### Data Vectors
+
+A data vector is a collection of observations that are of the **same type.**
+
+::: callout
+**Example:** In 2021, the average temperature in Guam for each month was 80.7, 81.4, 81.5, 82.6, 82.6, 83.7, 83.4, 81.8, 82.5, 81.4, 82.0, and 81.0. Store these values in a vector named `temp`.
+:::
+
+```{webr}
+#| edit: true
+#| caption: Data Vector ex1
+
+```
+
+------------------------------------------------------------------------
+
+### Data Vectors
+
+Vectors can be assigned **attributes** or **names.**
+
+```{webr}
+#| edit: true
+#| caption: Data Vector ex2
+#| min-lines: 4
+
+```
+
+------------------------------------------------------------------------
+
+### Data Vectors
+
+**Indexing** a vector can be done multiple ways.
+
+```{webr}
+#| edit: true
+#| caption: indexing_vector_name
+#| min-lines: 3
+
+```
+
+OR
+
+```{webr}
+#| edit: true
+#| caption: indexing_vector_value
+#| min-lines: 3
+```
+
+------------------------------------------------------------------------
+
+### Operators
+
+**Operators** are functions/symbols that tell `R` what sort of `computation` to perform.
+
+**Comparison operators:**
+
+::: incremental
+-   `>` : greater than
+-   `<` : less than
+-   `>=` : greater than or equal to
+-   `<=` : less than or equal to
+-   `==` : is equal to
+-   `!=` : does not equal
+:::
+
+------------------------------------------------------------------------
+
+### Using Operators
+
+::: callout
+**Example:** Which months record warmer average temperatures than August?
+:::
+
+```{webr}
+#| edit: true
+#| caption: using_operators
+#| min-lines: 3
+
+```
+
+------------------------------------------------------------------------
+
+### Operators
+
+**Logical operators:**
+
+::: incremental
+-   `&` AND
+-   `|` OR
+-   `!` NOT
+:::
+
+------------------------------------------------------------------------
+
+### Using Operators
+
+::: callout
+**Example:** What **FALL** months have warmer average temperatures than August?
+:::
+
+```{webr}
+#| edit: true
+#| caption: using_operators_two
+#| min-lines: 3
+```
+
+------------------------------------------------------------------------
+
+### Using Operators
+
+::: callout
+**Example:** Which month had the highest average temperature?
+:::
+
+```{webr}
+#| edit: true
+#| min-lines: 3
+```
+
+------------------------------------------------------------------------
+
+### Using Operators
+
+::: callout
+**Example:** What is the average temperature in the summer months?
+:::
+
+```{webr}
+#| edit: true
+#| min-lines: 3
+```
+
+------------------------------------------------------------------------
+
+### Using Operators
+
+::: callout
+**Exercise:**
+
+a). What month has the lowest average temperature in 2021?
+
+b). Return all months with an average temperature less than `82`.
+:::
+
+```{webr}
+#| exercise: ex_1_a
+#| caption: exercise 1a
+#| min-lines: 3
+
+```
+
+```{webr}
+#| exercise: ex_1_a
+#| check: true 
+gradethis::grade_this_code(correct = "Great job!", 
+                           incorrect = "Not quite. Try again!")
+```
+
+```{webr}
+#| exercise: ex_1_a
+#| solution: true
+names(temp)[temp == min(temp)]
+```
+
+```{webr}
+#| exercise: ex_1_b
+#| caption: exercise 1b
+#| min-lines: 3
+
+```
+
+```{webr}
+#| exercise: ex_1_b
+#| check: true 
+gradethis::grade_this_code(correct = "Great job!", 
+                           incorrect = "Not quite. Try again!")
+```
+
+```{webr}
+#| exercise: ex_1_b
+#| solution: true
+names(temp)[temp < 82]
+```
+
+------------------------------------------------------------------------
+
+### Vector Operations
+
+You can utilize *element-wise* operations onto **vectors.**
+
+```{r, echo = TRUE, eval = FALSE}
+# adds two to each element in temp
+temp <- temp + 2
+```
+
+------------------------------------------------------------------------
+
+### Vector Operations
+
+::: callout
+**Example:** Convert all temperatures in our `temp` vector from Fahrenheit to Celcius. Use the formula $$C = \frac{5}{9}*(t-32)$$
+:::
+
+```{webr}
+#| edit: true
+#| min-lines: 3
+```
+
+------------------------------------------------------------------------
+
+### Sequences
+
+::: callout
+**Example:** Return all values from `1` to `10`.
+:::
+
+```{webr}
+#| edit: true
+```
+
+Use the `seq()` function for more flexible operations.
+
+```{webr}
+#| edit: true
+```
+
+------------------------------------------------------------------------
+
+### Random Sampling
+
+The [`sample()`](https://rdrr.io/r/base/sample.html) function takes a sample from the specified elements of `x` with or without replacement.
+
+```{webr}
+#| edit: true
+```
+
+------------------------------------------------------------------------
+
+### Repetition
+
+To repeat values, use `rep()`
+
+```{webr}
+#| edit: true
+```
+
+------------------------------------------------------------------------
+
+### Conditionals, Loops, and Functions
+
+When you need to **control the flow and logic of your code**, you can use conditional statements, loops, or functions.
+
+------------------------------------------------------------------------
+
+## Conditionals
+
+-   **Conditionals (e.g., `if`, `else if`, `else`)** let you run certain sections of code only if a specific condition is true. This is useful when you want your program to make decisions or take different paths depending on the situation.
+
+------------------------------------------------------------------------
+
+## Conditionals {auto-animate="true"}
+
+:::{data-id = "if-else"}
+
+```{r, echo=TRUE, eval = FALSE}
+if (condition) {
+ do if TRUE 
+} else {
+do if FALSE
+}
+
+```
+
+:::
+
+------------------------------------------------------------------------
+
+## Conditionals {auto-animate="true"}
+
+:::{data-id = "if-else"}
+
+```{r, echo=TRUE, eval = FALSE}
+if (condition) {
+ do something
+} else if (condition2) {
+ do something
+} else {
+do this instead
+}
+```
+
+:::
+
+------------------------------------------------------------------------
+
+### Conditionals
+
+::: callout
+**Example:** Write an `if-else` statement that prints the letter grade based off of the numeric scores.
+
+-   **A**: `90` or higher
+-   **B**: `75`-`89`
+-   **C**: less than `75`
+:::
+
+```{webr}
+#| edit: true
+#| min-lines: 3
+```
+
+------------------------------------------------------------------------
+
+### Functions
+
+-   **Functions** let you **group code into reusable blocks**. Instead of repeating the same code in multiple places, you can define it once and call it whenever you need. Functions can also take inputs (arguments) and return outputs (results).
+
+------------------------------------------------------------------------
+
+### Functions {auto-animate="true"}
+
+:::{data-id = "function"}
+
+```{r, echo = TRUE, eval = FALSE}
+# Define a function
+function_name <- function(arg1, arg2, ...) {
+  
+  # do something here with arg1 and arg2
+  
+  # Step 3: Return the result
+  return(result)
+}
+
+
+# Call (use) the function
+function_name(value1, value2)
+
+```
+
+:::
+
+------------------------------------------------------------------------
+
+### Functions {auto-animate="true"}
+
+:::{data-id = "function"}
+
+```{r, echo = TRUE, eval = FALSE}
+#' purpose of this function
+#'
+#' @param arg1 define arg1
+#' @param arg2 define arg2
+#'
+#' @return description 
+function_name <- function(arg1, arg2, ...) {
+  
+  # do something here with arg1 and arg2
+  
+  # Step 3: Return the result
+  return(result)
+}
+
+
+# Call (use) the function
+function_name(value1, value2)
+
+```
+
+:::
+
+------------------------------------------------------------------------
+
+### Functions
+
+::: callout
+**Example:** Write a function that assigns the letter grade based off of the numeric scores.
+
+-   **A**: `90` or higher
+-   **B**: `75`-`89`
+-   **C**: less than `75`
+:::
+
+```{webr}
+#| edit: true
+#| min-lines: 3
+```
+
+------------------------------------------------------------------------
+
+### Recursive Functions
+
+A `recursive function` is a function that calls itself to solve smaller instances of the same problem. It’s particularly useful for tasks that can be broken down into simpler, repetitive sub-tasks
+
+------------------------------------------------------------------------
+
+### Factorials
+
+::: callout
+**Example:** Calculate the `factorial` of a non-negative integer n,
+
+$$n! = n \times (n - 1) \times (n - 2) \times . . . \times 2 \times 1 $$
+:::
+
+------------------------------------------------------------------------
+
+### Factorials
+
+::: callout
+**Example:** Calculate the `factorial` of a non-negative integer n,
+
+$$n! = n \times (n - 1) \times (n - 2) \times . . . \times 2 \times 1 $$
+:::
+
+```{r, echo = TRUE}
+#' Calculate the factorial of a given integer using recursion
+#'
+#' @param n non-negative integer
+#' @return n!
+factorial_recursive <- function(n) {
+ if(n == 0) {
+  return(1)
+ } else {
+  return(n * factorial_recursive(n-1))
+ }
+}
+```
+
+```{webr}
+#| edit: true
+#| min-lines: 4
+```
+
+------------------------------------------------------------------------
+
+### Loops
+
+-   **Loops (e.g., `for`, `while`)** allow you to repeat sections of code multiple times without writing them out again. This is especially helpful when performing the same task on many items, such as processing each value in a dataset.
+
+```{r, eval=FALSE, echo = TRUE}
+for (loopindex in vector) {
+  do this
+}
+```
+
+------------------------------------------------------------------------
+
+## Case Study: GovGuam Tax Revenue
+
+Let’s examine the table showing Government of Guam tax revenue from 2017-2022 from the [2023 Guam Statistical Yearbook](https://bsp.guam.gov/wp-bsp-content/uploads/2025/01/2023-Guam-Statistical-Yearbook-Final.pdf).
+
+![](images/clipboard-3553642164.png){width="1200px"}
+
+------------------------------------------------------------------------
+
+## Case Study: GovGuam Tax Revenue
+
+::: {.callout .callout-pink title="To do"}
+-   Make two separate vectors: one for the dollar amounts in each category (excluding the total) for 2022, and another for 2021. Note: When copying the numbers, do not use commas for formatting — a comma will be interpreted as separating values.
+
+-   Add attributes to each vector that describe what the values represent (the category or description).
+
+-   Find the difference in tax revenue between 2021 and 2022 in each category.
+
+-   Build two vectors that calculate what percent of the total revenue comes from each category for 2022 and 2021.
+
+-   Write a function that takes in a percentage value (e.g., the share of a tax category) and classifies it into these categories:
+
+    -   `> 30%` : Large Share
+    -   `> 10%` : Medium Share
+    -   `< 10%` : Small Share
+
+-   Use a for loop to categorize each value in our vectors.
+:::
+
+------------------------------------------------------------------------
+
+### Case Study: GovGuam Tax Revenue
+
+![](images/clipboard-3553642164.png){width="1200px"}
+
+-   Make two separate vectors: one for the dollar amounts in each category (excluding the total) for 2022, and another for 2021.
+
+```{webr}
+#| edit: true
+#| min-lines: 5
+```
+
+------------------------------------------------------------------------
+
+-   Add attributes to each vector that describe what the values represent (the category or description).
+
+```{webr}
+#| edit: true
+#| min-lines: 5
+
+```
+
+-   Find the difference in tax revenue between 2021 and 2022 in each category.
+
+```{webr}
+#| edit: true
+#| min-lines: 2
+
+```
+
+-   Build two vectors that calculate what percent of the total revenue comes from each category for 2022 and 2021.
+
+```{webr}
+#| edit: true
+#| min-lines: 5
+
+```
+
+------------------------------------------------------------------------
+
+-   Write a function that takes in a percentage value (e.g., the share of a tax category) and classifies it into these categories:
+
+    -   `> 30%` : Large Share
+    -   `> 10%` : Medium Share
+    -   `< 10%` : Small Share
+
+-   Use a for loop to categorize each value in our vectors.
+
+```{webr}
+#| edit: true
+#| min-lines: 10
+
+```
+
+------------------------------------------------------------------------
+
+### Lists vs. Vectors
+
+::::: {style="margin-top:-0.9em;"}
+<small>
+
+:::: callout-recall
+::: incremental
+-   A *vector* is a one-dimensional array with elements that are of the same data type.
+
+-   A *list* is a recursive vector, meaning a list can contain multiple vectors or other lists. Lists can contain lists of vectors or lists of dataframes. Lists can contain any data-type.
+
+    *![](images/clipboard-4246629424.png)* <small> Figure 5.1: Data Structures — from “Introduction to R and RStudio” by Remco Bas`t </small>`{=html}
+:::
+::::
+
+</small>
+:::::
+
+------------------------------------------------------------------------
+
+### Creating & Indexing a List
+
+```{webr}
+#| edit: true
+#| min-lines: 5
+
+```
+
+------------------------------------------------------------------------
+
+### The `apply()` family
+
+<medium> The `apply()` family are several functions in R that provide a way to apply functions across different data structures without the need to write explicit loops. </medium>
+
+<small>
+
++------------+---------------+------------+--------------------------------------------------------------------------+
+| Function   | Input         | Output     | Description                                                              |
++============+===============+============+==========================================================================+
+| `apply()`  | -   Matrix    | -   Vector | Applies a specified function across rows or columns                      |
+|            |               |            |                                                                          |
+|            | -   Dataframe | -   Array  |                                                                          |
++------------+---------------+------------+--------------------------------------------------------------------------+
+| `lapply()` | -   List      | -   List   | Applies a function to each element; always returns a list                |
+|            |               |            |                                                                          |
+|            | -   Vector    |            |                                                                          |
++------------+---------------+------------+--------------------------------------------------------------------------+
+| `sapply()` | -   List      | -   Vector | same as `sapply()` but returns the most simplified version it can return |
+|            |               |            |                                                                          |
+|            | <!-- -->      | -   Matrix |                                                                          |
+|            |               |            |                                                                          |
+|            | -   Vector    | -   List   |                                                                          |
++------------+---------------+------------+--------------------------------------------------------------------------+
+
+</small>
+
+------------------------------------------------------------------------
+
+### Using `apply()`
+
+<medium>
+
+:::: fragment
+::: callout-recall
+```{r, eval=FALSE, echo=TRUE}
+share_categories <- c()
+for (pct in pct_tr_21) {
+  share_categories <- append(share_categories, categorize_tax(pct))
+}
+```
+:::
+::::
+
+::: fragment
+We can use either `lapply()` or `sapply()` instead:
+
+```{webr}
+#| edit: true
+#| min-lines: 3
+```
+:::
+
+## </medium>
+
+### Vectorized Functions
+
+Most base `R` functions are *vectorized,* meaning they automatically apply the function or operation to every element in a vector provided.
+
+::: fragment
+```{r, echo = TRUE, eval = TRUE}
+num <- 8
+mean(8)
+```
+:::
+
+::: fragment
+```{r, echo = TRUE, eval = TRUE}
+num_vector <- c(8,9,2,3,2)
+mean(num_vector)
+```
+:::
+
+::: fragment
+Our function `categorize_tax` is NOT vectorized.
+
+```{webr}
+#| edit: true
+#| min-lines: 5
+```
+:::
+
+------------------------------------------------------------------------
+
+### Vectorized Functions
+
+To vectorize our `categorize_tax`, we need to re-define the function.
+
+::: fragment
+```{webr}
+#| edit: true
+#| min-lines: 5
+```
+:::

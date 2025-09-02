@@ -57,8 +57,6 @@ for (loopindex in vector) {
 ## If-else
 
 ::: callout-example
-#### Example:
-
 Write an `if-else` statement that prints the letter grade based off of the numeric scores.
 
 -   **A**: `90` or higher
@@ -85,8 +83,6 @@ if (score >= 90) {
 Let us extend our `if-else` statement from above and put it into a defined function that takes the numeric score as an input and outputs its respective letter grade.
 
 ::: callout-example
-#### Example:
-
 Write a function that assigns the letter grade based off of the numeric scores.
 
 -   **A**: `90` or higher
@@ -123,8 +119,6 @@ get_grade(8)
 A `recursive function` is a function that calls itself to solve smaller instances of the same problem. It’s particularly useful for tasks that can be broken down into simpler, repetitive sub-tasks.
 
 ::: callout-example
-#### Example:
-
 Calculate the `factorial` of a non-negative integer n,
 
 $$n! = n \times (n - 1) \times (n - 2) \times . . . \times 2 \times 1 $$
@@ -193,17 +187,28 @@ categories <- c("Income", "Gross Receipts", "Section 30 Federal income tax", "Pr
 
 names(tr_21) <- categories
 names(tr_22) <- categories
+
+## -- OR
+
+tr_21 <- c("Income" = 352818, "Gross Receipts" = 296806, "Section 30 Federal income tax" = 65110, 
+           "Property" = 35612, "Hotel Occupancy" = 12372, "Liquid Fuel" = 10100, "Tabacco" = 34978, 
+           "Alcoholic Beverages" = 3519, "Excise" = 3761, "Lmited Gaming" = 1395, "Other" = 0)
+
+tr_22 <- c("Income" = 372492, "Gross Receipts" = 327115, "Section 30 Federal income tax" = 76141, 
+           "Property" = 35794, "Hotel Occupancy" = 18169, "Liquid Fuel" = 9353, "Tabacco" = 31643, 
+           "Alcoholic Beverages" = 4953, "Excise" = 3562, "Lmited Gaming" = 1473, "Other" = 0)
+
 ```
 
 3.  Find the difference in tax revenue between 2021 and 2022 in each category.
 
-```{r, echo = FALSE, eval = FALSE}
+```{r}
 diff_taxRev <- tr_22 - tr_21
 ```
 
 4.  Build two vectors that calculate what percent of the total revenue comes from each category for 2022 and 2021.
 
-```{r, echo = FALSE, eval = FALSE}
+```{r}
 # grab the total number of tax revenue from all categories for both years
 total_22 <- sum(tr_22)
 total_21 <- sum(tr_21)
@@ -212,3 +217,182 @@ total_21 <- sum(tr_21)
 pct_tr_21 <- tr_21/total_21 * 100
 pct_tr_22 <- tr_22/total_22 * 100
 ```
+
+5.  Write a function that takes in a percentage value and classifies it into these categories: `>30%`: Large Share, `>10%`: Medium Share, `<10%`: Small Share
+
+```{r}
+
+#' This function groups the share sizes based off of a percentage value.
+#' 
+#'@param percent_val a percentage value representing tax revenue
+#'@return string of either "Large", "Medium", "Small Share"
+categorize_tax <- function(percent_val) {
+  if (percent_val > 30) {
+    share <- "Large Share"
+  } else if (percent_val > 10) {
+    share <- "Medium Share"
+  } else {
+    share <- "Small Share"
+  }
+  return(share)
+}
+
+# test each possible case
+categorize_tax(40)
+categorize_tax(12)
+categorize_tax(9)
+```
+
+5.  Use a for loop to categorize each value in our vectors. Check how many of each share we have.
+
+```{r}
+share_categories <- c()
+for (pct in pct_tr_21) {
+  share_categories <- append(share_categories, categorize_tax(pct))
+  
+}
+
+```
+
+## Lists vs. Vectors
+
+A ***vector*** is a one dimensional array of elements that must be the SAME type. Almost all data in `R` is stored in a vector.
+
+A ***list*** **is a recursive vector**, meaning a list can contain multiple vectors or other lists. Lists can contain lists of vectors or lists of dataframes. Lists can contain any data-type.
+
+::: callout-example
+Create/Define a list.
+
+*Solution:*
+
+```{r}
+
+# vector num: numeric
+num <- c(1,8,9,2)
+
+# vector char: character 
+char <- c("Apple", "Banana")
+
+# list: l combination of num and char
+l <- list(num, char)
+print(l)
+```
+:::
+
+::: callout-example
+Indexing a list:
+
+```{r}
+
+# returns the first element of the list 
+# single bracket - returns as a list
+print(l[1])
+
+# double bracker - returns back the vector
+print(l[[1]])
+
+# returns the second element of the list
+print(l[2])
+print(l[[2]])
+
+# returns the 3rd element of the vector in the first element of the list
+print(l[[1]][3])
+
+
+# setting names in the list
+names(l) <- c("num", "char")
+
+# indexing using names
+print(l$num[3])
+```
+:::
+
+### The `apply()` family
+
+The `apply()` family are several functions in R that provide a way to apply functions across different data structures without the need to write explicit loops. These functions allow you to work more efficiently with vectors, lists, dataframes, and in a much cleaner way.
+
++------------+---------------+------------+--------------------------------------------------------------------------+
+| Function   | Input         | Output     | Description                                                              |
++============+===============+============+==========================================================================+
+| `apply()`  | -   Matrix    | -   Vector | Applies a specified function across rows or columns                      |
+|            |               |            |                                                                          |
+|            | -   Dataframe | -   Array  |                                                                          |
++------------+---------------+------------+--------------------------------------------------------------------------+
+| `lapply()` | -   List      | -   List   | Applies a function to each element; always returns a list                |
+|            |               |            |                                                                          |
+|            | -   Vector    |            |                                                                          |
++------------+---------------+------------+--------------------------------------------------------------------------+
+| `sapply()` | -   List      | -   Vector | same as `sapply()` but returns the most simplified version it can return |
+|            |               |            |                                                                          |
+|            | <!-- -->      | -   Matrix |                                                                          |
+|            |               |            |                                                                          |
+|            | -   Vector    | -   List   |                                                                          |
++------------+---------------+------------+--------------------------------------------------------------------------+
+
+Let's use some of the functions above to categorize our tax revenue percentage vectors with the above `share_categories()` function.
+
+```{r}
+categories <- lapply(pct_tr_21, categorize_tax)
+print(categories)
+class(categories)
+```
+
+```{r}
+categories_sapply <- sapply(pct_tr_21, categorize_tax)
+print(categories_sapply)
+class(categories_sapply)
+```
+
+## Vectorized Functions
+
+Most base `R` functions are *vectorized,* meaning they automatically apply the function or operation to every element in a vector provided.
+
+Our function `categorize_tax` is NOT vectorized. You can see below that we can an error if we try to input the ENTIRE percent vector into the function.
+
+::: callout-caution
+```{r}
+categorize_tax(pct_tr_21)
+```
+:::
+
+To make our `categorize_tax` function vectorized, we need to adjust the code. Rather than using nested `if-else` statements, we can use `ifelse()`, which is the vectorized version and works element-wise across an entire vector.
+
+::: callout-example
+#### Non-Vectorized Function vs Vectorized Function
+
+*Before vectorizing: (we need to run a loop using this function to do element-wise operations on it)*
+
+```{r}
+#' This function groups the share sizes based off of a percentage value.
+#' 
+#'@param percent_val a percentage value representing tax revenue
+#'@return string of either "Large", "Medium", "Small Share"
+categorize_tax <- function(percent_val) {
+  if (percent_val > 30) {
+    share <- "Large Share"
+  } else if (percent_val > 10) {
+    share <- "Medium Share"
+  } else {
+    share <- "Small Share"
+  }
+  return(share)
+}
+```
+
+*After vectoring: we can directly provide this function our vector and it will automatically perform element wise operations on it because the inner `ifelse()`* *is a vectorized function.*
+
+```{r}
+#' This function groups the share sizes based off of a percentage value.
+#' 
+#'@param percent_val a percentage value representing tax revenue
+#'@return string of either "Large", "Medium", "Small Share"
+categorize_tax_v <- function(percent_val) {
+  ifelse(
+    percent_val > 30, "Large Share",
+    ifelse(percent_val > 10, "Medium Share", "Small Share")
+  )
+}
+
+categorize_tax_v(pct_tr_21)
+```
+:::

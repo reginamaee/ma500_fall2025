@@ -127,8 +127,6 @@ class(2)
 An **R data vector** is a collection of observations or measurements concerning a single variable **of the same data type** (all numeric, all character, all logical, etc.). The `c()` function takes individual values and *combines them into a single vector*.
 
 ::: callout-example
-### Example
-
 In 2021, the average temperature in Guam for each month was 80.7, 81.4, 81.5, 82.6, 82.6, 83.7, 83.4, 81.8, 82.5, 81.4, 82.0, and 81.0. Store these values in a vector named `temp`.
 
 *Solution:*
@@ -201,8 +199,6 @@ temp[1:4]
 -   `!=` not equal to
 
 ::: callout-example
-### Example:
-
 What months have a higher average temperature compared to August?
 
 *Solution:*
@@ -227,7 +223,7 @@ Let's break the line of code down:
 -   `!` NOT
 
 ::: callout-example
-### Example - using or operator:
+### Using or operator:
 
 What FALL months have a higher average temperature than August?
 
@@ -248,7 +244,7 @@ temp[temp > temp["Aug"] | names(temp) %in% fall]
 -   `names(temp) %in% fall` : checks which attributes are in the `fall` vector
 
 ::: callout-example
-### Example - using equals operator:
+### Using equals operator:
 
 What month had the highest average temperature?
 
@@ -266,8 +262,6 @@ names(temp)[temp == max(temp)]
 :::
 
 ::: callout-example
-### Example
-
 What is the average temperature in the summer months?
 
 *Solution:*
@@ -295,7 +289,7 @@ temp <- temp + 2
 ```
 
 ::: callout-example
-### Example - Vector Operation
+### Vector Operation
 
 Convert all temperatures in our `temp` vector from Fahrenheit to Celsius.
 
@@ -339,7 +333,7 @@ print(1:10)
 For more flexible sequences, we can use the `seq` function:
 
 ::: callout-example
-### Example - Sequence List
+### Sequence List
 
 Create a list of every 3rd value from `1` to `20`
 
@@ -367,7 +361,7 @@ seq(from = 10, to = 1, by = -3)
 The [`sample()`](https://rdrr.io/r/base/sample.html) function takes a sample from the specified elements of `x` with or without replacement.
 
 ::: callout-example
-### Example - Creating a sample
+### Creating a sample
 
 Create a random sample of `20` values ranging from `1` to `100` with replacement.
 
