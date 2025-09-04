@@ -867,3 +867,205 @@ To vectorize our `categorize_tax`, we need to re-define the function.
 #| min-lines: 5
 ```
 :::
+
+------------------------------------------------------------------------
+
+### Just another thing about Functions
+
+::: fragment
+-\> the environment!
+:::
+
+::: fragment
+This will still work:
+
+```{r, echo = TRUE}
+
+sum <- function(x) {
+  return(x + y)
+}
+
+# y is defined in your global environment (if you look at your list of variables)
+y <- 15
+sum(12)
+
+```
+:::
+
+::: fragment
+R uses *lexical scoping* to find the value associated with a variable name. Since y is not defined in the function, R will look in your environment.
+:::
+
+------------------------------------------------------------------------
+
+### And.. one more thing
+
+::: fragment
+Arguments are *lazily evaluated*. They will not compute or accessed unless needed or called.
+:::
+
+::: fragment
+```{r, echo = TRUE}
+print_function <- function(x) {
+  return(40)
+}
+
+print_function("Hello")
+```
+:::
+
+------------------------------------------------------------------------
+
+### What is a `data.frame`?
+
+::: fragment
+A `data.frame` in `R` is a data structure used to store data in a tabular form.
+:::
+
+::: fragment
+-   think of:
+    -   spreadsheet, excel sheet, SQL table
+
+    -   collection of multiple data vectors
+:::
+
+::: fragment
+It is two-dimensional, meaning it has rows and columns where:
+
+-   each *row* represents an observation
+-   each *column* represents a variable, attribute, or feature.
+:::
+
+------------------------------------------------------------------------
+
+::: fragment
+### What is `tidyverse`?
+
+-   collection of packages to help with cleaning, transformation, visualization, and analysis
+:::
+
+::: fragment
+### What is `ggplot2`?
+
+-   *the* R package for data visualization.
+:::
+
+------------------------------------------------------------------------
+
+### Some concepts before we start -\> Publication Ready
+
+![](images/clipboard-3308447790.png)
+
+------------------------------------------------------------------------
+
+### Database Ready
+
+![](images/clipboard-3854327513.png)
+
+------------------------------------------------------------------------
+
+### Long vs Wide Format
+
+![](images/clipboard-2758460241.png)
+
+------------------------------------------------------------------------
+
+### Long vs Wide Format
+
+::: callout-note
+-   Wide format is easier for human reading or performing side-by-side comparisons. This is typically the format when you are outputting a table for publications.
+
+-   Long format is usually preferred for analysis and visualization. Ie, `ggplot2` and `dplyr` are optimized for long data (although it could work with wide with some coding variations).
+:::
+
+------------------------------------------------------------------------
+
+### Merging/Joins
+
+![](images/clipboard-100854897.png)
+
+------------------------------------------------------------------------
+
+### Creating a `data.frame`
+
+::: fragment
+##### **Defining in R:**
+:::
+
+:::::: fragment
+::::: callout-example
+::: fragment
+```{r, echo = TRUE}
+#| code-line-numbers: 5-7
+
+tr_21 <- c(352818, 296806, 65110, 35612, 12372, 10100, 34978, 3519, 3761, 1395, 0)
+tr_22 <- c(372492, 327115, 76141, 35794, 18169, 9353, 31643, 4953, 3562, 1473, 0)
+categories <- c("Income", "Gross Receipts", "Section 30 Federal income tax", "Property", "Hotel Occupancy", "Liquid Fuel", "Tabacco", "Alcoholic Beverages", "Excise", "Lmited Gaming", "Other")
+
+tax_rev <- data.frame(description = categories, 
+                      tax_2021 = tr_21, 
+                      tax_2022 = tr_22)
+```
+:::
+
+::: fragment
+```{r}
+print(tax_rev)
+```
+:::
+:::::
+::::::
+
+------------------------------------------------------------------------
+
+#### About today's data-set
+
+:::::::::: {style="margin-top:-1.6em;"}
+<small>
+
+:::: fragment
+::: callout
+### Dataset 1: Road Injuries Dataset
+
+The estimation of *Road Injuries* dataset comes from the [Global Burden of Disease](https://www.healthdata.org/research-analysis/gbd). These estimates were published in their GBD 2021 annual paper.
+
+-   Road injuries refer to cyclist injuries, pedestrian-road injuries, motor vehicle injuries, etc.
+
+-   The dataset has the following attributes:
+
+    -   Location
+    -   Age
+    -   Year
+    -   Number of Deaths
+:::
+::::
+
+::::::: fragment
+:::::: callout
+### Dataset 2: Overwatch Dataset
+
+Overwatch 2 is a team-based FPS game developed by Blizzard Entertainment, typically played (5 v 5).
+
+Each game is played within a different map and different objective.
+
+The dataset has the following attributes:
+
+::::: columns
+::: {.column width="50%"}
+-   Player
+-   Date
+-   Win
+:::
+
+::: {.column width="50%"}
+-   Map
+-   Mode
+-   Role
+-   Elimination, Assists, Deaths, Damage, Heals, and Mitigation
+:::
+:::::
+::::::
+:::::::
+
+</small>
+::::::::::

@@ -9,6 +9,7 @@ book:
     - 01_install.qmd
     - 03_Basics.qmd
     - 04_CLF.qmd
+    - 05_Dataframes.qmd
     
 execute: 
   error: true

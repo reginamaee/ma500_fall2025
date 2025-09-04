@@ -144,6 +144,20 @@ factorial_recursive(6)
 
 Note: `R` already has a base function called `factorial`.
 
+::: callout-important
+```{r}
+sum <- function(x) {
+  x + y
+}
+
+# y is defined in your global environment (if you look at your list of variables)
+y <- 15
+sum(12)
+```
+
+R uses *lexical scoping* to find the value associated with a variable name. Since \`y\` is not defined in the function, R will look in your environment.
+:::
+
 ## Case Study: GovGuam Tax Revenue
 
 Let’s examine the table showing Government of Guam tax revenue from 2017-2022 from the [2023 Guam Statistical Yearbook](https://bsp.guam.gov/wp-bsp-content/uploads/2025/01/2023-Guam-Statistical-Yearbook-Final.pdf).

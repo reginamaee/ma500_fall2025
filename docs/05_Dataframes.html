@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Introduction to Dataframes – MA500: Introduction to R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./04_CLF.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-0de45b8b5f35a93596f1d788d60c4c11.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-94859c87fd2e0f79297c4bdcf1025212.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./05_Dataframes.html">Introduction to Dataframes</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">MA500: Introduction to R</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">MA-500: Introduction to R</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_install.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">R/RStudio Installation Guide</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_Basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">R Basics &amp; Fundamentals</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_CLF.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Conditionals, Loops, and Functions</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_Dataframes.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Introduction to Dataframes</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#what-is-a-data.frame" id="toc-what-is-a-data.frame" class="nav-link active" data-scroll-target="#what-is-a-data.frame">What is a <code>data.frame</code>?</a></li>
+  <li><a href="#what-is-tidyverse" id="toc-what-is-tidyverse" class="nav-link" data-scroll-target="#what-is-tidyverse">What is <code>tidyverse</code>?</a></li>
+  <li><a href="#what-is-ggplot2" id="toc-what-is-ggplot2" class="nav-link" data-scroll-target="#what-is-ggplot2">What is <code>ggplot2</code>?</a></li>
+  <li><a href="#creating-a-data.frame" id="toc-creating-a-data.frame" class="nav-link" data-scroll-target="#creating-a-data.frame">Creating a Data.frame</a>
+  <ul class="collapse">
+  <li><a href="#defining-in-r" id="toc-defining-in-r" class="nav-link" data-scroll-target="#defining-in-r">Defining in R</a></li>
+  <li><a href="#reading-in-a-.csv" id="toc-reading-in-a-.csv" class="nav-link" data-scroll-target="#reading-in-a-.csv">Reading in a <code>.csv</code></a></li>
+  </ul></li>
+  <li><a href="#analyzing-the-data" id="toc-analyzing-the-data" class="nav-link" data-scroll-target="#analyzing-the-data">Analyzing the data</a></li>
+  <li><a href="#visualizing-the-data" id="toc-visualizing-the-data" class="nav-link" data-scroll-target="#visualizing-the-data">Visualizing the data</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Introduction to Dataframes</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="what-is-a-data.frame" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-a-data.frame">What is a <code>data.frame</code>?</h3>
+<p>A <code>data.frame</code> in <code>R</code> is a data structure used to store data in a tabular form. It is very similar to a spreadsheet, excel sheet, or SQL table within R. You can also think of it as a collection of multiple data vectors. A <code>data.frame</code> is two-dimensional, meaning it has rows and columns where:</p>
+<ul>
+<li>each <em>row</em> represents an observation</li>
+<li>each <em>column</em> represents a variable, attribute, or feature.</li>
+</ul>
+</section>
+<section id="what-is-tidyverse" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-tidyverse">What is <code>tidyverse</code>?</h3>
+<p><code>Tidyverse</code> is a collection of packages to help with cleaning, transformation, visualization, and analysis. (A few packages in <code>Tidyverse</code> include <code>dplyr</code>, <code>ggplot2</code>, <code>tidyr</code>, and <code>readr</code>). In this class, we will be using this collection for data wrangling, cleaning, and transforming.</p>
+<p>You can install tidyverse by running: <code>install.packages("tidyverse")</code>.</p>
+</section>
+<section id="what-is-ggplot2" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-ggplot2">What is <code>ggplot2</code>?</h3>
+<p>This is <em>the</em> R package for data visualization. This suite provides an easy way to visualize your data with: bar charts, scatter plots, time trends, etc. Writing ggplot code comprises of these components: the data being visualized, the aesthetics (how you would like the variables to be mapped), and geometric objects (the shapes that represent the data).</p>
+<p>Note: Installing <code>tidyverse</code> also installs <code>ggplot2</code>, since it’s one of the core packages included.</p>
+</section>
+<section id="creating-a-data.frame" class="level2">
+<h2 class="anchored" data-anchor-id="creating-a-data.frame">Creating a Data.frame</h2>
+<p>You can build a <code>data.frame</code> either by defining it within R or by reading data from a <code>.csv</code> or <code>.xlsx</code> file.</p>
+<section id="defining-in-r" class="level3">
+<h3 class="anchored" data-anchor-id="defining-in-r">Defining in R</h3>
+<div class="callout-example">
+<p>Let’s add our previously defined vectors in a <code>data.frame</code>. <img src="images/clipboard-3553642164.png" class="img-fluid" width="1200"></p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>tr_21 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">352818</span>, <span class="dv">296806</span>, <span class="dv">65110</span>, <span class="dv">35612</span>, <span class="dv">12372</span>, <span class="dv">10100</span>, <span class="dv">34978</span>, <span class="dv">3519</span>, <span class="dv">3761</span>, <span class="dv">1395</span>, <span class="dv">0</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>tr_22 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">372492</span>, <span class="dv">327115</span>, <span class="dv">76141</span>, <span class="dv">35794</span>, <span class="dv">18169</span>, <span class="dv">9353</span>, <span class="dv">31643</span>, <span class="dv">4953</span>, <span class="dv">3562</span>, <span class="dv">1473</span>, <span class="dv">0</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>categories <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Income"</span>, <span class="st">"Gross Receipts"</span>, <span class="st">"Section 30 Federal income tax"</span>, <span class="st">"Property"</span>, <span class="st">"Hotel Occupancy"</span>, <span class="st">"Liquid Fuel"</span>, <span class="st">"Tabacco"</span>, <span class="st">"Alcoholic Beverages"</span>, <span class="st">"Excise"</span>, <span class="st">"Lmited Gaming"</span>, <span class="st">"Other"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>tax_rev <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">description =</span> categories, </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                      <span class="at">tax_2021 =</span> tr_21, </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">tax_2022 =</span> tr_22)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(tax_rev))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    description tax_2021 tax_2022
+1                        Income   352818   372492
+2                Gross Receipts   296806   327115
+3 Section 30 Federal income tax    65110    76141
+4                      Property    35612    35794
+5               Hotel Occupancy    12372    18169
+6                   Liquid Fuel    10100     9353</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="reading-in-a-.csv" class="level3">
+<h3 class="anchored" data-anchor-id="reading-in-a-.csv">Reading in a <code>.csv</code></h3>
+<p>To read a separate <code>.csv</code> file into R, we will use the <code>read_csv</code> function from the <code>readr</code> package (also part of <code>tidyverse</code>).</p>
+<div class="callout-example">
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># personal preference for me is to create a separate string that is my parent folder</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>dir <span class="ot">&lt;-</span> <span class="st">"/Users/rdominguez/Documents/MA500/Lessons/datasets/"</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>ow <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">paste0</span>(dir, <span class="st">"overwatch_stats.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 87 Columns: 12
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (5): Player, Date, Map, Mode, Role
+dbl (7): Win, Elimination, Assists, Deaths, Damage, Heals, Mitigation
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="analyzing-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="analyzing-the-data">Analyzing the data</h2>
+<p>Once your data is loaded into R, the best first steps is to inspect it. The main focus: get familiar with the data and summarize its main characteristics.</p>
+<p>The <code>head()</code> function displays the first 6 rows of your dataset</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ow)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 12
+  Player  Date     Win Map   Mode  Role  Elimination Assists Deaths Damage Heals
+  &lt;chr&gt;   &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+1 player1 8/15/…     1 Sura… Assa… Dama…          28       0      5  11480  2484
+2 player1 8/15/…     1 King… Atta… Dama…          17       3      4   6713     0
+3 player1 8/15/…     0 New … Robot Tank           27       4      7   5776   122
+4 player1 8/15/…     0 Midt… Atta… Dama…           8       3      6   7138     8
+5 player1 8/15/…     1 Ilios Atta… Supp…          10       3      4   2163  4849
+6 player1 8/15/…     1 Hava… Esco… Tank            7       2      9   4416  2498
+# ℹ 1 more variable: Mitigation &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>The <code>summary()</code> function provides us with a statistical summary of each column or variable.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ow)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Player              Date                Win             Map           
+ Length:87          Length:87          Min.   :0.0000   Length:87         
+ Class :character   Class :character   1st Qu.:0.0000   Class :character  
+ Mode  :character   Mode  :character   Median :1.0000   Mode  :character  
+                                       Mean   :0.6552                     
+                                       3rd Qu.:1.0000                     
+                                       Max.   :1.0000                     
+     Mode               Role            Elimination       Assists      
+ Length:87          Length:87          Min.   : 4.00   Min.   : 0.000  
+ Class :character   Class :character   1st Qu.:10.50   1st Qu.: 2.000  
+ Mode  :character   Mode  :character   Median :15.00   Median : 6.000  
+                                       Mean   :16.68   Mean   : 8.747  
+                                       3rd Qu.:21.00   3rd Qu.:12.500  
+                                       Max.   :58.00   Max.   :51.000  
+     Deaths           Damage          Heals         Mitigation  
+ Min.   : 0.000   Min.   :  773   Min.   :    0   Min.   :   0  
+ 1st Qu.: 4.000   1st Qu.: 2974   1st Qu.:  100   1st Qu.:   0  
+ Median : 6.000   Median : 4336   Median : 1322   Median :   0  
+ Mean   : 5.989   Mean   : 5166   Mean   : 3214   Mean   :1156  
+ 3rd Qu.: 8.000   3rd Qu.: 6994   3rd Qu.: 5898   3rd Qu.:1798  
+ Max.   :12.000   Max.   :14824   Max.   :18620   Max.   :7253  </code></pre>
+</div>
+</div>
+<p>The <code>str()</code> function gives a structural overview of the data.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(ow)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>spc_tbl_ [87 × 12] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+ $ Player     : chr [1:87] "player1" "player1" "player1" "player1" ...
+ $ Date       : chr [1:87] "8/15/24" "8/15/24" "8/15/24" "8/15/24" ...
+ $ Win        : num [1:87] 1 1 0 0 1 1 0 1 1 1 ...
+ $ Map        : chr [1:87] "Suravasa" "King's Row" "New Queen Street" "Midtown" ...
+ $ Mode       : chr [1:87] "Assault" "Attack Escort" "Robot" "Attack Escort" ...
+ $ Role       : chr [1:87] "Damage" "Damage" "Tank" "Damage" ...
+ $ Elimination: num [1:87] 28 17 27 8 10 7 22 15 27 8 ...
+ $ Assists    : num [1:87] 0 3 4 3 3 2 6 3 8 5 ...
+ $ Deaths     : num [1:87] 5 4 7 6 4 9 9 7 4 1 ...
+ $ Damage     : num [1:87] 11480 6713 5776 7138 2163 ...
+ $ Heals      : num [1:87] 2484 0 122 8 4849 ...
+ $ Mitigation : num [1:87] 0 245 2082 828 0 ...
+ - attr(*, "spec")=
+  .. cols(
+  ..   Player = col_character(),
+  ..   Date = col_character(),
+  ..   Win = col_double(),
+  ..   Map = col_character(),
+  ..   Mode = col_character(),
+  ..   Role = col_character(),
+  ..   Elimination = col_double(),
+  ..   Assists = col_double(),
+  ..   Deaths = col_double(),
+  ..   Damage = col_double(),
+  ..   Heals = col_double(),
+  ..   Mitigation = col_double()
+  .. )
+ - attr(*, "problems")=&lt;externalptr&gt; </code></pre>
+</div>
+</div>
+<p>Another useful thing to analyze is looking at all the possible values in your columns - sometimes, the <code>str()</code> function shows all unique values, but other times it gets cut off. We can do it this way:</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># output all unique values in the Player column </span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(ow<span class="sc">$</span>Player)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "player1" "player2"</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># OR use the apply function for the unique function</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lapply</span>(ow, unique)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>$Player
+[1] "player1" "player2"
+
+$Date
+[1] "8/15/24" "8/14/24" "8/13/24" "8/12/24" "8/16/24" "8/10/24" "8/17/24"
+
+$Win
+[1] 1 0
+
+$Map
+ [1] "Suravasa"              "King's Row"            "New Queen Street"     
+ [4] "Midtown"               "Ilios"                 "Havana"               
+ [7] "Blizzard World"        "Junkertown"            "New Junk City"        
+[10] "Paraiso"               "Runasapi"              "Nepal"                
+[13] "Colosseo"              "Shambali Monastery"    "Busan"                
+[16] "Rialto"                "Oasis"                 "Eichenwalde"          
+[19] "Lijiang Tower"         "Route 66"              "Antarctic Peninsula"  
+[22] "Circuit Royal"         "Hollywood"             "Watchpoint: Gibraltar"
+[25] "Samoa"                 "Numbani"               "Dorado"               
+
+$Mode
+[1] "Assault"       "Attack Escort" "Robot"         "Attack"       
+[5] "Escort"       
+
+$Role
+[1] "Damage"  "Tank"    "Support"
+
+$Elimination
+ [1] 28 17 27  8 10  7 22 15 21 14 16 20  5 11 33 19 34 23  6 18  9 12 29 26  4
+[26] 13 58
+
+$Assists
+ [1]  0  3  4  2  6  8  5  7 12 10 11 16  1 13 26 20 22 14 30  9 19 17 15 23 51
+
+$Deaths
+ [1]  5  4  7  6  9  1  3 10  8 12  2  0 11
+
+$Damage
+ [1] 11480  6713  5776  7138  2163  4416  7538 10948  9735  4102  7234  6301
+[13]  1166  4403  6042  8466  5083  4307  7841  2509  5076  9435  8793  6227
+[25] 13201  4548  7355  6344  2801 10388  4632 13538  8332 14824  2328  7634
+[37]  8196  3417  5347  3869  3395  5768  6849  3440  1886  3324  9540  2458
+[49]  7477  1755  4336  3506  2364  5320  3444  4283  3849  9577  3349  2520
+[61]  1844  2934  5021  1445  4768  2309  3290  2636  3812  2239  3100  2999
+[73]  2949  4437   773  2504  3032  3198  1015  1506  5172  4210  3694  1907
+[85]  3736  4602 12204
+
+$Heals
+ [1]  2484     0   122     8  4849  2498  2260   225   382   941   129   187
+[13]    78  5917  1900    16  1542  1490  1342   243  1322  1185   543  2866
+[25]   731   734   330    63  7782   727  7352   241   722   536   822  7641
+[37]  9179  7375   942    21 12938  7404  4384  6813  6107 11855  4188  9333
+[49]  2738  1018  2832  3286  6780  5880  8181  4120 11971  1142  8902  2698
+[61]  4689  8910  8853  2510  4060 10032  3860  8015  9545 18620
+
+$Mitigation
+ [1]    0  245 2082  828 1068 5654 6078 2012 4439  486 1386 1735 2692 3197 6532
+[16] 3251 5070 2760 1994  980 5243 3220 4639 5234 7253 1686  734 1275  928 3676
+[31] 1860  364  900  462 2472  220  548 2886 3901  598</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We can access a column in a <code>data.frame</code> by using the <code>$</code> operator. When we do this, we can treat the column as if it is a single vector.</p>
+</div>
+</div>
+<p>If we analyze the output of the <code>summary()</code> and the <code>str()</code> function, we can see that the <code>Date</code> column is categorized as a <code>character</code>. Let’s reassign it’s class by using the <code>as.Date</code> function.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' because the values of Date appear as MM/DD/YY in the data, we will use %m/%d/%y to follow the same format.</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">#' %y represents year using 2 digits, %Y represents using 4 digits</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>ow<span class="sc">$</span>Date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(ow<span class="sc">$</span>Date, <span class="at">format =</span> <span class="st">"%m/%d/%y"</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(ow<span class="sc">$</span>Date)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Date"</code></pre>
+</div>
+</div>
+</section>
+<section id="visualizing-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="visualizing-the-data">Visualizing the data</h2>
+<p>The output of <code>summary()</code> and <code>str()</code> told us that we have several <code>numeric</code> columns in our data: <code>eliminations</code>, <code>assists</code>, <code>deaths</code>, <code>damage</code>, <code>heals</code>, and <code>mitigation</code>.</p>
+<p>Let’s first visualize a histogram for the <code>damage</code> column to determine its distribution.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># using base R function: hist()</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(ow<span class="sc">$</span>Damage)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_Dataframes_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can also create a boxplot as another way to view its distribution and determine what our potential outliers would look like.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># using base R function: boxplot()</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(ow<span class="sc">$</span>Damage)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_Dataframes_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./04_CLF.html" class="pagination-link" aria-label="Conditionals, Loops, and Functions">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Conditionals, Loops, and Functions</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
