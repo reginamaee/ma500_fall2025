@@ -166,9 +166,96 @@ code:not(pre code) {
   /*font-family: "Courier New", monospace !important;*/
 }
 
+/* example but white background */
 
+/* ------------------------------
+   Base callout styling
+--------------------------------*/
+.callout-example-white {
+  border-left: 4px solid #7caa90;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 6px;
+}
 
+/* If the title element exists but is empty, insert default text */
+.callout-example-white .callout-title:empty::before {
+  content: "Example";
+}
 
+/* If there is no header at all, create one (requires :has support) */
+.callout-example-white:not(:has(.callout-header))::before {
+  content: "📝 Example";   /* fallback with icon */
+  display: block;
+  font-weight: 700;
+  padding: .55rem .9rem;
+  background: color-mix(in srgb, #7caa90 14%, transparent);
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  margin: -1rem -1rem .6rem; /* aligns with your padding */
+}
+
+/* ------------------------------
+   Icon in header
+   (works whether FA or emoji)
+--------------------------------*/
+.callout-example-white .callout-header::before {
+  /* Use emoji by default */
+  content: "📝";
+  margin-right: .5rem;
+  display: inline-block;
+  transform: translateY(1px);
+  color: #2c7a5e;
+  font-size: 1.1em;
+  font-family: "Segoe UI Emoji", sans-serif;
+}
+
+/* Uncomment this block ONLY if using FontAwesome:
+.callout-example .callout-header::before {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  content: "\f15c";   /* fa-file-alt */
+  margin-right: .5rem;
+  color: #2c7a5e;
+}
+*/
+
+/* ------------------------------
+   Code styling inside callout
+--------------------------------*/
+/* -----------------------------------
+   CODE styling (input)
+----------------------------------- */
+.callout-example-white .sourceCode,
+.callout-example-white pre.sourceCode {
+  background-color: #e0f2e0 !important;
+  border-radius: 4px;
+  padding: .4rem .6rem;
+}
+
+.callout-example-white pre.sourceCode code {
+  color: #2c3e50 !important;
+  font-family: "Fira Code", monospace !important;
+  font-size: 0.9em;
+}
+
+/* -----------------------------------
+   OUTPUT styling (stdout, messages, errors)
+----------------------------------- */
+.callout-example-white .cell-output pre,
+.callout-example-white .cell-output-stdout pre,
+.callout-example-white pre.r-output {
+  background-color: #fdf0de !important;
+  color: #000000 !important;
+  border-radius: 4px;
+  padding: .4rem .6rem;
+  margin-top: .4rem;
+  font-size: 0.7em !important;
+  /*font-family: "Courier New", monospace !important;*/
+}
+
+/***********/
 
 
 /* Accent + layout (yours) */

@@ -191,6 +191,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#analyzing-the-data" id="toc-analyzing-the-data" class="nav-link" data-scroll-target="#analyzing-the-data">Analyzing the data</a></li>
   <li><a href="#visualizing-the-data" id="toc-visualizing-the-data" class="nav-link" data-scroll-target="#visualizing-the-data">Visualizing the data</a></li>
+  <li><a href="#data-transformation" id="toc-data-transformation" class="nav-link" data-scroll-target="#data-transformation">Data Transformation</a>
+  <ul class="collapse">
+  <li><a href="#dplyr" id="toc-dplyr" class="nav-link" data-scroll-target="#dplyr">Dplyr</a></li>
+  </ul></li>
+  <li><a href="#merging" id="toc-merging" class="nav-link" data-scroll-target="#merging">Merging</a>
+  <ul class="collapse">
+  <li><a href="#join-functions" id="toc-join-functions" class="nav-link" data-scroll-target="#join-functions">Join Functions</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -525,8 +533,707 @@ Note
 </div>
 </div>
 </div>
+</section>
+<section id="data-transformation" class="level2">
+<h2 class="anchored" data-anchor-id="data-transformation">Data Transformation</h2>
+<div class="callout-example-white">
+<p><strong>Convert the <code>data.frame</code> from <code>wide</code> to <code>long</code></strong></p>
+<p>Transformation Functions:</p>
+<ul>
+<li><p><code>pivot_longer()</code> -&gt; function to go from <code>wide</code> to <code>long</code></p></li>
+<li><p><code>pivot_wider()</code> -&gt; function to go from <code>long</code> to <code>wide</code></p></li>
+</ul>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>ow_long <span class="ot">&lt;-</span> ow <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="fu">c</span>(<span class="st">"Elimination"</span>, <span class="st">"Assists"</span>,</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                                      <span class="st">"Deaths"</span>, <span class="st">"Damage"</span>, <span class="st">"Heals"</span>,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                                      <span class="st">"Mitigation"</span>), </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                                <span class="at">names_to =</span> <span class="st">"value_type"</span>, </span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                                <span class="at">values_to =</span> <span class="st">"value"</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ow_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 8
+  Player  Date         Win Map      Mode    Role   value_type  value
+  &lt;chr&gt;   &lt;date&gt;     &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;       &lt;dbl&gt;
+1 player1 2024-08-15     1 Suravasa Assault Damage Elimination    28
+2 player1 2024-08-15     1 Suravasa Assault Damage Assists         0
+3 player1 2024-08-15     1 Suravasa Assault Damage Deaths          5
+4 player1 2024-08-15     1 Suravasa Assault Damage Damage      11480
+5 player1 2024-08-15     1 Suravasa Assault Damage Heals        2484
+6 player1 2024-08-15     1 Suravasa Assault Damage Mitigation      0</code></pre>
+</div>
+</div>
+</div>
+<p>Concepts to know:</p>
+<ul>
+<li><p><code>%&gt;%</code> -&gt; pipe operator, takes the output of the expression of the LHS and passes it to the first argument on its RHS</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#summary(ow)</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co">#ow %&gt;% summary()</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>ow <span class="sc">%&gt;%</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">head</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Player               Date                 Win             Map           
+ Length:6           Min.   :2024-08-15   Min.   :0.0000   Length:6          
+ Class :character   1st Qu.:2024-08-15   1st Qu.:0.2500   Class :character  
+ Mode  :character   Median :2024-08-15   Median :1.0000   Mode  :character  
+                    Mean   :2024-08-15   Mean   :0.6667                     
+                    3rd Qu.:2024-08-15   3rd Qu.:1.0000                     
+                    Max.   :2024-08-15   Max.   :1.0000                     
+     Mode               Role            Elimination       Assists    
+ Length:6           Length:6           Min.   : 7.00   Min.   :0.00  
+ Class :character   Class :character   1st Qu.: 8.50   1st Qu.:2.25  
+ Mode  :character   Mode  :character   Median :13.50   Median :3.00  
+                                       Mean   :16.17   Mean   :2.50  
+                                       3rd Qu.:24.50   3rd Qu.:3.00  
+                                       Max.   :28.00   Max.   :4.00  
+     Deaths          Damage          Heals          Mitigation     
+ Min.   :4.000   Min.   : 2163   Min.   :   0.0   Min.   :   0.00  
+ 1st Qu.:4.250   1st Qu.: 4756   1st Qu.:  36.5   1st Qu.:  61.25  
+ Median :5.500   Median : 6244   Median :1303.0   Median : 536.50  
+ Mean   :5.833   Mean   : 6281   Mean   :1660.2   Mean   : 703.83  
+ 3rd Qu.:6.750   3rd Qu.: 7032   3rd Qu.:2494.5   3rd Qu.:1008.00  
+ Max.   :9.000   Max.   :11480   Max.   :4849.0   Max.   :2082.00  </code></pre>
+</div>
+</div>
+<ul>
+<li>The example above states: with the <code>overwatch</code> dataset, use the function <code>head()</code> and from the output of <code>head()</code>, use the function <code>summary().</code></li>
+</ul></li>
+</ul>
+<section id="dplyr" class="level3">
+<h3 class="anchored" data-anchor-id="dplyr">Dplyr</h3>
+<p><code>dplyr</code> is a package in <code>R</code> that is part of <code>tidyverse</code>, it is the main package for data manipulation that is <em>super</em> intuitive. It is often described as “grammar for data manipulation”</p>
+<ul>
+<li><code>mutate()</code> - adds new variables that are “manipulations” of other variables that already exist in your data / create or transform columns</li>
+</ul>
+<div class="callout-example">
+<p><strong>Using <code>mutate()</code></strong></p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">8</span>,<span class="dv">10</span>, <span class="cn">NA</span>, <span class="dv">5</span>, <span class="dv">6</span>))</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">x2 =</span> x<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   x  x2
+1  1   1
+2  3   9
+3  8  64
+4 10 100
+5 NA  NA
+6  5  25
+7  6  36</code></pre>
+</div>
+</div>
+</div>
+<ul>
+<li><code>filter()</code> - filters or picks cases based on their values</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <code>filter()</code> function will always return or filter your data for conditions that are TRUE <strong>meaning conditions that are FALSE or conditions that are NA will not be returned</strong>.</p>
+<ul>
+<li><p>If you want to retain the missing values, you have to explicitly filter for it as well.</p></li>
+<li><p>Use <code>is.na()</code> to determine if value is missing.</p></li>
+</ul>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">8</span>,<span class="dv">10</span>, <span class="cn">NA</span>, <span class="dv">5</span>, <span class="dv">6</span>))</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co"># NA is dropped as well</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>filter <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">filter</span>(x <span class="sc">!=</span> <span class="dv">3</span>)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>filter</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   x
+1  1
+2  8
+3 10
+4  5
+5  6</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>filter <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">filter</span>(x <span class="sc">!=</span> <span class="dv">3</span> <span class="sc">|</span> <span class="fu">is.na</span>(x))</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>filter</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   x
+1  1
+2  8
+3 10
+4 NA
+5  5
+6  6</code></pre>
+</div>
+</div>
+</div>
+</div>
+<ul>
+<li><p><code>select()</code> - picks based on columns/variables</p></li>
+<li><p><code>arrange()</code> - reorder rows</p></li>
+<li><p><code>summarise()</code> - collapse into specified summary statistics</p></li>
+<li><p><code>group_by()</code> - allows functions to be conducted by group</p></li>
+</ul>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<code>ungroup()</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When you use <code>group_by()</code>, you should try your best to <code>ungroup()</code> your data afterwards so that any following operation is not done within groups again.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">student =</span> <span class="fu">c</span>(<span class="st">"X"</span>, <span class="st">"X"</span>, <span class="st">"X"</span>, <span class="st">"Y"</span>, <span class="st">"Y"</span>, <span class="st">"Y"</span>), </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">score =</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">98</span>, <span class="dv">85</span>, <span class="dv">90</span>, <span class="dv">96</span>, <span class="dv">98</span>), </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">class =</span> <span class="fu">c</span>(<span class="st">"Math"</span>, <span class="st">"Math"</span>, <span class="st">"Bio"</span>, <span class="st">"Bio"</span>, <span class="st">"Bio"</span>, <span class="st">"Math"</span>))</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>mean_student <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>            <span class="fu">group_by</span>(class, student) <span class="sc">%&gt;%</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>            <span class="fu">summarise</span>(<span class="at">average_score =</span> <span class="fu">mean</span>(score))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'class'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mean_student)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 3
+# Groups:   class [2]
+  class student average_score
+  &lt;chr&gt; &lt;chr&gt;           &lt;dbl&gt;
+1 Bio   X                  85
+2 Bio   Y                  93
+3 Math  X                  99
+4 Math  Y                  98</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>mean_student <span class="ot">&lt;-</span> mean_student <span class="sc">%&gt;%</span> </span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">sum_score =</span> <span class="fu">sum</span>(average_score))</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mean_student)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  class sum_score
+  &lt;chr&gt;     &lt;dbl&gt;
+1 Bio         178
+2 Math        197</code></pre>
+</div>
+</div>
+<p><code>summarise()</code> drops one level of grouping but the highest level is retained, as shown in the second operation. Running the same lines of code but including <code>ungroup()</code> will provide an <code>overall_sum</code> at the end, instead of a <code>sum</code> by <code>class</code>.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>mean_student <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>            <span class="fu">group_by</span>(class, student) <span class="sc">%&gt;%</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">summarise</span>(<span class="at">average_score =</span> <span class="fu">mean</span>(score)) <span class="sc">%&gt;%</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'class'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mean_student)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 3
+  class student average_score
+  &lt;chr&gt; &lt;chr&gt;           &lt;dbl&gt;
+1 Bio   X                  85
+2 Bio   Y                  93
+3 Math  X                  99
+4 Math  Y                  98</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>mean_student <span class="ot">&lt;-</span> mean_student <span class="sc">%&gt;%</span> </span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">sum_score =</span> <span class="fu">sum</span>(average_score))</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mean_student)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+  sum_score
+      &lt;dbl&gt;
+1       375</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="callout-example-white">
+<p><strong>What is the total number of wins and losses and percentage of wins/losses for each Player? By each Date? Create a visualization.</strong></p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a new data.frame that is a copy of ow_long, group it by Player &amp; Date, and use the summarise function to calculate the total number of wins/loses and its percent</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>player_wins <span class="ot">&lt;-</span> ow_long <span class="sc">%&gt;%</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Player, Date) <span class="sc">%&gt;%</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">wins =</span> <span class="fu">sum</span>(Win),</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">pct_win =</span> <span class="fu">sum</span>(Win)<span class="sc">/</span><span class="fu">n</span>() <span class="sc">*</span> <span class="dv">100</span>, </span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">lose =</span> <span class="fu">n</span>() <span class="sc">-</span> <span class="fu">sum</span>(Win), </span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">pct_lose =</span> lose<span class="sc">/</span><span class="fu">n</span>() <span class="sc">*</span> <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'Player'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(player_wins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 6
+# Groups:   Player [2]
+   Player  Date        wins pct_win  lose pct_lose
+   &lt;chr&gt;   &lt;date&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
+ 1 player1 2024-08-12    24    50      24     50  
+ 2 player1 2024-08-13    78    68.4    36     31.6
+ 3 player1 2024-08-14    66    73.3    24     26.7
+ 4 player1 2024-08-15    48    66.7    24     33.3
+ 5 player1 2024-08-16     6    50       6     50  
+ 6 player2 2024-08-10     6    50       6     50  
+ 7 player2 2024-08-13    60    83.3    12     16.7
+ 8 player2 2024-08-14     6   100       0      0  
+ 9 player2 2024-08-15    36    75      12     25  
+10 player2 2024-08-17    12    25      36     75  </code></pre>
+</div>
+</div>
+<p>Create a bar-graph:</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plotting number of wins</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>bar <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> player_wins, <span class="fu">aes</span>(<span class="at">x=</span> Date, <span class="at">y=</span> wins)) <span class="sc">+</span> </span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">fill =</span> Player), <span class="at">position=</span><span class="st">"dodge"</span>, <span class="at">stat=</span><span class="st">"identity"</span>)</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(bar)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_Dataframes_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Create a line-graph:</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>line <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> player_wins, <span class="fu">aes</span>(<span class="at">x=</span> Date, <span class="at">y=</span> wins)) <span class="sc">+</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">color =</span> Player)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(line)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_Dataframes_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="callout-example-white">
+<p><strong>What is the total number of eliminations and damage by Role? Create a visualization.</strong></p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>role_stats <span class="ot">&lt;-</span> ow_long <span class="sc">%&gt;%</span> </span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Player, Role, value_type) <span class="sc">%&gt;%</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">sum_val =</span> <span class="fu">sum</span>(value))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'Player', 'Role'. You can override using
+the `.groups` argument.</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(role_stats)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+# Groups:   Player, Role [1]
+  Player  Role   value_type  sum_val
+  &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;         &lt;dbl&gt;
+1 player1 Damage Assists          61
+2 player1 Damage Damage       139972
+3 player1 Damage Deaths          130
+4 player1 Damage Elimination     415
+5 player1 Damage Heals         14135
+6 player1 Damage Mitigation    12348</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(role_stats <span class="sc">%&gt;%</span> <span class="fu">filter</span>(value_type <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Elimination"</span>, <span class="st">"Damage"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 4
+# Groups:   Player, Role [6]
+   Player  Role    value_type  sum_val
+   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;         &lt;dbl&gt;
+ 1 player1 Damage  Damage       139972
+ 2 player1 Damage  Elimination     415
+ 3 player1 Support Damage        35623
+ 4 player1 Support Elimination     122
+ 5 player1 Tank    Damage       163196
+ 6 player1 Tank    Elimination     401
+ 7 player2 Damage  Damage         2934
+ 8 player2 Damage  Elimination       7
+ 9 player2 Support Damage        87308
+10 player2 Support Elimination     435
+11 player2 Tank    Damage        20389
+12 player2 Tank    Elimination      71</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>chart <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> role_stats, <span class="fu">aes</span>(<span class="at">x =</span> Role, <span class="at">y =</span> sum_val)) <span class="sc">+</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"dodge"</span>, <span class="at">stat =</span> <span class="st">"identity"</span>, <span class="fu">aes</span>(<span class="at">fill =</span> Player)) <span class="sc">+</span></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> value_type, <span class="at">scales =</span> <span class="st">"free_y"</span>)</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(chart)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_Dataframes_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can also re-order the way our items appear in our chart by making our ordering variables factors and setting its levels. Below, we set <code>Role</code> and <code>value_type</code> to be a factor where the levels are in the order we want these categories to appear on our chart (the x-axis for <code>Role</code> and the various facets for <code>value_type</code>).</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># re-order the x-axis by changing Role into a factor with wanted order of levels</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Tank, Support, Damage </span></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>role_stats<span class="sc">$</span>Role <span class="ot">&lt;-</span> <span class="fu">factor</span>(role_stats<span class="sc">$</span>Role, <span class="at">levels=</span><span class="fu">c</span>(<span class="st">"Tank"</span>, <span class="st">"Support"</span>, <span class="st">"Damage"</span>))</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(role_stats<span class="sc">$</span>Role)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] Damage  Support Tank   
+Levels: Tank Support Damage</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>role_stats<span class="sc">$</span>value_type <span class="ot">&lt;-</span> <span class="fu">factor</span>(role_stats<span class="sc">$</span>value_type, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Elimination"</span>, </span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>                                                                  <span class="st">"Assists"</span>, </span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>                                                                  <span class="st">"Deaths"</span>, </span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>                                                                  <span class="st">"Damage"</span>,</span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>                                                                  <span class="st">"Heals"</span>,</span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>                                                                  <span class="st">"Mitigation"</span>))</span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(role_stats<span class="sc">$</span>value_type)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] Assists     Damage      Deaths      Elimination Heals       Mitigation 
+Levels: Elimination Assists Deaths Damage Heals Mitigation</code></pre>
+</div>
+</div>
+<p>Re-define the plot:</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>chart <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> role_stats, <span class="fu">aes</span>(<span class="at">x =</span> Role, <span class="at">y =</span> sum_val)) <span class="sc">+</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"dodge"</span>, <span class="at">stat =</span> <span class="st">"identity"</span>, <span class="fu">aes</span>(<span class="at">fill =</span> Player)) <span class="sc">+</span></span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> value_type, <span class="at">scales =</span> <span class="st">"free_y"</span>)</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(chart)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_Dataframes_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="merging" class="level2">
+<h2 class="anchored" data-anchor-id="merging">Merging</h2>
+<div class="callout-recall">
+<p><strong>Recall</strong>: Merging data sets is the process of combining two or more data sets based on common columns or row indices. This is common in data analytics when you need to bring information together from different sources into one single data set.</p>
+</div>
+<section id="join-functions" class="level3">
+<h3 class="anchored" data-anchor-id="join-functions">Join Functions</h3>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Join Types
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 61%">
+<col style="width: 19%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Join Function</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>inner_join()</code></td>
+<td>Keeps only rows that have a match in <strong>both</strong> datasets.</td>
+<td>Overlap only</td>
+</tr>
+<tr class="even">
+<td><code>left_join()</code></td>
+<td>Keeps <strong>all rows from the left</strong> dataset, filling with <code>NA</code> if no match on right.</td>
+<td>Keep the left side</td>
+</tr>
+<tr class="odd">
+<td><code>right_join()</code></td>
+<td>Keeps <strong>all rows from the right</strong> dataset, filling with <code>NA</code> if no match on left.</td>
+<td>Keep the right side</td>
+</tr>
+<tr class="even">
+<td><code>full_join()</code></td>
+<td>Keeps <strong>all rows from both</strong> datasets; matches are combined, non-matches get <code>NA</code>.</td>
+<td>Keep everything</td>
+</tr>
+<tr class="odd">
+<td><code>semi_join()</code></td>
+<td>Filters the left dataset to only rows that have a match in the right; doesn’t add columns.</td>
+<td>Left rows with matches</td>
+</tr>
+<tr class="even">
+<td><code>anti_join()</code></td>
+<td>Filters the left dataset to rows that <strong>do not</strong> have a match in the right.</td>
+<td>Left rows without matches</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>To further analyze our data, we will merge the <code>overwatch_heros.csv</code> into our current <code>data.frame.</code>In addition to the Overwatch dataset, the accompanying dataset (<code>overwatch_heros</code>) lists the heroes played in each game. We know that each row in the original Overwatch dataset we’ve been working with corresponds to a single game. Because of the game’s mechanics, players are allowed to switch heroes during a match. As a result, in the heroes dataset, you’ll see that a player may have played multiple heroes within the same game.</p>
+<ul>
+<li><p>The <code>overwatch_heros</code> data set contains these attributes:</p>
+<ul>
+<li>Player</li>
+<li>Date</li>
+<li>Win</li>
+<li>Map</li>
+<li>Mode</li>
+<li>Role</li>
+<li>Percent Played</li>
+<li>Hero</li>
+</ul></li>
+</ul>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read in the new data set</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>dir <span class="ot">&lt;-</span> <span class="st">"/Users/rdominguez/Documents/MA500/Lessons/datasets/"</span></span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>hero <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">paste0</span>(dir, <span class="st">"overwatch_heros.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 99 Columns: 8
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (6): Player, Date, Map, Mode, Role, Hero
+dbl (2): Win, Percent Played
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(hero)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>spc_tbl_ [99 × 8] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+ $ Player        : chr [1:99] "player1" "player1" "player1" "player1" ...
+ $ Date          : chr [1:99] "8/15/24" "8/15/24" "8/15/24" "8/15/24" ...
+ $ Win           : num [1:99] 1 1 1 0 0 1 1 0 0 1 ...
+ $ Map           : chr [1:99] "Suravasa" "Suravasa" "King's Row" "New Queen Street" ...
+ $ Mode          : chr [1:99] "Assault" "Assault" "Attack Escort" "Robot" ...
+ $ Role          : chr [1:99] "Damage" "Damage" "Damage" "Tank" ...
+ $ Percent Played: num [1:99] 82 18 100 100 100 100 100 48 52 100 ...
+ $ Hero          : chr [1:99] "Sombra" "Bastion" "Sombra" "Dva" ...
+ - attr(*, "spec")=
+  .. cols(
+  ..   Player = col_character(),
+  ..   Date = col_character(),
+  ..   Win = col_double(),
+  ..   Map = col_character(),
+  ..   Mode = col_character(),
+  ..   Role = col_character(),
+  ..   `Percent Played` = col_double(),
+  ..   Hero = col_character()
+  .. )
+ - attr(*, "problems")=&lt;externalptr&gt; </code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set the Date column as a Date data type</span></span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>hero<span class="sc">$</span>Date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(hero<span class="sc">$</span>Date, <span class="at">format =</span> <span class="st">"%m/%d/%y"</span>)</span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(hero<span class="sc">$</span>Date)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Date"</code></pre>
+</div>
+</div>
+<p>The output of <code>str()</code> shows that the hero data frame contains more observations than the Overwatch dataset, which has 87 entries.</p>
+<p>When you use the <code>left_join</code> function to merge the <code>ow</code> data frame with the <code>hero</code> data frame, it will match all key values from the <code>hero</code> data to the <code>ow</code> data. However, the first time you run this, you’ll encounter a “many-to-many relationship” warning. This means that the join will occur, but it will generate all possible combinations of our key columns—Player, Date, Win, Map, Mode, and Role—with the various corresponding heroes.</p>
+<p>To simplify things, we’ll only join the rows associated with the heroes that were played the most during each game.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>hero_most_played <span class="ot">&lt;-</span> hero <span class="sc">%&gt;%</span></span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Player, Date, Win, Map, Mode, Role) <span class="sc">%&gt;%</span></span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Percent Played</span><span class="st">`</span> <span class="sc">==</span> <span class="fu">max</span>(<span class="st">`</span><span class="at">Percent Played</span><span class="st">`</span>))</span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a>ow_with_hero <span class="ot">&lt;-</span> <span class="fu">left_join</span>(ow, hero_most_played, <span class="at">by=</span></span>
+<span id="cb66-6"><a href="#cb66-6" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">c</span>(<span class="st">"Player"</span>, <span class="st">"Date"</span>, <span class="st">"Win"</span>,</span>
+<span id="cb66-7"><a href="#cb66-7" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"Map"</span>, <span class="st">"Mode"</span>, <span class="st">"Role"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in left_join(ow, hero_most_played, by = c("Player", "Date", "Win", : Detected an unexpected many-to-many relationship between `x` and `y`.
+ℹ Row 24 of `x` matches multiple rows in `y`.
+ℹ Row 24 of `y` matches multiple rows in `x`.
+ℹ If a many-to-many relationship is expected, set `relationship =
+  "many-to-many"` to silence this warning.</code></pre>
+</div>
+</div>
+<p>When merging, you may encounter a <strong>“many-to-many relationship” warning</strong>. This occurs because there are duplicate combinations of our key indicators: Player, Date, Win, Map, Mode, Role. In other words, the dataset contains <strong>multiple games played by the same player, on the same date, with the same result, on the same map, mode, and role</strong>. Normally, this issue would be prevented by assigning a <strong>unique game identifier</strong>. However, this dataset does not include such an identifier. As a result, a player can appear in several games on the same day—even under the exact same conditions (map, role, and mode).</p>
+<p>To move forward with analysis, we will <strong>detect and remove these duplicate entries</strong> to ensure clean merges.</p>
+<ul>
+<li>tldr: issue 1 with the merge: The dataset lacks a unique game identifier, which causes duplicate entries.</li>
+</ul>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co"># this code counts all possible combinations of our key indicators and filters to the set that shows up more than once</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>duplicate <span class="ot">&lt;-</span> ow <span class="sc">%&gt;%</span> </span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(Player, Date, Win, Map, Mode, Role) <span class="sc">%&gt;%</span></span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n <span class="sc">&gt;</span> <span class="dv">1</span>)</span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(duplicate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 7
+  Player  Date         Win Map      Mode    Role       n
+  &lt;chr&gt;   &lt;date&gt;     &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;  &lt;int&gt;
+1 player1 2024-08-13     1 Suravasa Assault Damage     2</code></pre>
+</div>
+</div>
+<p>After we find this duplicate combination of our key indicators, we will remove it from our <code>ow_with_hero</code> data.frame and move on with our analysis. This will be done using <code>anti_join</code>.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>ow_with_hero <span class="ot">&lt;-</span> ow_with_hero <span class="sc">%&gt;%</span></span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">anti_join</span>(duplicate, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"Player"</span>, <span class="st">"Date"</span>, <span class="st">"Win"</span>, <span class="st">"Map"</span>,</span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Mode"</span>, <span class="st">"Role"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="callout-example-white">
+<p><strong>Analyze player 2’s statistics by their Heroes played.</strong></p>
+<p>First, let’s transform our newly merged data from <code>wide</code> to <code>long</code> for easier analysis.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>ow_long_with_hero <span class="ot">&lt;-</span> ow_with_hero <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="fu">c</span>(<span class="st">"Elimination"</span>, <span class="st">"Assists"</span>,</span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>                                      <span class="st">"Deaths"</span>, <span class="st">"Damage"</span>, <span class="st">"Heals"</span>,</span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>                                      <span class="st">"Mitigation"</span>), </span>
+<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a>                                <span class="at">names_to =</span> <span class="st">"value_type"</span>, </span>
+<span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a>                                <span class="at">values_to =</span> <span class="st">"value"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Next, we are going to create a new dataset that only contains <code>Player 2</code>’s records and summarize from there.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>player2 <span class="ot">&lt;-</span> ow_long_with_hero <span class="sc">%&gt;%</span></span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Player <span class="sc">==</span> <span class="st">"player2"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Player, Hero, value_type) <span class="sc">%&gt;%</span></span>
+<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">sum_val =</span> <span class="fu">sum</span>(value))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'Player', 'Hero'. You can override using
+the `.groups` argument.</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(player2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 30 × 4
+# Groups:   Player, Hero [5]
+   Player  Hero       value_type  sum_val
+   &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;         &lt;dbl&gt;
+ 1 player2 Lifeweaver Assists          17
+ 2 player2 Lifeweaver Damage         2239
+ 3 player2 Lifeweaver Deaths            3
+ 4 player2 Lifeweaver Elimination      11
+ 5 player2 Lifeweaver Heals          8181
+ 6 player2 Lifeweaver Mitigation        0
+ 7 player2 Mauga      Assists          17
+ 8 player2 Mauga      Damage        10449
+ 9 player2 Mauga      Deaths           16
+10 player2 Mauga      Elimination      44
+# ℹ 20 more rows</code></pre>
+</div>
+</div>
+<p>Let’s just create another bar-chart to visualize these results!</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>p2_facet <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> player2, <span class="fu">aes</span>(<span class="at">x=</span>Hero, <span class="at">y=</span>sum_val))<span class="sc">+</span></span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>)<span class="sc">+</span><span class="fu">facet_wrap</span>(<span class="sc">~</span>value_type, <span class="at">scales=</span><span class="st">"free_y"</span>)</span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(p2_facet)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05_Dataframes_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

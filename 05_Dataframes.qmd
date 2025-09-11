@@ -63,6 +63,7 @@ ow <- read_csv(paste0(dir, "overwatch_stats.csv"))
 Once your data is loaded into R, the best first steps is to inspect it. The main focus: get familiar with the data and summarize its main characteristics.
 
 The `head()` function displays the first 6 rows of your dataset
+
 ```{r}
 head(ow)
 ```
@@ -80,6 +81,7 @@ str(ow)
 ```
 
 Another useful thing to analyze is looking at all the possible values in your columns - sometimes, the `str()` function shows all unique values, but other times it gets cut off. We can do it this way:
+
 ```{r}
 # output all unique values in the Player column 
 unique(ow$Player)
@@ -93,6 +95,7 @@ We can access a column in a `data.frame` by using the `$` operator. When we do t
 :::
 
 If we analyze the output of the `summary()` and the `str()` function, we can see that the `Date` column is categorized as a `character`. Let's reassign it's class by using the `as.Date` function.
+
 ```{r}
 
 #' because the values of Date appear as MM/DD/YY in the data, we will use %m/%d/%y to follow the same format.
@@ -104,6 +107,7 @@ class(ow$Date)
 ```
 
 ## Visualizing the data
+
 The output of `summary()` and `str()` told us that we have several `numeric` columns in our data: `eliminations`, `assists`, `deaths`, `damage`, `heals`, and `mitigation`.
 
 Let's first visualize a histogram for the `damage` column to determine its distribution.
@@ -114,7 +118,326 @@ hist(ow$Damage)
 ```
 
 We can also create a boxplot as another way to view its distribution and determine what our potential outliers would look like.
+
 ```{r}
 # using base R function: boxplot()
 boxplot(ow$Damage)
 ```
+
+## Data Transformation
+
+::: callout-example-white
+**Convert the `data.frame` from `wide` to `long`**
+
+Transformation Functions:
+
+-   `pivot_longer()` -\> function to go from `wide` to `long`
+
+-   `pivot_wider()` -\> function to go from `long` to `wide`
+
+```{r}
+ow_long <- ow %>% pivot_longer(cols=c("Elimination", "Assists",
+                                      "Deaths", "Damage", "Heals",
+                                      "Mitigation"), 
+                                names_to = "value_type", 
+                                values_to = "value")
+
+head(ow_long)
+```
+:::
+
+Concepts to know:
+
+-   `%>%` -\> pipe operator, takes the output of the expression of the LHS and passes it to the first argument on its RHS
+
+    ```{r}
+    #summary(ow)
+
+    #ow %>% summary()
+
+    ow %>%
+        head() %>%
+          summary()
+    ```
+
+    -   The example above states: with the `overwatch` dataset, use the function `head()` and from the output of `head()`, use the function `summary().`
+
+### Dplyr
+
+`dplyr` is a package in `R` that is part of `tidyverse`, it is the main package for data manipulation that is *super* intuitive. It is often described as "grammar for data manipulation"
+
+-   `mutate()` - adds new variables that are "manipulations" of other variables that already exist in your data / create or transform columns
+
+::: callout-example
+**Using `mutate()`**
+```{r}
+df <- data.frame(x=c(1,3,8,10, NA, 5, 6))
+df <- df %>% 
+  mutate(x2 = x^2)
+print(df)
+```
+:::
+
+-   `filter()` - filters or picks cases based on their values
+
+::: callout-tip
+The `filter()` function will always return or filter your data for conditions that are TRUE **meaning conditions that are FALSE or conditions that are NA will not be returned**.
+
+-   If you want to retain the missing values, you have to explicitly filter for it as well.
+
+-   Use `is.na()` to determine if value is missing.
+
+```{r}
+df <- data.frame(x=c(1,3,8,10, NA, 5, 6))
+
+# NA is dropped as well
+filter <- df %>% filter(x != 3)
+filter
+
+filter <- df %>% filter(x != 3 | is.na(x))
+filter
+```
+:::
+
+-   `select()` - picks based on columns/variables
+
+-   `arrange()` - reorder rows
+
+-   `summarise()` - collapse into specified summary statistics
+
+-   `group_by()` - allows functions to be conducted by group
+
+::: callout-warning
+#### `ungroup()`
+
+When you use `group_by()`, you should try your best to `ungroup()` your data afterwards so that any following operation is not done within groups again.
+
+```{r}
+df <- data.frame(student = c("X", "X", "X", "Y", "Y", "Y"), 
+                         score = c(100, 98, 85, 90, 96, 98), 
+                 class = c("Math", "Math", "Bio", "Bio", "Bio", "Math"))
+
+mean_student <- df %>% 
+            group_by(class, student) %>%
+            summarise(average_score = mean(score))
+
+print(mean_student)
+
+mean_student <- mean_student %>% 
+  summarise(sum_score = sum(average_score))
+
+print(mean_student)
+```
+
+`summarise()` drops one level of grouping but the highest level is retained, as shown in the second operation. Running the same lines of code but including `ungroup()` will provide an `overall_sum` at the end, instead of a `sum` by `class`.
+
+```{r}
+mean_student <- df %>% 
+            group_by(class, student) %>%
+            summarise(average_score = mean(score)) %>%
+            ungroup()
+
+print(mean_student)
+
+mean_student <- mean_student %>% 
+  summarise(sum_score = sum(average_score))
+
+print(mean_student)
+```
+:::
+
+::: callout-example-white
+**What is the total number of wins and losses and percentage of wins/losses for each Player? By each Date? Create a visualization.**
+
+```{r}
+# create a new data.frame that is a copy of ow_long, group it by Player & Date, and use the summarise function to calculate the total number of wins/loses and its percent
+player_wins <- ow_long %>%
+  group_by(Player, Date) %>%
+  summarise(wins = sum(Win),
+            pct_win = sum(Win)/n() * 100, 
+            lose = n() - sum(Win), 
+            pct_lose = lose/n() * 100)
+
+print(player_wins)
+```
+
+Create a bar-graph:
+
+```{r}
+# plotting number of wins
+bar <- ggplot(data = player_wins, aes(x= Date, y= wins)) + 
+  geom_bar(aes(fill = Player), position="dodge", stat="identity")
+
+print(bar)
+```
+
+Create a line-graph:
+
+```{r}
+line <- ggplot(data = player_wins, aes(x= Date, y= wins)) +
+  geom_line(aes(color = Player)) + geom_point()
+print(line)
+```
+:::
+
+::: callout-example-white
+**What is the total number of eliminations and damage by Role? Create a visualization.**
+
+```{r}
+role_stats <- ow_long %>% 
+  group_by(Player, Role, value_type) %>%
+  summarise(sum_val = sum(value))
+head(role_stats)
+
+print(role_stats %>% filter(value_type %in% c("Elimination", "Damage")))
+
+chart <- ggplot(data = role_stats, aes(x = Role, y = sum_val)) +
+  geom_bar(position = "dodge", stat = "identity", aes(fill = Player)) +
+  facet_wrap(~ value_type, scales = "free_y")
+print(chart)
+```
+
+We can also re-order the way our items appear in our chart by making our ordering variables factors and setting its levels. Below, we set `Role` and `value_type` to be a factor where the levels are in the order we want these categories to appear on our chart (the x-axis for `Role` and the various facets for `value_type`).
+
+```{r}
+# re-order the x-axis by changing Role into a factor with wanted order of levels
+# Tank, Support, Damage 
+
+role_stats$Role <- factor(role_stats$Role, levels=c("Tank", "Support", "Damage"))
+unique(role_stats$Role)
+
+role_stats$value_type <- factor(role_stats$value_type, levels = c("Elimination", 
+                                                                  "Assists", 
+                                                                  "Deaths", 
+                                                                  "Damage",
+                                                                  "Heals",
+                                                                  "Mitigation"))
+unique(role_stats$value_type)
+```
+
+Re-define the plot:
+
+```{r}
+chart <- ggplot(data = role_stats, aes(x = Role, y = sum_val)) +
+  geom_bar(position = "dodge", stat = "identity", aes(fill = Player)) +
+  facet_wrap(~ value_type, scales = "free_y")
+print(chart)
+```
+:::
+
+## Merging
+
+::: callout-recall
+**Recall**: Merging data sets is the process of combining two or more data sets based on common columns or row indices. This is common in data analytics when you need to bring information together from different sources into one single data set.
+:::
+
+### Join Functions
+
+::: callout-note
+#### Join Types
+
+| Join Function | Description |   |
+|--------------|--------------------------------------------|--------------|
+| `inner_join()` | Keeps only rows that have a match in **both** datasets. | Overlap only |
+| `left_join()` | Keeps **all rows from the left** dataset, filling with `NA` if no match on right. | Keep the left side |
+| `right_join()` | Keeps **all rows from the right** dataset, filling with `NA` if no match on left. | Keep the right side |
+| `full_join()` | Keeps **all rows from both** datasets; matches are combined, non-matches get `NA`. | Keep everything |
+| `semi_join()` | Filters the left dataset to only rows that have a match in the right; doesn’t add columns. | Left rows with matches |
+| `anti_join()` | Filters the left dataset to rows that **do not** have a match in the right. | Left rows without matches |
+:::
+
+To further analyze our data, we will merge the `overwatch_heros.csv` into our current `data.frame.`In addition to the Overwatch dataset, the accompanying dataset (`overwatch_heros`) lists the heroes played in each game. We know that each row in the original Overwatch dataset we’ve been working with corresponds to a single game. Because of the game’s mechanics, players are allowed to switch heroes during a match. As a result, in the heroes dataset, you’ll see that a player may have played multiple heroes within the same game.
+
+-   The `overwatch_heros` data set contains these attributes:
+
+    -   Player
+    -   Date
+    -   Win
+    -   Map
+    -   Mode
+    -   Role
+    -   Percent Played
+    -   Hero
+
+```{r}
+# read in the new data set
+dir <- "/Users/rdominguez/Documents/MA500/Lessons/datasets/"
+
+hero <- read_csv(paste0(dir, "overwatch_heros.csv"))
+str(hero)
+
+# set the Date column as a Date data type
+hero$Date <- as.Date(hero$Date, format = "%m/%d/%y")
+class(hero$Date)
+```
+
+The output of `str()` shows that the hero data frame contains more observations than the Overwatch dataset, which has 87 entries.
+
+When you use the `left_join` function to merge the `ow` data frame with the `hero` data frame, it will match all key values from the `hero` data to the `ow` data. However, the first time you run this, you’ll encounter a “many-to-many relationship” warning. This means that the join will occur, but it will generate all possible combinations of our key columns—Player, Date, Win, Map, Mode, and Role—with the various corresponding heroes.
+
+To simplify things, we’ll only join the rows associated with the heroes that were played the most during each game.
+
+```{r}
+hero_most_played <- hero %>%
+  group_by(Player, Date, Win, Map, Mode, Role) %>%
+  filter(`Percent Played` == max(`Percent Played`))
+
+ow_with_hero <- left_join(ow, hero_most_played, by=
+                            c("Player", "Date", "Win",
+                              "Map", "Mode", "Role"))
+```
+
+When merging, you may encounter a **“many-to-many relationship” warning**. This occurs because there are duplicate combinations of our key indicators: Player, Date, Win, Map, Mode, Role. In other words, the dataset contains **multiple games played by the same player, on the same date, with the same result, on the same map, mode, and role**. Normally, this issue would be prevented by assigning a **unique game identifier**. However, this dataset does not include such an identifier. As a result, a player can appear in several games on the same day—even under the exact same conditions (map, role, and mode).
+
+To move forward with analysis, we will **detect and remove these duplicate entries** to ensure clean merges.
+
+-   tldr: issue 1 with the merge: The dataset lacks a unique game identifier, which causes duplicate entries.
+
+```{r}
+# this code counts all possible combinations of our key indicators and filters to the set that shows up more than once
+duplicate <- ow %>% 
+  count(Player, Date, Win, Map, Mode, Role) %>%
+  filter(n > 1)
+print(duplicate)
+```
+
+After we find this duplicate combination of our key indicators, we will remove it from our `ow_with_hero` data.frame and move on with our analysis. This will be done using `anti_join`.
+
+```{r}
+ow_with_hero <- ow_with_hero %>%
+    anti_join(duplicate, by = c("Player", "Date", "Win", "Map",
+        "Mode", "Role"))
+```
+
+::: callout-example-white
+**Analyze player 2's statistics by their Heroes played.**
+
+First, let's transform our newly merged data from `wide` to `long` for easier analysis.
+
+```{r}
+ow_long_with_hero <- ow_with_hero %>% pivot_longer(cols=c("Elimination", "Assists",
+                                      "Deaths", "Damage", "Heals",
+                                      "Mitigation"), 
+                                names_to = "value_type", 
+                                values_to = "value")
+```
+
+Next, we are going to create a new dataset that only contains `Player 2`'s records and summarize from there.
+
+```{r}
+player2 <- ow_long_with_hero %>%
+  filter(Player == "player2") %>%
+  group_by(Player, Hero, value_type) %>%
+  summarise(sum_val = sum(value))
+
+print(player2)
+```
+
+Let's just create another bar-chart to visualize these results!
+
+```{r}
+p2_facet <- ggplot(data = player2, aes(x=Hero, y=sum_val))+
+  geom_bar(stat = "identity")+facet_wrap(~value_type, scales="free_y")
+print(p2_facet)
+```
+:::
