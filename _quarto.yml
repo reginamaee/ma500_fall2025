@@ -10,6 +10,7 @@ book:
     - 03_Basics.qmd
     - 04_CLF.qmd
     - 05_Dataframes.qmd
+    - 06_Visualizations.qmd
     
 execute: 
   error: true
