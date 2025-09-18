@@ -428,5 +428,65 @@
     "crumbs": [
       "Data Visualizations"
     ]
+  },
+  {
+    "objectID": "07_EDA.html",
+    "href": "07_EDA.html",
+    "title": "Exploratory Data Analysis",
+    "section": "",
+    "text": "Measures of Central Tendency\nExploratory Data Analysis (EDA) is the process of systematically examining your data to determine how best to visualize, summarize, and transform it in order to uncover patterns, trends, and insights. We use this process to:\nFor this process, we will be exploring the mtcars dataset. R has many built-in datasets and mtcars is one of them. You can bring up the documentation of the dataset by running ?mtcars. We can save it to our environment by running:\nMeasures of central tendency describes the center or typical values in your data set. We know a few already such as:\nThe above have functions in R, but for mode(), we can find it in different ways such as using the table() function or creating our own function.\nhide code\ntable(mtcars$cyl)\n\n\n\n 4  6  8 \n11  7 14\nOR\nhide code\nmode &lt;- function(x) {\n  names(sort(-table(x)))[1]\n}\n\nmode(mtcars$cyl)\n\n\n[1] \"8\"",
+    "crumbs": [
+      "Exploratory Data Analysis"
+    ]
+  },
+  {
+    "objectID": "07_EDA.html#measures-of-central-tendency",
+    "href": "07_EDA.html#measures-of-central-tendency",
+    "title": "Exploratory Data Analysis",
+    "section": "",
+    "text": "mean()\nmedian()\n\n\n\n\n\n\n\n\n\n\n\nTip\n\n\n\n\nClose mean and median values can show symmetry in your data.\nA higher or lower mean from the median can show skewness.",
+    "crumbs": [
+      "Exploratory Data Analysis"
+    ]
+  },
+  {
+    "objectID": "07_EDA.html#variation",
+    "href": "07_EDA.html#variation",
+    "title": "Exploratory Data Analysis",
+    "section": "Variation",
+    "text": "Variation\nVariation helps us determine the spread or how dispersed our data is. You can think of it as a way to determine “how consistent” your values are close to your “typical” or “centered” values.\nCommon functions include:\n\nrange()\nvar()\nsd()\nIQR()\n\nIt is beneficial to visualize your data distribution on top of computing these metrics above.\n\n\n\n\n\n\nTip\n\n\n\nIf your variable is continuous, use a histogram. If your variable is categorical, use a bar chart.\n\n\n\nVisualizing Variation\nWe want to count how many rows fall into each category of the variable cyl, which represents the number of cylinders. Even though cyl is stored as a numeric variable, it behaves more like a categorical variable because the values are discrete (e.g., 4, 6, 8 cylinders). So, for this example, we will be creating a bar chart:\n\nVisualize the distribution of the cyl variable.\n\n\nhide code\nggplot(data = mtcars, aes(x=as.factor(cyl)))+\n  geom_bar(aes(fill=as.factor(cyl)))+\n  labs(x=\"Number of Cylinders\", \n       fill = \"Number of Cylinders\")\n\n\n\n\n\n\n\n\n\nThe barchart above shows us which category has the least amount of rows or the most number of rows. With this visualization, we can see easily that more cars in our data set have 8 cylinders (which was observed when finding the mode of this variable).\n\n\nVisualize the distribution of the mpg variable\nBecause mpg is continuous, we will utilize a histogram.\n\n\nhide code\nggplot(data=mtcars)+\n  geom_histogram(aes(x=mpg), fill=\"lightblue\", binwidth=0.5)\n\n\n\n\n\n\n\n\n\nOur histogram above tells us a few things:\n\nThe distribution for mpg is fairly spread out, with clusters around the 15-25 mpg range.\nThere are less cars that have high miles per gallon (ie &gt; 30).\n\nTo get the numeric values of each bin shown above, we can run the following code:\n\n\nhide code\nmtcars %&gt;% \n  count(cut_width(mpg, 0.5))\n\n\n   cut_width(mpg, 0.5) n\n1          [10.2,10.8] 2\n2          (13.2,13.8] 1\n3          (14.2,14.8] 2\n4          (14.8,15.2] 3\n5          (15.2,15.8] 1\n6          (15.8,16.2] 1\n7          (16.2,16.8] 1\n8          (17.2,17.8] 1\n9          (17.8,18.2] 2\n10         (18.2,18.8] 1\n11         (18.8,19.2] 2\n12         (19.2,19.8] 1\n13         (20.8,21.2] 2\n14         (21.2,21.8] 3\n15         (22.8,23.2] 2\n16         (24.2,24.8] 1\n17         (25.8,26.2] 1\n18         (27.2,27.8] 1\n19         (30.2,30.8] 2\n20         (32.2,32.8] 1\n21         (33.8,34.2] 1\n\n\n\ncut_width() separates your data into groups of your specified width.",
+    "crumbs": [
+      "Exploratory Data Analysis"
+    ]
+  },
+  {
+    "objectID": "07_EDA.html#outliers",
+    "href": "07_EDA.html#outliers",
+    "title": "Exploratory Data Analysis",
+    "section": "Outliers",
+    "text": "Outliers\nOutliers can significantly impact model fitting and statistical calculations. They are data points that lie far away from the rest of your observed values. Some measures and models are highly sensitive to these extreme data points so it is always import to conduct exploratory analysis to understand your data (and know the context of your data!).\n\nOutliers are data points that do not seem to fit the pattern.\nSome of these data points can be data entry errors.\nSome can be real observations that suggest new information.\n\n\nVisualizing Outliers\nA boxplot might be one of the easiest ways to visualize outliers within your data set. Additionally, a boxplot provides information about the median, quartiles, and spread of your data. But, outliers are shown as individual dots outside of the whiskers and box.\n\nFind outliers by graphing a boxplot of the hp variable.\n\n\nhide code\nggplot(data=mtcars, aes(x=hp))+\n  geom_boxplot()\n\n\n\n\n\n\n\n\n\nOur above plot shows that most data is centered around the median and is not as wide spread, but it does show one outlier that has a horsepower greater than 300. This plot also shows that most cars in this data set have around 100 - 180 horsepower.\nThis one data point can strongly influence the mean, but not so much of the median.\n\n\nhide code\n# mean with the 300 hp\nmean(mtcars$hp)\n\n\n[1] 146.6875\n\n\nhide code\n# mean without 300 hp\nmean(mtcars$hp[mtcars$hp &lt; 300])\n\n\n[1] 140.6129\n\n\nIt’s also useful to examine outliers within groups. For example, if we extend our boxplot by splitting it according to the am variable (automatic vs. manual transmission), we can see that the results differ between groups.\n\n\nhide code\nggplot(data=mtcars, aes(x=hp))+\n  geom_boxplot(aes(fill=as.factor(am)))\n\n\n\n\n\n\n\n\n\nThe boxplot above compares horsepower (hp) between automatic (am = 0) and manual (am = 1) cars. We can differences in both the spread of the data and outliers. For automatic cars, the distribution of horsepower is wider, but no individual points fall beyond the whiskers. However, the manual group shows two cars with high horsepower, marked as outliers.\n\n\n\n\n\n\n\nImportant\n\n\n\nOutlier detection can depend on how our data is grouped and your question of analysis!\n\n\n\n\nIdentifying outliers\nWe can identify outliers visually by using graphs like boxplots, histograms, etc. However, we can filter our data several ways using different methods:\n\nTukey’s IQR Rule\n\nAn outlier is determined if that value falls below \\(Q1 - 1.5*IQR\\) or above \\(Q3 - 1.5*IQR\\) .\n\n\nhide code\nmtcars &lt;- mtcars %&gt;%\n  mutate(\n    Q1 = quantile(hp, 0.25),      # 25th percentile\n    Q3 = quantile(hp, 0.75),      # 75th percentile\n    IQR = Q3 - Q1,                 # Interquartile range\n    lower_bound = Q1 - 1.5 * IQR,  # lower cutoff\n    upper_bound = Q3 + 1.5 * IQR,  # upper cutoff\n    outlier_iqr = ifelse(hp &lt; lower_bound | hp &gt; upper_bound, 1, 0)\n  )\n\nprint(mtcars %&gt;% filter(outlier_iqr == 1))\n\n\n              mpg cyl disp  hp drat   wt qsec vs am gear carb   Q1  Q3  IQR\nMaserati Bora  15   8  301 335 3.54 3.57 14.6  0  1    5    8 96.5 180 83.5\n              lower_bound upper_bound outlier_iqr\nMaserati Bora      -28.75      305.25           1\n\n\n\n\n\nZ-Score\n\nAnother way is by using z-scores, which measures how many standard deviations a value is away from the mean. This is useful when data is approximately normally distributed.\nBelow, we set the cutoff to be anything more than 2 SD from the mean.\n\n\nhide code\nmtcars &lt;- mtcars %&gt;%\n  mutate(zscore_hp = as.numeric(scale(hp)),\n         outlier_zscore = ifelse(abs(zscore_hp) &gt; 2, 1, 0))\n\nprint(mtcars %&gt;% filter(outlier_zscore == 1))\n\n\n              mpg cyl disp  hp drat   wt qsec vs am gear carb   Q1  Q3  IQR\nMaserati Bora  15   8  301 335 3.54 3.57 14.6  0  1    5    8 96.5 180 83.5\n              lower_bound upper_bound outlier_iqr zscore_hp outlier_zscore\nMaserati Bora      -28.75      305.25           1  2.746567              1\n\n\n\n\n\nPercentiles\n\nOutliers can also be identified through percentiles which splits the data into 100 equal parts.\nBelow we set the cutoff to be anything more than the 95th percentile value.\n\n\nhide code\nmtcars &lt;- mtcars %&gt;%\n  mutate(\n    outlier_pct = ifelse(hp &gt; quantile(hp, 0.95), 1, 0)\n  )\n\nprint(mtcars %&gt;% filter(outlier_pct == 1))\n\n\n                mpg cyl disp  hp drat   wt qsec vs am gear carb   Q1  Q3  IQR\nFord Pantera L 15.8   8  351 264 4.22 3.17 14.5  0  1    5    4 96.5 180 83.5\nMaserati Bora  15.0   8  301 335 3.54 3.57 14.6  0  1    5    8 96.5 180 83.5\n               lower_bound upper_bound outlier_iqr zscore_hp outlier_zscore\nFord Pantera L      -28.75      305.25           0  1.711021              0\nMaserati Bora       -28.75      305.25           1  2.746567              1\n               outlier_pct\nFord Pantera L           1\nMaserati Bora            1",
+    "crumbs": [
+      "Exploratory Data Analysis"
+    ]
+  },
+  {
+    "objectID": "07_EDA.html#handling-outliers",
+    "href": "07_EDA.html#handling-outliers",
+    "title": "Exploratory Data Analysis",
+    "section": "Handling Outliers",
+    "text": "Handling Outliers\n\nUnderstand the Cause:\n\nNatural Variability: Legitimate data variation\nData Entry Errors: Mistakes in data collection or entry.\nInstrument/Process Error: Issues with data collection methods.\n\nDecide on an Approach:\n\nKeep Them: If they reflect true variation.\nTransform Data: Reduce their impact.\nCap/Floor Values: Limit extreme outliers.\nRemove Them: If they’re errors or irrelevant—document decisions.\nUse Robust Models: Opt for models less sensitive to outliers.\n\nALWAYS DOCUMENT!",
+    "crumbs": [
+      "Exploratory Data Analysis"
+    ]
+  },
+  {
+    "objectID": "07_EDA.html#covariance-and-correlation",
+    "href": "07_EDA.html#covariance-and-correlation",
+    "title": "Exploratory Data Analysis",
+    "section": "Covariance and Correlation",
+    "text": "Covariance and Correlation\nCovariance expresses how two numeric variables change together, whether it be positive or negative. (Covariance is sensitive and influenced by the units and scales of our variables.)\n\na positive result indicates a positive linear relationship - as x increases, y increases\na negative result indicates a negative linear relationship - as x decreases, y decreases\n\nCorrelation helps interpret covariance further by assessing both the strength and direction. The Pearson’s correlation coefficient, \\(\\rho_{xy}\\), is the most commonly used measure, where \\[-1 \\leq \\rho_{xy} \\leq 1\\]\n\n\\(\\rho_{xy} = -1\\) indicates a near perfect negative linear relationship\n\\(\\rho_{xy} = 1\\) indicates a near perfect positive linear relationship\nHowever, the relationship gets weaker the closer the coefficient is to 0.\n\nLet’s investigate more into the mtcars dataset and see if there is a relationship between hp, the gross horsepower of a car, and qsec, the shortest time taken to travel a quarter-mile distance.\n\nWhat is the relationship between hp and qsec?\nFirst, we will visualize the relationship by plotting a scatterplot:\n\n\nhide code\nscatter &lt;- ggplot(data = mtcars,\n                  aes(x = hp, \n                      y = qsec))+\n           geom_point()\n\n\nWe can observe a negative relationship from the scatterplot, which means that cars that take a shorter amount of time to travel a quarter-mile tend to have more horsepower. (as x increases, y decreases).\nWhen we compute the covariance and correlation for these two variables, we get:\n\n\nhide code\ncov(mtcars$hp, mtcars$qsec)\n\n\n[1] -86.77008\n\n\nhide code\ncor(mtcars$hp, mtcars$qsec)\n\n\n[1] -0.7082234\n\n\nThe negative value from our covariance determines a negative relationship. However, the strength of this relationship is dependent on the units of our variable in question, so this value -86 is not easily interpretable.\nThe correlation value of ~ -0.71 standardizes the covariance by proportioning it between -1 and 1. This negative 0.71 value says that there is a slightly strong negative correlation.",
+    "crumbs": [
+      "Exploratory Data Analysis"
+    ]
   }
 ]

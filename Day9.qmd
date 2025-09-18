@@ -1,0 +1,363 @@
+---
+format: 
+  live-revealjs:
+    theme: default
+    auto-animate: true
+    auto-animate-duration: 0.5
+    auto-animate-easing: ease-in-out
+    code-line-numbers: true
+    css: reveal_style.css
+    include-in-header:
+      text: |
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+title: "MA-500 Intro to R"
+engine: knitr
+scrolling: FALSE
+scrollable: FALSE
+---
+
+{{< include _extensions/r-wasm/live/_knitr.qmd >}}
+
+{{< include ./_extensions/r-wasm/live/_gradethis.qmd >}}
+
+------------------------------------------------------------------------
+
+### Exploratory Data Analysis
+
+EDA: **How should we visualize and transform your data in a systematic way?**
+
+::: fragment
+**1.** Generate questions about your data.
+:::
+
+::: fragment
+**2.** Answer by visualizing, transforming, or modeling your data.
+:::
+
+::: fragment
+**3.** Use what you learn to refine your question or generate new questions.
+:::
+
+------------------------------------------------------------------------
+
+### `mtcars` dataset
+
+`R` has a built-in dataset called `mtcars` (Motor Trend Car Road Tests) which you can pull directly.
+
+```{r, echo=T}
+# save it into our library
+mtcars <- mtcars
+print(head(mtcars))
+```
+
+------------------------------------------------------------------------
+
+### Measures of Central Tendency
+
+<medium>
+
+::: fragment
+We already know:
+
+-   `mean()`
+
+-   `median()`
+:::
+
+::: fragment
+But, there is no `mode()` function. For that, we can use the `table()` function OR create our own `function`
+:::
+
+::: fragment
+```{r, echo = TRUE}
+table(mtcars$cyl)
+```
+:::
+
+::: fragment
+```{r, echo = TRUE}
+mode <- function(x) {
+  names(sort(-table(x)))[1]
+}
+
+mode(mtcars$cyl)
+```
+:::
+
+</medium>
+
+------------------------------------------------------------------------
+
+### Variation
+
+<medium> To see the variation in our data, we can use:
+
+:::: fragment
+::: incremental
+-   `range()`
+-   `var()`
+-   `sd()`
+-   `IQR()`
+:::
+::::
+
+::: fragment
+With these metrics, it is also great to visualize them:
+:::
+
+:::: fragment
+::: callout-tip
+If your variable is *continuous*, use a `histogram`. If your variable is *categorical*, use a `bar chart`.
+:::
+::::
+
+</medium>
+
+------------------------------------------------------------------------
+
+### Visualizing Variation
+
+::: {fragment}
+```{r, echo = TRUE, eval = FALSE}
+library(tidyverse)
+ggplot(data = mtcars, aes(x=as.factor(cyl)))+
+  geom_bar(aes(fill=as.factor(cyl)))+
+  labs(x="Number of Cylinders", 
+       fill = "Number of Cylinders")
+```
+:::
+
+::: fragment
+```{r}
+library(tidyverse)
+ggplot(data = mtcars, aes(x=as.factor(cyl)))+
+  geom_bar(aes(fill=as.factor(cyl)))+
+  labs(x="Number of Cylinders", 
+       fill = "Number of Cylinders")
+```
+:::
+
+------------------------------------------------------------------------
+
+### Visualizing Variation
+
+::: fragment
+```{r, echo=TRUE, eval=FALSE}
+ggplot(data=mtcars)+
+  geom_histogram(aes(x=mpg), fill="lightblue", binwidth=0.5)
+```
+:::
+
+::: fragment
+```{r}
+ggplot(data=mtcars)+
+  geom_histogram(aes(x=mpg), fill="lightblue", binwidth=0.5)
+```
+:::
+
+------------------------------------------------------------------------
+
+### Visualizing Variation
+
+::: fragment
+```{r, eval = TRUE, echo = TRUE}
+mtcars %>% 
+  count(cut_width(mpg, 0.5))
+```
+:::
+
+------------------------------------------------------------------------
+
+### Unusual Values / Outliers
+
+::: fragment
+**Outliers** can significantly impact model fitting and statistical calculations. Always conduct exploratory analysis to understand your data (and know the context of your data!) These are
+:::
+
+:::: fragment
+::: incremental
+-   data points that don't seem to fit the pattern
+
+-   sometimes data entry errors
+
+-   sometimes real observations that suggest new information
+:::
+::::
+
+------------------------------------------------------------------------
+
+### Unusual Values / Outliers
+
+::: fragment
+```{r, echo = TRUE, eval = FALSE}
+ggplot(data=mtcars, aes(x=hp))+
+  geom_boxplot()
+```
+:::
+
+::: fragment
+```{r}
+ggplot(data=mtcars, aes(x=hp))+
+  geom_boxplot()
+```
+:::
+
+------------------------------------------------------------------------
+
+### Unusual Values / Outliers
+
+::: fragment
+But, let's make sure we consider outliers by groups too depending on your question.
+
+```{r, echo = TRUE, eval = FALSE}
+ggplot(data=mtcars, aes(x=hp))+
+  geom_boxplot(aes(fill=as.factor(am)))
+```
+:::
+
+::: fragment
+```{r}
+ggplot(data=mtcars, aes(x=hp))+
+  geom_boxplot(aes(fill=as.factor(am)))
+```
+:::
+
+------------------------------------------------------------------------
+
+### Identifying outliers
+
+::: fragment
+-   Use boxplots/scatterplots/histograms
+
+-   Filter data to observations \> Q3 + 1.5(IQR) or \< Q1 - 1.5(IQR)
+
+```{r, echo = TRUE}
+mtcars <- mtcars %>%
+  mutate(
+    Q1 = quantile(hp, 0.25),      # 25th percentile
+    Q3 = quantile(hp, 0.75),      # 75th percentile
+    IQR = Q3 - Q1,                 # Interquartile range
+    lower_bound = Q1 - 1.5 * IQR,  # lower cutoff
+    upper_bound = Q3 + 1.5 * IQR,  # upper cutoff
+    outlier_iqr = ifelse(hp < lower_bound | hp > upper_bound, 1, 0)
+  )
+
+print(mtcars %>% filter(outlier_iqr == 1))
+```
+:::
+
+------------------------------------------------------------------------
+
+### Identifying outliers
+
+::: fragment
+-   or by the z-score method
+
+```{r, echo = TRUE, eval = TRUE}
+mtcars <- mtcars %>%
+  mutate(zscore_hp = as.numeric(scale(hp)),
+         outlier_zscore = ifelse(abs(zscore_hp) > 2, 1, 0))
+
+print(mtcars %>% filter(outlier_zscore == 1))
+```
+:::
+
+------------------------------------------------------------------------
+
+### Identifying outliers
+
+::: fragment
+-   or by percentiles
+
+```{r, echo = TRUE, eval = TRUE}
+mtcars <- mtcars %>%
+  mutate(
+    outlier_pct = ifelse(hp > quantile(hp, 0.95), 1, 0)
+  )
+
+print(mtcars %>% filter(outlier_pct == 1))
+```
+:::
+
+------------------------------------------------------------------------
+
+### Handling outliers
+
+<small>
+
+::: incremental
+1.  *Understand the Cause*:
+    -   **Natural Variability**: Legitimate data variation
+    -   **Data Entry Errors**: Mistakes in data collection or entry.
+    -   **Instrument/Process Error**: Issues with data collection methods.
+2.  *Decide on an Approach:*
+    -   **Keep Them**: If they reflect true variation.
+    -   **Transform Data**: Reduce their impact.
+    -   **Cap/Floor Values**: Limit extreme outliers.
+    -   **Remove Them**: If they’re errors or irrelevant—document decisions.
+    -   **Use Robust Models**: Opt for models less sensitive to outliers.
+3.  **ALWAYS DOCUMENT!**
+:::
+
+</small>
+
+------------------------------------------------------------------------
+
+### Covariance and Correlation
+
+
+<small>
+
+**Covariance** expresses how two numeric variables change together, whether it be positive or negative. (Covariance is sensitive and influenced by the units and scales of our variables.)
+
+-   a positive result indicates a positive linear relationship - as *x* increases, *y* increases
+-   a negative result indicates a negative linear relationship - as *x* decreases, *y* decreases
+
+**Correlation** helps interpret covariance further by assessing both the strength and direction. The *Pearson's correlation coefficient*, $\rho_{xy}$, is the most commonly used measure, where $$-1 \leq \rho_{xy} \leq 1$$
+
+-   $\rho_{xy} = -1$ indicates a near perfect negative linear relationship
+
+-   $\rho_{xy} = 1$ indicates a near perfect positive linear relationship
+
+-   However, the relationship gets weaker the closer the coefficient is to 0.
+
+</small>
+
+--- 
+
+### Covariance and Correlation
+
+<small>
+
+::: columns
+
+::: column
+Let's investigate more into the `mtcars` dataset and see if there is a relationship between `hp`, the gross horsepower of a car, and `qsec`, the shortest time taken to travel a quarter-mile distance.
+
+::: fragment
+```{r,echo = TRUE, eval = TRUE}
+scatter <- ggplot(data = mtcars,
+                  aes(x = hp, 
+                      y = qsec))+
+           geom_point()
+```
+
+```{r, echo = TRUE}
+cov(mtcars$hp, mtcars$qsec)
+cor(mtcars$hp, mtcars$qsec)
+```
+:::
+:::
+
+::: column
+```{r}
+scatter
+```
+:::
+:::
+
+</medium>
+
+---
+
+

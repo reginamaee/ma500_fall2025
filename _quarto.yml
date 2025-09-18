@@ -11,6 +11,7 @@ book:
     - 04_CLF.qmd
     - 05_Dataframes.qmd
     - 06_Visualizations.qmd
+    - 07_EDA.qmd
     
 execute: 
   error: true
