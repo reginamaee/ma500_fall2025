@@ -243,6 +243,7 @@ scatter <- ggplot(data = mtcars,
                   aes(x = hp, 
                       y = qsec))+
            geom_point()
+print(scatter)
 ```
 
 We can observe a negative relationship from the scatterplot, which means that cars that take a shorter amount of time to travel a quarter-mile tend to have more horsepower. (as *x* increases, *y* decreases).
