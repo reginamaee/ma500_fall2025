@@ -2,6 +2,7 @@
 format: 
   live-revealjs:
     theme: default
+    scrollable: true
     auto-animate: true
     auto-animate-duration: 0.5
     auto-animate-easing: ease-in-out
@@ -19,6 +20,10 @@ scrollable: FALSE
 {{< include _extensions/r-wasm/live/_knitr.qmd >}}
 
 {{< include ./_extensions/r-wasm/live/_gradethis.qmd >}}
+
+------------------------------------------------------------------------
+
+![](images/clipboard-126832707.jpeg)
 
 ------------------------------------------------------------------------
 
@@ -305,7 +310,6 @@ print(mtcars %>% filter(outlier_pct == 1))
 
 ### Covariance and Correlation
 
-
 <small>
 
 **Covariance** expresses how two numeric variables change together, whether it be positive or negative. (Covariance is sensitive and influenced by the units and scales of our variables.)
@@ -323,15 +327,14 @@ print(mtcars %>% filter(outlier_pct == 1))
 
 </small>
 
---- 
+------------------------------------------------------------------------
 
 ### Covariance and Correlation
 
-<small>
+<medium>
 
-::: columns
-
-::: column
+:::::: columns
+::::: column
 Let's investigate more into the `mtcars` dataset and see if there is a relationship between `hp`, the gross horsepower of a car, and `qsec`, the shortest time taken to travel a quarter-mile distance.
 
 ::: fragment
@@ -347,17 +350,353 @@ cov(mtcars$hp, mtcars$qsec)
 cor(mtcars$hp, mtcars$qsec)
 ```
 :::
-:::
 
 ::: column
 ```{r}
 scatter
 ```
 :::
-:::
+:::::
+::::::
 
 </medium>
 
+------------------------------------------------------------------------
+
+### Effect of outliers
+
+:::: callout-recall
+::: small
+In the `hp` variable, we had \~1–2 outliers (depending on your method of outliering).
+:::
+::::
+
+```{r, eval = TRUE, echo = TRUE}
+# outliers that are < or > IQR*1.5
+head(mtcars %>% filter(outlier_iqr == 1))
+
+# outliers that are > 95th percentile
+head(mtcars %>% filter(outlier_pct == 1))
+```
+
 ---
 
+### Effect of outliers 
 
+:::::: callout-example
+What is the correlation between `hp` and `qsec` after we remove outliers?
+
+::: fragment
+```{r, eval = TRUE, echo = TRUE}
+cor(mtcars$hp, mtcars$qsec)
+```
+:::
+
+::: fragment
+```{r, eval = TRUE, echo = TRUE}
+cor(mtcars$hp[mtcars$outlier_iqr != 1], 
+    mtcars$qsec[mtcars$outlier_iqr != 1])
+```
+:::
+
+::: fragment
+```{r, eval = TRUE, echo = TRUE}
+cor(mtcars$hp[mtcars$outlier_pct != 1], 
+    mtcars$qsec[mtcars$outlier_pct != 1])
+```
+:::
+::::::
+
+---
+
+### Covariance and Correlation
+
+<medium>Let's quickly look at correlation using data from the `iris` data set. </medium> <small> This data set contains measurements of sepal width/length and petal length/width of 50 different flowers from 3 different species of iris. </small>
+
+:::::: callout-example
+::: fragment
+What is the correlation between petal width and petal length?
+:::
+
+::: fragment
+```{r, eval = TRUE, echo = TRUE}
+cor(iris$Petal.Length, iris$Petal.Width)
+```
+:::
+
+::: fragment
+```{r, eval = TRUE, echo = TRUE}
+ggplot(data = iris, aes(x=Petal.Length, y=Petal.Width))+
+  geom_point()
+```
+:::
+::::::
+
+------------------------------------------------------------------------
+
+### Covariance and Correlation
+
+What happens when we observe the relationship by species?
+
+::::: callout-example
+::: fragment
+```{r, echo = TRUE, eval = TRUE}
+cor_group <- iris %>%
+    group_by(Species) %>%
+    summarize(correlation = cor(Petal.Length, Petal.Width))
+
+print(cor_group)
+```
+:::
+
+::: fragment
+```{r, echo = TRUE, eval = TRUE}
+ggplot(data = iris, aes(x=Petal.Length, y=Petal.Width))+
+  geom_point()+facet_wrap(~Species)
+```
+:::
+:::::
+
+------------------------------------------------------------------------
+
+### Covariance and Correlation
+
+<medium> If you would like to compute the correlation of each numeric variable to eachother for the whole `mtcars` dataset: </medium>
+
+::: fragment
+```{r, echo = TRUE, eval = TRUE}
+mtcars <- mtcars %>% select(mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb)
+cor_matrix <- round(cor(mtcars),2)
+cor_matrix
+```
+:::
+
+------------------------------------------------------------------------
+
+### Visualizing the Correlation Matrix
+
+<medium>
+
+:::::: callout-example
+**Using ggplot2**
+
+::: fragment
+```{r, echo = TRUE, eval = TRUE}
+cor_matrix <- as.data.frame(cor_matrix)
+cor_matrix$var1 <- row.names(cor_matrix)
+head(cor_matrix, 3)
+```
+:::
+
+::: fragment
+```{r, echo = TRUE, eval = TRUE}
+cor_matrix <- pivot_longer(cor_matrix, 
+                           cols = colnames(mtcars), 
+                           names_to = "var2")
+cor_matrix$var1 <- factor(cor_matrix$var1, 
+                          levels = rev(colnames(mtcars)))
+cor_matrix$var2 <- factor(cor_matrix$var2, 
+                          levels = colnames(mtcars))
+```
+:::
+
+::: fragment
+```{r, echo = TRUE, eval = TRUE}
+# create a correlation matrix heatmap 
+heatmap <- ggplot(cor_matrix, aes(x = var1, 
+                                  y = var2, 
+                                  fill = value))+
+  geom_tile()+
+  scale_fill_gradient2(
+    low = "darkblue",  
+    mid = "white",     
+    high = "red",      
+    midpoint = 0,      
+    limits = c(-1, 1))  
+
+print(heatmap)
+```
+:::
+::::::
+
+</medium>
+
+------------------------------------------------------------------------
+
+### Visualizing the correlation matrix
+
+<medium>
+
+:::: callout-example
+**Using \``corrplot`**
+
+::: fragment
+```{r, echo = TRUE, eval = TRUE}
+library(corrplot)
+cor_mat <- cor(mtcars)
+corrplot(cor_mat)
+```
+:::
+::::
+
+</medium>
+
+------------------------------------------------------------------------
+
+### Data Transformations
+
+::: small
+T*ransforming data*, not cleaning, re-arranging, or fixing typos, but taking the **log** or the **square root** to help make patterns easier to see and analyze or scale the data better.
+:::
+
+:::: fragment
+::: small
+**Why transform?**
+
+-   reduce skewness (make more normal?)
+-   stabilize the spread
+-   linearize the non-linear
+-   reduce the impact of outliers
+:::
+::::
+
+---
+
+### Data Transformations
+
+::: small
+Let's look at the `diamonds` (prices of over 50,000 round cut diamonds) data set! (This comes with `ggplot2`).
+:::
+
+::: fragment
+```{r, echo = TRUE, eval = TRUE}
+hist(diamonds$price, col = "blue")
+```
+:::
+
+::: fragment
+```{r, echo = TRUE, eval = TRUE}
+hist(log(diamonds$price), col="blue")
+```
+:::
+
+```{r, echo = TRUE}
+hist(sqrt(diamonds$price), col="blue")
+```
+
+---
+
+### Data Transformation 
+
+::: fragment
+```{r, echo = TRUE, eval = TRUE}
+ggplot(diamonds, aes(x = carat, y = price)) +
+  geom_point() +
+  labs(title = "Carat vs Price (Raw)")
+
+```
+:::
+
+---
+
+### Data Transformation
+
+::: fragment
+```{r, echo = TRUE, eval = TRUE}
+ggplot(diamonds, aes(x = log(carat), y = log(price))) +
+  geom_point(alpha = 0.3, col = "blue") +
+  labs(title = "Carat vs Price (Log)")
+```
+:::
+
+---
+
+### Model Impacts
+
+::: small
+Correlation measures the **linear** relationship/association between two variables.
+:::
+
+::: fragment
+```{r, eval = TRUE, echo = TRUE}
+cor(diamonds$carat, diamonds$price)
+```
+:::
+
+::: fragment
+```{r, eval = TRUE, echo = TRUE}
+cor(log(diamonds$carat), log(diamonds$price))
+```
+:::
+
+:::: fragment
+::: small
+Transforming to **log** will help when relationship is curved or skewed, especially when driven by outliers.
+:::
+::::
+
+:::::: fragment
+::::: columns
+::: column
+```{r}
+ggplot(diamonds, aes(x = carat, y = price)) +
+  geom_point() +
+  labs(title = "Carat vs Price (Raw)")
+```
+:::
+
+::: column
+```{r}
+ggplot(diamonds, aes(x = log(carat), y = log(price))) +
+  geom_point(alpha = 0.3, col = "blue") +
+  labs(title = "Carat vs Price (Log)")
+```
+:::
+:::::
+::::::
+
+---
+
+### Model Impacts
+
+```{r}
+pretty_lm <- function(model) {
+  s <- summary(model)
+  cat("Model Formula:", deparse(formula(model)), "\n\n")
+  cat("R-squared:", round(s$r.squared, 3), "\n")
+  cat("Adj R-squared:", round(s$adj.r.squared, 3), "\n")
+  cat("Residual Std Error:", round(s$sigma, 3), "\n\n")
+  print(coef(s))
+}
+
+```
+
+::::::: columns
+:::: column
+```{r, echo = TRUE, eval = FALSE}
+summary(lm(price ~ carat, 
+           data = diamonds))
+```
+
+::: small
+```{r}
+pretty_lm(lm(price ~ carat,
+             data = diamonds))
+```
+:::
+::::
+
+:::: column
+```{r, echo = TRUE, eval = FALSE}
+summary(lm(log(price) ~ log(carat), 
+           data = diamonds))
+```
+
+::: small
+```{r}
+pretty_lm(lm(log(price) ~ log(carat), 
+          data = diamonds))
+```
+:::
+::::
+:::::::

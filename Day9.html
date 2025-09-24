@@ -112,6 +112,7 @@
     }
     .reveal .slide:not(.center) {
       height: 100%;
+      overflow-y: auto;
     }
     .reveal .slide.scrollable {
       overflow-y: auto;
@@ -216,6 +217,10 @@ eyJhdHRyIjp7ImVkaXQiOmZhbHNlLCJldmFsIjp0cnVlLCJvdXRwdXQiOmZhbHNlfSwiY29kZSI6Indl
 </div>
 </div>
 </section>
+<section class="slide level2">
+
+
+<img data-src="images/clipboard-126832707.jpeg" class="r-stretch"></section>
 <section class="slide level2">
 
 <h3 id="exploratory-data-analysis">Exploratory Data Analysis</h3>
@@ -538,7 +543,7 @@ Maserati Bora            1</code></pre>
 </div>
 </div>
 </section>
-<section class="slide level2">
+<section class="slide level2 scrollable">
 
 <h3 id="handling-outliers">Handling outliers</h3>
 <p><small></small></p><small>
@@ -583,7 +588,7 @@ Maserati Bora            1</code></pre>
 <section class="slide level2">
 
 <h3 id="covariance-and-correlation-1">Covariance and Correlation</h3>
-<p><small></small></p><small>
+<p><medium></medium></p>
 <div class="columns">
 <div class="column">
 <p>Let’s investigate more into the <code>mtcars</code> dataset and see if there is a relationship between <code>hp</code>, the gross horsepower of a car, and <code>qsec</code>, the shortest time taken to travel a quarter-mile distance.</p>
@@ -605,7 +610,7 @@ Maserati Bora            1</code></pre>
 </div>
 </div>
 </div>
-</div><div class="column">
+<div class="column">
 <div class="cell">
 <div class="cell-output-display">
 <div>
@@ -615,11 +620,442 @@ Maserati Bora            1</code></pre>
 </div>
 </div>
 </div>
-</div></div>
+</div></div></div>
 <p></p>
-</small></section><small>
+</section>
 <section class="slide level2">
 
+<h3 id="effect-of-outliers">Effect of outliers</h3>
+<div class="callout-recall">
+<div class="small">
+<p>In the <code>hp</code> variable, we had ~1–2 outliers (depending on your method of outliering).</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a><span class="co"># outliers that are &lt; or &gt; IQR*1.5</span></span>
+<span id="cb24-2"><a href=""></a><span class="fu">head</span>(mtcars <span class="sc">%&gt;%</span> <span class="fu">filter</span>(outlier_iqr <span class="sc">==</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>              mpg cyl disp  hp drat   wt qsec vs am gear carb   Q1  Q3  IQR
+Maserati Bora  15   8  301 335 3.54 3.57 14.6  0  1    5    8 96.5 180 83.5
+              lower_bound upper_bound outlier_iqr zscore_hp outlier_zscore
+Maserati Bora      -28.75      305.25           1  2.746567              1
+              outlier_pct
+Maserati Bora           1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a><span class="co"># outliers that are &gt; 95th percentile</span></span>
+<span id="cb26-2"><a href=""></a><span class="fu">head</span>(mtcars <span class="sc">%&gt;%</span> <span class="fu">filter</span>(outlier_pct <span class="sc">==</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                mpg cyl disp  hp drat   wt qsec vs am gear carb   Q1  Q3  IQR
+Ford Pantera L 15.8   8  351 264 4.22 3.17 14.5  0  1    5    4 96.5 180 83.5
+Maserati Bora  15.0   8  301 335 3.54 3.57 14.6  0  1    5    8 96.5 180 83.5
+               lower_bound upper_bound outlier_iqr zscore_hp outlier_zscore
+Ford Pantera L      -28.75      305.25           0  1.711021              0
+Maserati Bora       -28.75      305.25           1  2.746567              1
+               outlier_pct
+Ford Pantera L           1
+Maserati Bora            1</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="effect-of-outliers-1">Effect of outliers</h3>
+<div class="callout-example">
+<p>What is the correlation between <code>hp</code> and <code>qsec</code> after we remove outliers?</p>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a><span class="fu">cor</span>(mtcars<span class="sc">$</span>hp, mtcars<span class="sc">$</span>qsec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.7082234</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href=""></a><span class="fu">cor</span>(mtcars<span class="sc">$</span>hp[mtcars<span class="sc">$</span>outlier_iqr <span class="sc">!=</span> <span class="dv">1</span>], </span>
+<span id="cb30-2"><a href=""></a>    mtcars<span class="sc">$</span>qsec[mtcars<span class="sc">$</span>outlier_iqr <span class="sc">!=</span> <span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.6638874</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href=""></a><span class="fu">cor</span>(mtcars<span class="sc">$</span>hp[mtcars<span class="sc">$</span>outlier_pct <span class="sc">!=</span> <span class="dv">1</span>], </span>
+<span id="cb32-2"><a href=""></a>    mtcars<span class="sc">$</span>qsec[mtcars<span class="sc">$</span>outlier_pct <span class="sc">!=</span> <span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.6082645</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="covariance-and-correlation-2">Covariance and Correlation</h3>
+<p><medium>Let’s quickly look at correlation using data from the <code>iris</code> data set. </medium> <small> This data set contains measurements of sepal width/length and petal length/width of 50 different flowers from 3 different species of iris. </small></p>
+<div class="callout-example">
+<div class="fragment">
+<p>What is the correlation between petal width and petal length?</p>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href=""></a><span class="fu">cor</span>(iris<span class="sc">$</span>Petal.Length, iris<span class="sc">$</span>Petal.Width)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9628654</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href=""></a><span class="fu">ggplot</span>(<span class="at">data =</span> iris, <span class="fu">aes</span>(<span class="at">x=</span>Petal.Length, <span class="at">y=</span>Petal.Width))<span class="sc">+</span></span>
+<span id="cb36-2"><a href=""></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Day9_files/figure-revealjs/unnamed-chunk-26-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="covariance-and-correlation-3">Covariance and Correlation</h3>
+<p>What happens when we observe the relationship by species?</p>
+<div class="callout-example">
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a>cor_group <span class="ot">&lt;-</span> iris <span class="sc">%&gt;%</span></span>
+<span id="cb37-2"><a href=""></a>    <span class="fu">group_by</span>(Species) <span class="sc">%&gt;%</span></span>
+<span id="cb37-3"><a href=""></a>    <span class="fu">summarize</span>(<span class="at">correlation =</span> <span class="fu">cor</span>(Petal.Length, Petal.Width))</span>
+<span id="cb37-4"><a href=""></a></span>
+<span id="cb37-5"><a href=""></a><span class="fu">print</span>(cor_group)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  Species    correlation
+  &lt;fct&gt;            &lt;dbl&gt;
+1 setosa           0.332
+2 versicolor       0.787
+3 virginica        0.322</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href=""></a><span class="fu">ggplot</span>(<span class="at">data =</span> iris, <span class="fu">aes</span>(<span class="at">x=</span>Petal.Length, <span class="at">y=</span>Petal.Width))<span class="sc">+</span></span>
+<span id="cb39-2"><a href=""></a>  <span class="fu">geom_point</span>()<span class="sc">+</span><span class="fu">facet_wrap</span>(<span class="sc">~</span>Species)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Day9_files/figure-revealjs/unnamed-chunk-28-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="covariance-and-correlation-4">Covariance and Correlation</h3>
+<p><medium> If you would like to compute the correlation of each numeric variable to eachother for the whole <code>mtcars</code> dataset: </medium></p>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href=""></a>mtcars <span class="ot">&lt;-</span> mtcars <span class="sc">%&gt;%</span> <span class="fu">select</span>(mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb)</span>
+<span id="cb40-2"><a href=""></a>cor_matrix <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">cor</span>(mtcars),<span class="dv">2</span>)</span>
+<span id="cb40-3"><a href=""></a>cor_matrix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
+mpg   1.00 -0.85 -0.85 -0.78  0.68 -0.87  0.42  0.66  0.60  0.48 -0.55
+cyl  -0.85  1.00  0.90  0.83 -0.70  0.78 -0.59 -0.81 -0.52 -0.49  0.53
+disp -0.85  0.90  1.00  0.79 -0.71  0.89 -0.43 -0.71 -0.59 -0.56  0.39
+hp   -0.78  0.83  0.79  1.00 -0.45  0.66 -0.71 -0.72 -0.24 -0.13  0.75
+drat  0.68 -0.70 -0.71 -0.45  1.00 -0.71  0.09  0.44  0.71  0.70 -0.09
+wt   -0.87  0.78  0.89  0.66 -0.71  1.00 -0.17 -0.55 -0.69 -0.58  0.43
+qsec  0.42 -0.59 -0.43 -0.71  0.09 -0.17  1.00  0.74 -0.23 -0.21 -0.66
+vs    0.66 -0.81 -0.71 -0.72  0.44 -0.55  0.74  1.00  0.17  0.21 -0.57
+am    0.60 -0.52 -0.59 -0.24  0.71 -0.69 -0.23  0.17  1.00  0.79  0.06
+gear  0.48 -0.49 -0.56 -0.13  0.70 -0.58 -0.21  0.21  0.79  1.00  0.27
+carb -0.55  0.53  0.39  0.75 -0.09  0.43 -0.66 -0.57  0.06  0.27  1.00</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="visualizing-the-correlation-matrix">Visualizing the Correlation Matrix</h3>
+<p><medium></medium></p>
+<div class="callout-example">
+<p><strong>Using ggplot2</strong></p>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href=""></a>cor_matrix <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(cor_matrix)</span>
+<span id="cb42-2"><a href=""></a>cor_matrix<span class="sc">$</span>var1 <span class="ot">&lt;-</span> <span class="fu">row.names</span>(cor_matrix)</span>
+<span id="cb42-3"><a href=""></a><span class="fu">head</span>(cor_matrix, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb var1
+mpg   1.00 -0.85 -0.85 -0.78  0.68 -0.87  0.42  0.66  0.60  0.48 -0.55  mpg
+cyl  -0.85  1.00  0.90  0.83 -0.70  0.78 -0.59 -0.81 -0.52 -0.49  0.53  cyl
+disp -0.85  0.90  1.00  0.79 -0.71  0.89 -0.43 -0.71 -0.59 -0.56  0.39 disp</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href=""></a>cor_matrix <span class="ot">&lt;-</span> <span class="fu">pivot_longer</span>(cor_matrix, </span>
+<span id="cb44-2"><a href=""></a>                           <span class="at">cols =</span> <span class="fu">colnames</span>(mtcars), </span>
+<span id="cb44-3"><a href=""></a>                           <span class="at">names_to =</span> <span class="st">"var2"</span>)</span>
+<span id="cb44-4"><a href=""></a>cor_matrix<span class="sc">$</span>var1 <span class="ot">&lt;-</span> <span class="fu">factor</span>(cor_matrix<span class="sc">$</span>var1, </span>
+<span id="cb44-5"><a href=""></a>                          <span class="at">levels =</span> <span class="fu">rev</span>(<span class="fu">colnames</span>(mtcars)))</span>
+<span id="cb44-6"><a href=""></a>cor_matrix<span class="sc">$</span>var2 <span class="ot">&lt;-</span> <span class="fu">factor</span>(cor_matrix<span class="sc">$</span>var2, </span>
+<span id="cb44-7"><a href=""></a>                          <span class="at">levels =</span> <span class="fu">colnames</span>(mtcars))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href=""></a><span class="co"># create a correlation matrix heatmap </span></span>
+<span id="cb45-2"><a href=""></a>heatmap <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(cor_matrix, <span class="fu">aes</span>(<span class="at">x =</span> var1, </span>
+<span id="cb45-3"><a href=""></a>                                  <span class="at">y =</span> var2, </span>
+<span id="cb45-4"><a href=""></a>                                  <span class="at">fill =</span> value))<span class="sc">+</span></span>
+<span id="cb45-5"><a href=""></a>  <span class="fu">geom_tile</span>()<span class="sc">+</span></span>
+<span id="cb45-6"><a href=""></a>  <span class="fu">scale_fill_gradient2</span>(</span>
+<span id="cb45-7"><a href=""></a>    <span class="at">low =</span> <span class="st">"darkblue"</span>,  </span>
+<span id="cb45-8"><a href=""></a>    <span class="at">mid =</span> <span class="st">"white"</span>,     </span>
+<span id="cb45-9"><a href=""></a>    <span class="at">high =</span> <span class="st">"red"</span>,      </span>
+<span id="cb45-10"><a href=""></a>    <span class="at">midpoint =</span> <span class="dv">0</span>,      </span>
+<span id="cb45-11"><a href=""></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>))  </span>
+<span id="cb45-12"><a href=""></a></span>
+<span id="cb45-13"><a href=""></a><span class="fu">print</span>(heatmap)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Day9_files/figure-revealjs/unnamed-chunk-32-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p></p>
+</section>
+<section class="slide level2">
+
+<h3 id="visualizing-the-correlation-matrix-1">Visualizing the correlation matrix</h3>
+<p><medium></medium></p>
+<div class="callout-example">
+<p><strong>Using `<code>corrplot</code></strong></p>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href=""></a><span class="fu">library</span>(corrplot)</span>
+<span id="cb46-2"><a href=""></a>cor_mat <span class="ot">&lt;-</span> <span class="fu">cor</span>(mtcars)</span>
+<span id="cb46-3"><a href=""></a><span class="fu">corrplot</span>(cor_mat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Day9_files/figure-revealjs/unnamed-chunk-33-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p></p>
+</section>
+<section class="slide level2">
+
+<h3 id="data-transformations">Data Transformations</h3>
+<div class="small">
+<p>T<em>ransforming data</em>, not cleaning, re-arranging, or fixing typos, but taking the <strong>log</strong> or the <strong>square root</strong> to help make patterns easier to see and analyze or scale the data better.</p>
+</div>
+<div class="fragment">
+<div class="small">
+<p><strong>Why transform?</strong></p>
+<ul>
+<li>reduce skewness (make more normal?)</li>
+<li>stabilize the spread</li>
+<li>linearize the non-linear</li>
+<li>reduce the impact of outliers</li>
+</ul>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="data-transformations-1">Data Transformations</h3>
+<div class="small">
+<p>Let’s look at the <code>diamonds</code> (prices of over 50,000 round cut diamonds) data set! (This comes with <code>ggplot2</code>).</p>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href=""></a><span class="fu">hist</span>(diamonds<span class="sc">$</span>price, <span class="at">col =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Day9_files/figure-revealjs/unnamed-chunk-34-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href=""></a><span class="fu">hist</span>(<span class="fu">log</span>(diamonds<span class="sc">$</span>price), <span class="at">col=</span><span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Day9_files/figure-revealjs/unnamed-chunk-35-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href=""></a><span class="fu">hist</span>(<span class="fu">sqrt</span>(diamonds<span class="sc">$</span>price), <span class="at">col=</span><span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Day9_files/figure-revealjs/unnamed-chunk-36-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="data-transformation">Data Transformation</h3>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href=""></a><span class="fu">ggplot</span>(diamonds, <span class="fu">aes</span>(<span class="at">x =</span> carat, <span class="at">y =</span> price)) <span class="sc">+</span></span>
+<span id="cb50-2"><a href=""></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb50-3"><a href=""></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Carat vs Price (Raw)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Day9_files/figure-revealjs/unnamed-chunk-37-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="data-transformation-1">Data Transformation</h3>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href=""></a><span class="fu">ggplot</span>(diamonds, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">log</span>(carat), <span class="at">y =</span> <span class="fu">log</span>(price))) <span class="sc">+</span></span>
+<span id="cb51-2"><a href=""></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.3</span>, <span class="at">col =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb51-3"><a href=""></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Carat vs Price (Log)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Day9_files/figure-revealjs/unnamed-chunk-38-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="model-impacts">Model Impacts</h3>
+<div class="small">
+<p>Correlation measures the <strong>linear</strong> relationship/association between two variables.</p>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href=""></a><span class="fu">cor</span>(diamonds<span class="sc">$</span>carat, diamonds<span class="sc">$</span>price)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9215913</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href=""></a><span class="fu">cor</span>(<span class="fu">log</span>(diamonds<span class="sc">$</span>carat), <span class="fu">log</span>(diamonds<span class="sc">$</span>price))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9659137</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div class="small">
+<p>Transforming to <strong>log</strong> will help when relationship is curved or skewed, especially when driven by outliers.</p>
+</div>
+</div>
+<div class="fragment">
+<div class="columns">
+<div class="column">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Day9_files/figure-revealjs/unnamed-chunk-41-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Day9_files/figure-revealjs/unnamed-chunk-42-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="model-impacts-1">Model Impacts</h3>
+<div class="columns">
+<div class="column">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href=""></a><span class="fu">summary</span>(<span class="fu">lm</span>(price <span class="sc">~</span> carat, </span>
+<span id="cb56-2"><a href=""></a>           <span class="at">data =</span> diamonds))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="small">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Model Formula: price ~ carat 
+
+R-squared: 0.849 
+Adj R-squared: 0.849 
+Residual Std Error: 1548.562 
+
+             Estimate Std. Error   t value Pr(&gt;|t|)
+(Intercept) -2256.361   13.05535 -172.8304        0
+carat        7756.426   14.06658  551.4081        0</code></pre>
+</div>
+</div>
+</div>
+</div><div class="column">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href=""></a><span class="fu">summary</span>(<span class="fu">lm</span>(<span class="fu">log</span>(price) <span class="sc">~</span> <span class="fu">log</span>(carat), </span>
+<span id="cb58-2"><a href=""></a>           <span class="at">data =</span> diamonds))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="small">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Model Formula: log(price) ~ log(carat) 
+
+R-squared: 0.933 
+Adj R-squared: 0.933 
+Residual Std Error: 0.263 
+
+            Estimate  Std. Error   t value Pr(&gt;|t|)
+(Intercept) 8.448661 0.001364691 6190.8959        0
+log(carat)  1.675817 0.001933806  866.5901        0</code></pre>
+</div>
+</div>
+</div>
+</div></div>
 
 <script type="webr-data">
 eyJvcHRpb25zIjp7ImJhc2VVcmwiOiJodHRwczovL3dlYnIuci13YXNtLm9yZy92MC41LjQvIn0sInBhY2thZ2VzIjp7InBrZ3MiOlsiZXZhbHVhdGUiLCJrbml0ciIsImh0bWx0b29scyJdLCJyZXBvcyI6W119LCJyZW5kZXJfZGYiOiJkZWZhdWx0In0=
@@ -639,12 +1075,12 @@ eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xIiwiaW5saW5lIjpmYWxzZSwibWV0
 W10=
 </script>
 </section>
-    </small></div><small>
-  </small><div class="quarto-auto-generated-content" style="display: none;">
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">
 
 </div>
-</div></div><small>
+</div></div>
 
   <script>window.backupDefine = window.define; window.define = undefined;</script>
   <script src="Day9_files/libs/revealjs/dist/reveal.js"></script>
@@ -1090,4 +1526,4 @@ W10=
     </script>
     
 
-</small></body></html>
+</body></html>

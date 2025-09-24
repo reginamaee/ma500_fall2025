@@ -259,3 +259,236 @@ The negative value from our covariance determines a negative relationship. Howev
 
 The correlation value of \~ `-0.71` standardizes the covariance by proportioning it between `-1` and `1`. This negative `0.71` value says that there is a slightly strong negative correlation.
 :::
+
+How does the above correlation change when we remove the outliers we identified in the `hp` (horsepower) variable?
+
+```{r}
+# correlation when we remove outliers identified by Tukey's Rule
+cor(mtcars$hp[mtcars$outlier_iqr != 1], 
+    mtcars$qsec[mtcars$outlier_iqr != 1])
+
+# correlation when we remove outliers > 95th percentile
+cor(mtcars$hp[mtcars$outlier_pct != 1], 
+    mtcars$qsec[mtcars$outlier_pct != 1])
+```
+
+We see that when we remove outliers the strength of the relationship is not as strong when we include cars that have higher horsepower.
+
+::: callout-tip
+**When would be the best time to remove or keep all data points?**
+
+If the goal is to focus on cars that are more “typical” in terms of horsepower, then removing the outliers can make the analysis more representative of that group. But, if the goal is to understand *all* cars in the dataset, then it is best to leave those data points in.
+:::
+
+### Correlation within group
+
+Let’s quickly look at another example of correlation using data from the `iris` data set. This data set contains measurements of sepal width/length and petal length/width of 50 different flowers from 3 different species of iris.
+
+::: callout-example-white
+**What is the correlation between petal length and petal width?**
+
+```{r}
+cor(iris$Petal.Length, iris$Petal.Width)
+```
+
+```{r}
+ggplot(data = iris, aes(x=Petal.Length, y = Petal.Width))+
+  geom_point()
+```
+
+Our value of `0.96` suggests that petal length and petal width have a strong, positive association, ie we can expect a larger petal length if petal width is large as well. We can kinda see this pattern when we look at the scatter plot above.
+
+**BUT, how does the correlation change when we observe the relationship by species?**
+
+```{r}
+cor_group <- iris %>%
+    group_by(Species) %>%
+    summarize(correlation = cor(Petal.Length, Petal.Width))
+
+print(cor_group)
+```
+
+The correlation is not as strong for the *setosa* and the *virginica* species. At times, grouping makes a large difference. If we look at the overall correlation, we might assume that this relationship holds for all iris species, which as shown may not be the case.
+
+```{r}
+ggplot(data = iris, aes(x=Petal.Length, y=Petal.Width, color=Species))+
+  geom_point()+facet_wrap(~Species)
+```
+:::
+
+### Creating a correlation matrix
+
+If you would like to compute the correlation of each numeric variable to eachother for the whole `mtcars` dataset:
+
+```{r}
+mtcars <- mtcars %>% select(mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb)
+cor_matrix <- round(cor(mtcars),2)
+cor_matrix
+```
+
+In the above code, we provide the `cor()` function the whole `mtcars` data set when `mtcars` ONLY consists of numeric variables (note, we only selected the numeric columns - if there are other columns, such as character columns, this would error out). The output provides us with a numeric representation of our correlation matrix.
+
+::: callout-example-white
+**Visualizing correlation matrix using `ggplot2`**
+
+```{r}
+# set correlation matrix to a data frame first
+cor_matrix <- as.data.frame(cor_matrix)
+
+# create a new column that is the row names of our inital matrix
+cor_matrix$var1 <- row.names(cor_matrix)
+head(cor_matrix, 3)
+
+# pivot the data set from wide to long
+cor_matrix <- pivot_longer(cor_matrix, 
+                           cols = colnames(mtcars), 
+                           names_to = "var2")
+
+# set the order we want our variables to appear
+cor_matrix$var1 <- factor(cor_matrix$var1, 
+                          levels = rev(colnames(mtcars)))
+cor_matrix$var2 <- factor(cor_matrix$var2, 
+                          levels = colnames(mtcars))
+```
+
+After the above data manipulation, we can create a heatmap using `ggplot` to visualize our matrix.
+
+```{r}
+heatmap <- ggplot(cor_matrix, aes(x = var1, 
+                                  y = var2, 
+                                  fill = value))+
+  geom_tile()+
+  scale_fill_gradient2(
+    low = "darkblue",  
+    mid = "white",     
+    high = "red",      
+    midpoint = 0,      
+    limits = c(-1, 1))  
+
+print(heatmap)
+
+```
+:::
+
+::: callout-example-white
+**Visualizing using the `corrplot`** **package**
+
+A simpler way to visualize this correlation matrix is by using `corrplot`.
+
+```{r}
+library(corrplot)
+cor_mat <- cor(mtcars)
+corrplot(cor_mat)
+```
+
+In the above code, we provide the function `corrplot()` with the numerically computed correlation matrix.
+:::
+
+Choosing to use `ggplot` vs `corrplot` is your personal preference. `ggplot` may provide additional customization for complex cases.
+
+## Data Transformation
+
+In some cases, we may need to *transform* our data. By transforming, I mean by taking the **log** or the **square root** to help patterns be easier to see and analyze or to scale the data.
+
+Why should we transform?
+
+-   reduce skewness (or make more normal?)
+-   stablize the spread
+-   linearize the non-linear
+-   reduce the impact of outliers
+
+To discuss data transformation in more detail, we will look at the `diamonds` data set which comes with `ggplot2`. This data set contains prices for over 50,000 round cut diamonds. You can read more about it when pulling up the documentation (`?diamonds`).
+
+Let's visualize the variable `price` to see how the different prices of each diamond in the data set ranges from.
+
+```{r}
+hist(diamonds$price, col = "blue")
+```
+
+Our above scatter plot shows that our data is right-skewed, we have lots of diamonds that range from \$0-\$5000, and very few diamonds that are above the \$15,000 price range.
+
+Let's look at the distribution if we take the **log** of the `price` variable.
+
+```{r}
+hist(log(diamonds$price), col = "blue")
+```
+
+After we log transform the `price` variable, we see the the distribution looks more balanced and symmetric from before. We see that our extreme values of price are now compressed, which may indicate that those large values will be less influential.
+
+Let's dive more into the `price` of diamonds based on the carat size (the `carat` variable).
+
+```{r}
+ggplot(diamonds, aes(x = carat, y = price)) +
+  geom_point() +
+  labs(title = "Carat vs Price (Raw)")
+```
+
+In the above scatter plot, we see
+
+1.  there are MANY data points which make it hard to fully understand the pattern or relationship between the two variables
+2.  the overall trend seems to be positive, when carat size increases, price seems to increase as well, but the plot is curving up.
+3.  small diamonds are clustered at the bottom, and for larger diamonds, there is larger variation/more spread.
+4.  note, there is an extreme value around \~5 with a price range \> 15,000
+
+```{r}
+ggplot(diamonds, aes(x = log(carat), y = log(price))) +
+  geom_point() +
+  labs(title = "Carat vs Price (Log)")
+```
+
+When we plot the relationship with their **log** values, we see a more linear relationship with reduced variation.
+
+### Impact on Models
+
+When we look at **correlation,** we are measuring the **linear** association between two different variables.
+
+```{r}
+cor(diamonds$carat, diamonds$price)
+```
+
+```{r}
+cor(log(diamonds$carat), log(diamonds$price))
+```
+
+Although it is not a big change in correlation, the value between the `log` variables is stronger, indicating that our diamonds with extreme prices have less of an effect on the correlation. As we see in the scatter plots above, the graph shows an almost-perfect linear relationship.
+
+::: callout-tip
+Transforming to **log** will help when the relationship is curved or skewed and most especially when the data is being driven by outliers.
+:::
+
+When we perform a simple linear regression model:
+
+```{r, echo = FALSE}
+pretty_lm <- function(model) {
+  s <- summary(model)
+  cat("Model Formula:", deparse(formula(model)), "\n\n")
+  cat("R-squared:", round(s$r.squared, 3), "\n")
+  cat("Adj R-squared:", round(s$adj.r.squared, 3), "\n")
+  cat("Residual Std Error:", round(s$sigma, 3), "\n\n")
+  print(coef(s))
+}
+
+```
+
+```{r, eval = FALSE}
+summary(lm(price ~ carat), data = diamonds)
+```
+
+```{r, echo = FALSE, eval = TRUE}
+pretty_lm(lm(price ~ carat,
+             data = diamonds))
+```
+
+```{r, eval = FALSE}
+summary(lm(log(price) ~ log(carat)), data = diamonds)
+```
+
+```{r, echo = FALSE, eval = TRUE}
+pretty_lm(lm(log(price) ~ log(carat),
+             data = diamonds))
+
+```
+
+When we model **price \~ carat** without the transformation, the slope tells us that for every extra carat, the diamond’s price increases by about \$7,756. The model explains about 85% (shown by the `R^2` value) of the variation in price, but it has large residuals. The model predictions are off by about \$1,500 on average.
+
+Our model when we do transform the data, the **log-log model** (log(price) \~ log(carat)), fits the data much better. The slope means that a 1% increase in carat size is associated with about a 1.68% increase in price. The model fit is stronger (R² = 0.933 vs 0.849) and the residuals are smaller. Instead of predictions being off by about \$1,500, the log model’s residual standard error is only 0.263 (in log units). When we back-transform that, it means the model’s predictions are usually within about give or take 26% of the actual price.

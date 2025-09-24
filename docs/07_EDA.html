@@ -233,7 +233,15 @@ window.Quarto = {
   <li><a href="#identifying-outliers" id="toc-identifying-outliers" class="nav-link" data-scroll-target="#identifying-outliers">Identifying outliers</a></li>
   </ul></li>
   <li><a href="#handling-outliers" id="toc-handling-outliers" class="nav-link" data-scroll-target="#handling-outliers">Handling Outliers</a></li>
-  <li><a href="#covariance-and-correlation" id="toc-covariance-and-correlation" class="nav-link" data-scroll-target="#covariance-and-correlation">Covariance and Correlation</a></li>
+  <li><a href="#covariance-and-correlation" id="toc-covariance-and-correlation" class="nav-link" data-scroll-target="#covariance-and-correlation">Covariance and Correlation</a>
+  <ul class="collapse">
+  <li><a href="#correlation-within-group" id="toc-correlation-within-group" class="nav-link" data-scroll-target="#correlation-within-group">Correlation within group</a></li>
+  <li><a href="#creating-a-correlation-matrix" id="toc-creating-a-correlation-matrix" class="nav-link" data-scroll-target="#creating-a-correlation-matrix">Creating a correlation matrix</a></li>
+  </ul></li>
+  <li><a href="#data-transformation" id="toc-data-transformation" class="nav-link" data-scroll-target="#data-transformation">Data Transformation</a>
+  <ul class="collapse">
+  <li><a href="#impact-on-models" id="toc-impact-on-models" class="nav-link" data-scroll-target="#impact-on-models">Impact on Models</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -678,8 +686,382 @@ Maserati Bora            1</code></pre>
 <p>The negative value from our covariance determines a negative relationship. However, the strength of this relationship is dependent on the units of our variable in question, so this value <code>-86</code> is not easily interpretable.</p>
 <p>The correlation value of ~ <code>-0.71</code> standardizes the covariance by proportioning it between <code>-1</code> and <code>1</code>. This negative <code>0.71</code> value says that there is a slightly strong negative correlation.</p>
 </div>
+<p>How does the above correlation change when we remove the outliers we identified in the <code>hp</code> (horsepower) variable?</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># correlation when we remove outliers identified by Tukey's Rule</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(mtcars<span class="sc">$</span>hp[mtcars<span class="sc">$</span>outlier_iqr <span class="sc">!=</span> <span class="dv">1</span>], </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    mtcars<span class="sc">$</span>qsec[mtcars<span class="sc">$</span>outlier_iqr <span class="sc">!=</span> <span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.6638874</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># correlation when we remove outliers &gt; 95th percentile</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(mtcars<span class="sc">$</span>hp[mtcars<span class="sc">$</span>outlier_pct <span class="sc">!=</span> <span class="dv">1</span>], </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    mtcars<span class="sc">$</span>qsec[mtcars<span class="sc">$</span>outlier_pct <span class="sc">!=</span> <span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.6082645</code></pre>
+</div>
+</div>
+<p>We see that when we remove outliers the strength of the relationship is not as strong when we include cars that have higher horsepower.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>When would be the best time to remove or keep all data points?</strong></p>
+<p>If the goal is to focus on cars that are more “typical” in terms of horsepower, then removing the outliers can make the analysis more representative of that group. But, if the goal is to understand <em>all</em> cars in the dataset, then it is best to leave those data points in.</p>
+</div>
+</div>
+<section id="correlation-within-group" class="level3">
+<h3 class="anchored" data-anchor-id="correlation-within-group">Correlation within group</h3>
+<p>Let’s quickly look at another example of correlation using data from the <code>iris</code> data set. This data set contains measurements of sepal width/length and petal length/width of 50 different flowers from 3 different species of iris.</p>
+<div class="callout-example-white">
+<p><strong>What is the correlation between petal length and petal width?</strong></p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(iris<span class="sc">$</span>Petal.Length, iris<span class="sc">$</span>Petal.Width)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9628654</code></pre>
+</div>
+</div>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> iris, <span class="fu">aes</span>(<span class="at">x=</span>Petal.Length, <span class="at">y =</span> Petal.Width))<span class="sc">+</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="07_EDA_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Our value of <code>0.96</code> suggests that petal length and petal width have a strong, positive association, ie we can expect a larger petal length if petal width is large as well. We can kinda see this pattern when we look at the scatter plot above.</p>
+<p><strong>BUT, how does the correlation change when we observe the relationship by species?</strong></p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>cor_group <span class="ot">&lt;-</span> iris <span class="sc">%&gt;%</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(Species) <span class="sc">%&gt;%</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">correlation =</span> <span class="fu">cor</span>(Petal.Length, Petal.Width))</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(cor_group)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  Species    correlation
+  &lt;fct&gt;            &lt;dbl&gt;
+1 setosa           0.332
+2 versicolor       0.787
+3 virginica        0.322</code></pre>
+</div>
+</div>
+<p>The correlation is not as strong for the <em>setosa</em> and the <em>virginica</em> species. At times, grouping makes a large difference. If we look at the overall correlation, we might assume that this relationship holds for all iris species, which as shown may not be the case.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> iris, <span class="fu">aes</span>(<span class="at">x=</span>Petal.Length, <span class="at">y=</span>Petal.Width, <span class="at">color=</span>Species))<span class="sc">+</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span><span class="fu">facet_wrap</span>(<span class="sc">~</span>Species)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="07_EDA_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="creating-a-correlation-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="creating-a-correlation-matrix">Creating a correlation matrix</h3>
+<p>If you would like to compute the correlation of each numeric variable to eachother for the whole <code>mtcars</code> dataset:</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="ot">&lt;-</span> mtcars <span class="sc">%&gt;%</span> <span class="fu">select</span>(mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>cor_matrix <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">cor</span>(mtcars),<span class="dv">2</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>cor_matrix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>       mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
+mpg   1.00 -0.85 -0.85 -0.78  0.68 -0.87  0.42  0.66  0.60  0.48 -0.55
+cyl  -0.85  1.00  0.90  0.83 -0.70  0.78 -0.59 -0.81 -0.52 -0.49  0.53
+disp -0.85  0.90  1.00  0.79 -0.71  0.89 -0.43 -0.71 -0.59 -0.56  0.39
+hp   -0.78  0.83  0.79  1.00 -0.45  0.66 -0.71 -0.72 -0.24 -0.13  0.75
+drat  0.68 -0.70 -0.71 -0.45  1.00 -0.71  0.09  0.44  0.71  0.70 -0.09
+wt   -0.87  0.78  0.89  0.66 -0.71  1.00 -0.17 -0.55 -0.69 -0.58  0.43
+qsec  0.42 -0.59 -0.43 -0.71  0.09 -0.17  1.00  0.74 -0.23 -0.21 -0.66
+vs    0.66 -0.81 -0.71 -0.72  0.44 -0.55  0.74  1.00  0.17  0.21 -0.57
+am    0.60 -0.52 -0.59 -0.24  0.71 -0.69 -0.23  0.17  1.00  0.79  0.06
+gear  0.48 -0.49 -0.56 -0.13  0.70 -0.58 -0.21  0.21  0.79  1.00  0.27
+carb -0.55  0.53  0.39  0.75 -0.09  0.43 -0.66 -0.57  0.06  0.27  1.00</code></pre>
+</div>
+</div>
+<p>In the above code, we provide the <code>cor()</code> function the whole <code>mtcars</code> data set when <code>mtcars</code> ONLY consists of numeric variables (note, we only selected the numeric columns - if there are other columns, such as character columns, this would error out). The output provides us with a numeric representation of our correlation matrix.</p>
+<div class="callout-example-white">
+<p><strong>Visualizing correlation matrix using <code>ggplot2</code></strong></p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set correlation matrix to a data frame first</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>cor_matrix <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(cor_matrix)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create a new column that is the row names of our inital matrix</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>cor_matrix<span class="sc">$</span>var1 <span class="ot">&lt;-</span> <span class="fu">row.names</span>(cor_matrix)</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cor_matrix, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>       mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb var1
+mpg   1.00 -0.85 -0.85 -0.78  0.68 -0.87  0.42  0.66  0.60  0.48 -0.55  mpg
+cyl  -0.85  1.00  0.90  0.83 -0.70  0.78 -0.59 -0.81 -0.52 -0.49  0.53  cyl
+disp -0.85  0.90  1.00  0.79 -0.71  0.89 -0.43 -0.71 -0.59 -0.56  0.39 disp</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pivot the data set from wide to long</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>cor_matrix <span class="ot">&lt;-</span> <span class="fu">pivot_longer</span>(cor_matrix, </span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">cols =</span> <span class="fu">colnames</span>(mtcars), </span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">names_to =</span> <span class="st">"var2"</span>)</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="co"># set the order we want our variables to appear</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>cor_matrix<span class="sc">$</span>var1 <span class="ot">&lt;-</span> <span class="fu">factor</span>(cor_matrix<span class="sc">$</span>var1, </span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>                          <span class="at">levels =</span> <span class="fu">rev</span>(<span class="fu">colnames</span>(mtcars)))</span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>cor_matrix<span class="sc">$</span>var2 <span class="ot">&lt;-</span> <span class="fu">factor</span>(cor_matrix<span class="sc">$</span>var2, </span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>                          <span class="at">levels =</span> <span class="fu">colnames</span>(mtcars))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>After the above data manipulation, we can create a heatmap using <code>ggplot</code> to visualize our matrix.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>heatmap <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(cor_matrix, <span class="fu">aes</span>(<span class="at">x =</span> var1, </span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">y =</span> var2, </span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">fill =</span> value))<span class="sc">+</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>()<span class="sc">+</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient2</span>(</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">low =</span> <span class="st">"darkblue"</span>,  </span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">mid =</span> <span class="st">"white"</span>,     </span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">high =</span> <span class="st">"red"</span>,      </span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">midpoint =</span> <span class="dv">0</span>,      </span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>))  </span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(heatmap)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="07_EDA_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="callout-example-white">
+<p><strong>Visualizing using the <code>corrplot</code></strong> <strong>package</strong></p>
+<p>A simpler way to visualize this correlation matrix is by using <code>corrplot</code>.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(corrplot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'corrplot' was built under R version 4.3.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>corrplot 0.94 loaded</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>cor_mat <span class="ot">&lt;-</span> <span class="fu">cor</span>(mtcars)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(cor_mat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="07_EDA_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In the above code, we provide the function <code>corrplot()</code> with the numerically computed correlation matrix.</p>
+</div>
+<p>Choosing to use <code>ggplot</code> vs <code>corrplot</code> is your personal preference. <code>ggplot</code> may provide additional customization for complex cases.</p>
+</section>
+</section>
+<section id="data-transformation" class="level2">
+<h2 class="anchored" data-anchor-id="data-transformation">Data Transformation</h2>
+<p>In some cases, we may need to <em>transform</em> our data. By transforming, I mean by taking the <strong>log</strong> or the <strong>square root</strong> to help patterns be easier to see and analyze or to scale the data.</p>
+<p>Why should we transform?</p>
+<ul>
+<li>reduce skewness (or make more normal?)</li>
+<li>stablize the spread</li>
+<li>linearize the non-linear</li>
+<li>reduce the impact of outliers</li>
+</ul>
+<p>To discuss data transformation in more detail, we will look at the <code>diamonds</code> data set which comes with <code>ggplot2</code>. This data set contains prices for over 50,000 round cut diamonds. You can read more about it when pulling up the documentation (<code>?diamonds</code>).</p>
+<p>Let’s visualize the variable <code>price</code> to see how the different prices of each diamond in the data set ranges from.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(diamonds<span class="sc">$</span>price, <span class="at">col =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="07_EDA_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Our above scatter plot shows that our data is right-skewed, we have lots of diamonds that range from $0-$5000, and very few diamonds that are above the $15,000 price range.</p>
+<p>Let’s look at the distribution if we take the <strong>log</strong> of the <code>price</code> variable.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">log</span>(diamonds<span class="sc">$</span>price), <span class="at">col =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="07_EDA_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>After we log transform the <code>price</code> variable, we see the the distribution looks more balanced and symmetric from before. We see that our extreme values of price are now compressed, which may indicate that those large values will be less influential.</p>
+<p>Let’s dive more into the <code>price</code> of diamonds based on the carat size (the <code>carat</code> variable).</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(diamonds, <span class="fu">aes</span>(<span class="at">x =</span> carat, <span class="at">y =</span> price)) <span class="sc">+</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Carat vs Price (Raw)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="07_EDA_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In the above scatter plot, we see</p>
+<ol type="1">
+<li>there are MANY data points which make it hard to fully understand the pattern or relationship between the two variables</li>
+<li>the overall trend seems to be positive, when carat size increases, price seems to increase as well, but the plot is curving up.</li>
+<li>small diamonds are clustered at the bottom, and for larger diamonds, there is larger variation/more spread.</li>
+<li>note, there is an extreme value around ~5 with a price range &gt; 15,000</li>
+</ol>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(diamonds, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">log</span>(carat), <span class="at">y =</span> <span class="fu">log</span>(price))) <span class="sc">+</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Carat vs Price (Log)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="07_EDA_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>When we plot the relationship with their <strong>log</strong> values, we see a more linear relationship with reduced variation.</p>
+<section id="impact-on-models" class="level3">
+<h3 class="anchored" data-anchor-id="impact-on-models">Impact on Models</h3>
+<p>When we look at <strong>correlation,</strong> we are measuring the <strong>linear</strong> association between two different variables.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(diamonds<span class="sc">$</span>carat, diamonds<span class="sc">$</span>price)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9215913</code></pre>
+</div>
+</div>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(<span class="fu">log</span>(diamonds<span class="sc">$</span>carat), <span class="fu">log</span>(diamonds<span class="sc">$</span>price))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9659137</code></pre>
+</div>
+</div>
+<p>Although it is not a big change in correlation, the value between the <code>log</code> variables is stronger, indicating that our diamonds with extreme prices have less of an effect on the correlation. As we see in the scatter plots above, the graph shows an almost-perfect linear relationship.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Transforming to <strong>log</strong> will help when the relationship is curved or skewed and most especially when the data is being driven by outliers.</p>
+</div>
+</div>
+<p>When we perform a simple linear regression model:</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(price <span class="sc">~</span> carat), <span class="at">data =</span> diamonds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Model Formula: price ~ carat 
+
+R-squared: 0.849 
+Adj R-squared: 0.849 
+Residual Std Error: 1548.562 
+
+             Estimate Std. Error   t value Pr(&gt;|t|)
+(Intercept) -2256.361   13.05535 -172.8304        0
+carat        7756.426   14.06658  551.4081        0</code></pre>
+</div>
+</div>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>hide code</summary>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(<span class="fu">log</span>(price) <span class="sc">~</span> <span class="fu">log</span>(carat)), <span class="at">data =</span> diamonds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Model Formula: log(price) ~ log(carat) 
+
+R-squared: 0.933 
+Adj R-squared: 0.933 
+Residual Std Error: 0.263 
+
+            Estimate  Std. Error   t value Pr(&gt;|t|)
+(Intercept) 8.448661 0.001364691 6190.8959        0
+log(carat)  1.675817 0.001933806  866.5901        0</code></pre>
+</div>
+</div>
+<p>When we model <strong>price ~ carat</strong> without the transformation, the slope tells us that for every extra carat, the diamond’s price increases by about $7,756. The model explains about 85% (shown by the <code>R^2</code> value) of the variation in price, but it has large residuals. The model predictions are off by about $1,500 on average.</p>
+<p>Our model when we do transform the data, the <strong>log-log model</strong> (log(price) ~ log(carat)), fits the data much better. The slope means that a 1% increase in carat size is associated with about a 1.68% increase in price. The model fit is stronger (R² = 0.933 vs 0.849) and the residuals are smaller. Instead of predictions being off by about $1,500, the log model’s residual standard error is only 0.263 (in log units). When we back-transform that, it means the model’s predictions are usually within about give or take 26% of the actual price.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
