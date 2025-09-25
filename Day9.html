@@ -1056,6 +1056,650 @@ log(carat)  1.675817 0.001933806  866.5901        0</code></pre>
 </div>
 </div>
 </div></div>
+</section>
+<section class="slide level2">
+
+<h3 id="covid-19-data-set">COVID-19 data set</h3>
+<p>Your group assignment will be focused on data cleaning from a data set from the Guam Department of Public Health. This data set contains information about COVID-19 cases with specific demographic information such as: ethnicity, village, sex, case status, etc.</p>
+<div class="fragment">
+<p><strong>Your task</strong>: Clean the variables <code>ethnicity</code>, <code>village</code>, and <code>case_identification: How.was.case.identified?</code>.</p>
+</div>
+<div class="fragment">
+<p><strong>Ethnicity</strong></p>
+<p>We want all ethnicities to be grouped into:</p>
+<ul>
+<li>Chamorro</li>
+<li>Filipino</li>
+<li>White</li>
+<li>Chuukese</li>
+<li>other Pacific Islander</li>
+<li>other Asian</li>
+<li>Mixed</li>
+</ul>
+</div>
+<div class="fragment">
+<p><strong>Village</strong></p>
+<p>For villages, this will be by:</p>
+<ul>
+<li><p>all main Guam Villages</p></li>
+<li><p>OOJ (our of jurisdiction)</p></li>
+</ul>
+</div>
+<div>
+<p><strong>Case Identifications</strong></p>
+<ul>
+<li><p>Clinical Evaluation</p></li>
+<li><p>Routine surveillance</p></li>
+<li><p>Contact Tracing</p></li>
+</ul>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="string-manipulation">String Manipulation</h3>
+<div class="medium">
+<p>Often times, we come across <em>messy</em> or <em>inconsistent</em> data. This can be due to a number of potential reasons, but more often than not, it is due to lack of data validations, user-entry errors, etc. In order to formally analyze the data. it is imperative that the data be cleaned or put into a standard form.</p>
+<div class="fragment">
+<p>To clean string data, we will be using the <code>stringr</code> package (which comes with <code>tidyverse</code>)</p>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="stringr-functions---subsetting"><code>stringr</code> functions - subsetting</h3>
+<div class="medium">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60" data-code-line-numbers="1|2|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href=""></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"stats"</span>, <span class="st">"statistics"</span>, <span class="st">"math"</span>)</span>
+<span id="cb60-2"><a href=""></a><span class="fu">str_sub</span>(x, <span class="dv">1</span>, <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "stat" "stat" "math"</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62" data-code-line-numbers="1|3-6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">flight =</span> <span class="fu">c</span>(<span class="st">"UA1234"</span>, <span class="st">"DL845"</span>, <span class="st">"AA99"</span>))</span>
+<span id="cb62-2"><a href=""></a></span>
+<span id="cb62-3"><a href=""></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(</span>
+<span id="cb62-4"><a href=""></a>  <span class="at">airline =</span> <span class="fu">str_sub</span>(flight, <span class="dv">1</span>,<span class="dv">2</span>),</span>
+<span id="cb62-5"><a href=""></a>  <span class="at">flight_num =</span> <span class="fu">str_sub</span>(flight, <span class="dv">3</span>)</span>
+<span id="cb62-6"><a href=""></a>)</span>
+<span id="cb62-7"><a href=""></a></span>
+<span id="cb62-8"><a href=""></a><span class="fu">print</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  flight airline flight_num
+1 UA1234      UA       1234
+2  DL845      DL        845
+3   AA99      AA         99</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>You can also use <strong>negative values</strong> to count backwards from the end of the string.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href=""></a><span class="co"># neg1 is the last character</span></span>
+<span id="cb64-2"><a href=""></a><span class="fu">str_sub</span>(x, <span class="sc">-</span><span class="dv">3</span>, <span class="sc">-</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "ats" "ics" "ath"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="stringr-functions---detecting-string-matches"><code>stringr</code> functions - detecting string matches</h3>
+<div class="mediumL">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66" data-code-line-numbers="1|2|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href=""></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"stats"</span>, <span class="st">"statistics"</span>, <span class="st">"math"</span>)</span>
+<span id="cb66-2"><a href=""></a><span class="fu">str_detect</span>(x, <span class="st">"stat"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  TRUE  TRUE FALSE</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68" data-code-line-numbers="1|3-4|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href=""></a>class <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"MA500"</span>, <span class="st">"MA541"</span>,<span class="st">"MATH"</span>)</span>
+<span id="cb68-2"><a href=""></a></span>
+<span id="cb68-3"><a href=""></a><span class="co"># detect if numbers exist in string</span></span>
+<span id="cb68-4"><a href=""></a><span class="fu">str_detect</span>(class, <span class="st">"[0-9]+"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  TRUE  TRUE FALSE</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p><code>str_detect</code> returns BOOLEAN variables, so it is helpful to use when we are filtering. For example:</p>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href=""></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb70-2"><a href=""></a>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(flight, <span class="st">"UA"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  flight airline flight_num
+1 UA1234      UA       1234</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="regex-basics---regular-expressions">Regex Basics - Regular Expressions</h3>
+<div class="medium">
+<p><strong>What is regex?</strong></p>
+<ul>
+<li>concise language for describing patterns in strings</li>
+</ul>
+<div class="fragment">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Pattern</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>[0-9]</code> or <code>\\d</code></td>
+<td>any digit from 0 - 9</td>
+</tr>
+<tr class="even">
+<td><code>[A-Z]</code></td>
+<td>any UPPERCASE letter from A - Z</td>
+</tr>
+<tr class="odd">
+<td><code>[a-z]</code></td>
+<td>any LOWERCASE letter from A - Z</td>
+</tr>
+<tr class="even">
+<td><code>+</code></td>
+<td>one or more <em>(usually used in combination of above patterns)</em></td>
+</tr>
+<tr class="odd">
+<td><code>?</code></td>
+<td>zero or more</td>
+</tr>
+<tr class="even">
+<td><code>*</code></td>
+<td>zero or more</td>
+</tr>
+<tr class="odd">
+<td><code>^</code></td>
+<td>start of string</td>
+</tr>
+<tr class="even">
+<td><code>$</code></td>
+<td>end of string</td>
+</tr>
+<tr class="odd">
+<td><code>.</code></td>
+<td>every character except a new line</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="back-to-str_detect-quickly">back to <code>str_detect</code> quickly</h3>
+<div class="mediumL">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href=""></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb72-2"><a href=""></a>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(flight, <span class="st">"^UA"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  flight airline flight_num
+1 UA1234      UA       1234</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb74" data-code-line-numbers="1|2|3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href=""></a>hobbies <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"cooking"</span>, <span class="st">"reading"</span>, <span class="st">"eating"</span>, <span class="st">"dance"</span>, <span class="st">"sport"</span>)</span>
+<span id="cb74-2"><a href=""></a><span class="fu">str_detect</span>(hobbies, <span class="st">"ing$"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  TRUE  TRUE  TRUE FALSE FALSE</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="stringr-functions---detecting-string-matches-1"><code>stringr</code> functions - detecting string matches</h3>
+<div class="medium">
+<p>We can also use the functions <code>str_starts</code> or <code>str_ends</code> to detect patterns in the beginning or end of strings.</p>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href=""></a>hobbies <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"cooking"</span>, <span class="st">"reading"</span>, <span class="st">"eating"</span>, <span class="st">"dance"</span>, <span class="st">"sport"</span>)</span>
+<span id="cb76-2"><a href=""></a><span class="fu">str_starts</span>(hobbies, <span class="st">"cook"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  TRUE FALSE FALSE FALSE FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href=""></a><span class="fu">str_ends</span>(hobbies, <span class="st">"ing"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  TRUE  TRUE  TRUE FALSE FALSE</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="stringr-functions---mutating-string-matches"><code>stringr</code> functions - mutating string matches</h3>
+<div class="medium">
+<p>We can use <code>str_sub</code> to also change the content of the data.</p>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb80" data-code-line-numbers="1|2|3|1-3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href=""></a>hobbies <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"cooking"</span>, <span class="st">"reading"</span>, <span class="st">"eating"</span>)</span>
+<span id="cb80-2"><a href=""></a><span class="fu">str_sub</span>(hobbies, <span class="sc">-</span><span class="dv">3</span>, <span class="sc">-</span><span class="dv">1</span>) <span class="ot">&lt;-</span> <span class="st">""</span></span>
+<span id="cb80-3"><a href=""></a><span class="fu">print</span>(hobbies)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "cook" "read" "eat" </code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p>Let’s try the same process but using <code>str_replace</code> instead</p>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb82" data-code-line-numbers="1|2|3|1-6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href=""></a>hobbies <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"cooking"</span>, <span class="st">"reading"</span>, <span class="st">"eating"</span>)</span>
+<span id="cb82-2"><a href=""></a><span class="fu">str_replace</span>(hobbies, <span class="st">"ing"</span>, <span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "cook" "read" "eat" </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb84" data-code-line-numbers="1|2|3|1-6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href=""></a><span class="fu">print</span>(hobbies)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "cooking" "reading" "eating" </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb86" data-code-line-numbers="1|2|3|1-6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href=""></a>hobbies <span class="ot">&lt;-</span> <span class="fu">str_replace</span>(hobbies, <span class="st">"ing"</span>, <span class="st">""</span>)</span>
+<span id="cb86-2"><a href=""></a><span class="fu">print</span>(hobbies)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "cook" "read" "eat" </code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><code>str_replace</code> only replaces the <strong>first</strong> instance or the first matched pattern in each string - if you want to replace <strong>all</strong> instances, use <code>str_replace_all</code></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="combing-string-detection-with-operators">Combing string detection with operators</h3>
+<div class="medium">
+<div class="small">
+<p>We can look for multiple patterns at once. For example,</p>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href=""></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"MA500"</span>, <span class="st">"BA124"</span>, <span class="st">"MA354"</span>, <span class="st">"PY100"</span>)</span>
+<span id="cb88-2"><a href=""></a><span class="fu">str_detect</span>(x, <span class="st">"MA|PY"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  TRUE FALSE  TRUE  TRUE</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div class="small">
+<p>Let’s detect string variables that match only Males.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href=""></a>gender <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"math"</span>, <span class="st">"MALE"</span>, <span class="st">"m"</span>, <span class="st">"female"</span>, <span class="st">"Male"</span>, <span class="st">"Female"</span>, <span class="st">"Male1"</span>)</span>
+<span id="cb90-2"><a href=""></a><span class="fu">str_detect</span>(gender, <span class="st">"m"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  TRUE FALSE  TRUE  TRUE FALSE  TRUE FALSE</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div class="small">
+<p>Notice, the second element returns <code>FALSE</code> but we expect it to be true. That is because our string detection is <strong>case-sensitive.</strong> Good practice is to first bring everything to lower case using the function <code>str_to_lower</code>.</p>
+</div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href=""></a>gender <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"math"</span>, <span class="st">"MALE"</span>, <span class="st">"m"</span>, <span class="st">"female"</span>, <span class="st">"Male"</span>, <span class="st">"Female"</span>, <span class="st">"Male1"</span>)</span>
+<span id="cb92-2"><a href=""></a><span class="fu">str_detect</span>(<span class="fu">str_to_lower</span>(gender), <span class="st">"m"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div class="small">
+<p>Now, we see everything returns <code>TRUE</code> when we expect the Female strings to be <code>FALSE</code>. That is because providing <code>str_detect</code> with only <code>m</code> will just check if the variable contains <code>m</code>.</p>
+</div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href=""></a>gender <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"math"</span>, <span class="st">"MALE"</span>, <span class="st">"m"</span>, <span class="st">"female"</span>, <span class="st">"Male"</span>, <span class="st">"Female"</span>, <span class="st">"Male1"</span>)</span>
+<span id="cb94-2"><a href=""></a><span class="fu">str_detect</span>(<span class="fu">str_to_lower</span>(gender), <span class="st">"^m"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div class="small">
+<p>We added in <code>^</code> to indicate the string should start with <code>m</code>, but it also returns <code>TRUE</code> for the first element. Let’s fix this up one more time.</p>
+</div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href=""></a>gender <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"math"</span>, <span class="st">"MALE"</span>, <span class="st">"m"</span>, <span class="st">"female"</span>, <span class="st">"Male"</span>, <span class="st">"Female"</span>, <span class="st">"Male1"</span>, <span class="st">"Male1234"</span>)</span>
+<span id="cb96-2"><a href=""></a><span class="co">#str_detect(str_to_lower(gender), "^^(mal)|^(male)$")</span></span>
+<span id="cb96-3"><a href=""></a><span class="fu">str_detect</span>(<span class="fu">str_to_lower</span>(gender), <span class="st">"^(m|male)$|(male.+)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE  TRUE  TRUE FALSE  TRUE FALSE  TRUE  TRUE</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 data-auto-animate="true" id="re-categorizing-in-a-data-set">Re-categorizing in a data set</h3>
+<div class="medium">
+<p>Let’s say we want to clean the gender vector by standardizing its values — replacing each messy or inconsistent entry with a consistent label (e.g., ‘Male’ or ‘Female’). For this, we will use <code>case_when()</code> which is like an <code>ifelse</code> statement but easier to implement with many cases.</p>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 data-auto-animate="true" id="re-categorizing-in-a-data-set-1">Re-categorizing in a data set</h3>
+<div data-id="case">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href=""></a>gen_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">gender =</span> <span class="fu">c</span>(</span>
+<span id="cb98-2"><a href=""></a>  <span class="st">"M"</span>, <span class="st">"male"</span>, <span class="st">"FEMALE"</span>, <span class="st">"f"</span>, <span class="st">"Fem"</span>, <span class="st">"maLe"</span>, </span>
+<span id="cb98-3"><a href=""></a>  <span class="st">"Feemale"</span>, <span class="st">"fem."</span>, <span class="st">"MALE"</span>, <span class="st">"m."</span>, <span class="st">"femail"</span>, </span>
+<span id="cb98-4"><a href=""></a>  <span class="st">"Unknown"</span>, <span class="st">"?"</span>, <span class="st">"u"</span>, <span class="st">"U."</span>, <span class="st">"N/A"</span>, <span class="st">"none"</span>, <span class="st">""</span>, </span>
+<span id="cb98-5"><a href=""></a>  <span class="st">"Other"</span>,<span class="st">"prefer_not"</span>, </span>
+<span id="cb98-6"><a href=""></a>  <span class="st">"MALE"</span>, <span class="st">"femAle"</span>, <span class="st">"Prefers not"</span>, <span class="st">"Othr"</span>, <span class="st">"na"</span></span>
+<span id="cb98-7"><a href=""></a>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 data-auto-animate="true" id="re-categorizing-in-a-data-set-2">Re-categorizing in a data set</h3>
+<div data-id="case">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href=""></a>gen_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">gender =</span> <span class="fu">c</span>(</span>
+<span id="cb99-2"><a href=""></a>  <span class="st">"M"</span>, <span class="st">"male"</span>, <span class="st">"FEMALE"</span>, <span class="st">"f"</span>, <span class="st">"Fem"</span>, <span class="st">"maLe"</span>, </span>
+<span id="cb99-3"><a href=""></a>  <span class="st">"Feemale"</span>, <span class="st">"fem."</span>, <span class="st">"MALE"</span>, <span class="st">"m."</span>, <span class="st">"femail"</span>, </span>
+<span id="cb99-4"><a href=""></a>  <span class="st">"Unknown"</span>, <span class="st">"?"</span>, <span class="st">"u"</span>, <span class="st">"U."</span>, <span class="st">"N/A"</span>, <span class="st">"none"</span>, <span class="st">""</span>, </span>
+<span id="cb99-5"><a href=""></a>  <span class="st">"Other"</span>,<span class="st">"prefer_not"</span>, </span>
+<span id="cb99-6"><a href=""></a>  <span class="st">"MALE"</span>, <span class="st">"femAle"</span>, <span class="st">"Prefers not"</span>, <span class="st">"Othr"</span>, <span class="st">"na"</span></span>
+<span id="cb99-7"><a href=""></a>))</span>
+<span id="cb99-8"><a href=""></a></span>
+<span id="cb99-9"><a href=""></a>gen_df <span class="ot">&lt;-</span> gen_df <span class="sc">%&gt;%</span> </span>
+<span id="cb99-10"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">gender_clean =</span> <span class="fu">case_when</span>(</span>
+<span id="cb99-11"><a href=""></a>    </span>
+<span id="cb99-12"><a href=""></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 data-auto-animate="true" id="re-categorizing-in-a-data-set-3">Re-categorizing in a data set</h3>
+<div data-id="case">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href=""></a>gen_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">gender =</span> <span class="fu">c</span>(</span>
+<span id="cb100-2"><a href=""></a>  <span class="st">"M"</span>, <span class="st">"male"</span>, <span class="st">"FEMALE"</span>, <span class="st">"f"</span>, <span class="st">"Fem"</span>, <span class="st">"maLe"</span>, </span>
+<span id="cb100-3"><a href=""></a>  <span class="st">"Feemale"</span>, <span class="st">"fem."</span>, <span class="st">"MALE"</span>, <span class="st">"m."</span>, <span class="st">"femail"</span>, </span>
+<span id="cb100-4"><a href=""></a>  <span class="st">"Unknown"</span>, <span class="st">"?"</span>, <span class="st">"u"</span>, <span class="st">"U."</span>, <span class="st">"N/A"</span>, <span class="st">"none"</span>, <span class="st">""</span>, </span>
+<span id="cb100-5"><a href=""></a>  <span class="st">"Other"</span>,<span class="st">"prefer_not"</span>, </span>
+<span id="cb100-6"><a href=""></a>  <span class="st">"MALE"</span>, <span class="st">"femAle"</span>, <span class="st">"Prefers not"</span>, <span class="st">"Othr"</span>, <span class="st">"na"</span></span>
+<span id="cb100-7"><a href=""></a>))</span>
+<span id="cb100-8"><a href=""></a></span>
+<span id="cb100-9"><a href=""></a>gen_df <span class="ot">&lt;-</span> gen_df <span class="sc">%&gt;%</span> </span>
+<span id="cb100-10"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">gender_clean =</span> <span class="fu">case_when</span>(</span>
+<span id="cb100-11"><a href=""></a>    <span class="fu">str_detect</span>(<span class="fu">str_to_lower</span>(gender), <span class="st">"^(m)|^(male)$"</span>)</span>
+<span id="cb100-12"><a href=""></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 data-auto-animate="true" id="re-categorizing-in-a-data-set-4">Re-categorizing in a data set</h3>
+<div data-id="case">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href=""></a>gen_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">gender =</span> <span class="fu">c</span>(</span>
+<span id="cb101-2"><a href=""></a>  <span class="st">"M"</span>, <span class="st">"male"</span>, <span class="st">"FEMALE"</span>, <span class="st">"f"</span>, <span class="st">"Fem"</span>, <span class="st">"maLe"</span>, </span>
+<span id="cb101-3"><a href=""></a>  <span class="st">"Feemale"</span>, <span class="st">"fem."</span>, <span class="st">"MALE"</span>, <span class="st">"m."</span>, <span class="st">"femail"</span>, </span>
+<span id="cb101-4"><a href=""></a>  <span class="st">"Unknown"</span>, <span class="st">"?"</span>, <span class="st">"u"</span>, <span class="st">"U."</span>, <span class="st">"N/A"</span>, <span class="st">"none"</span>, <span class="st">""</span>, </span>
+<span id="cb101-5"><a href=""></a>  <span class="st">"Other"</span>,<span class="st">"prefer_not"</span>, </span>
+<span id="cb101-6"><a href=""></a>  <span class="st">"MALE"</span>, <span class="st">"femAle"</span>, <span class="st">"Prefers not"</span>, <span class="st">"Othr"</span>, <span class="st">"na"</span></span>
+<span id="cb101-7"><a href=""></a>))</span>
+<span id="cb101-8"><a href=""></a></span>
+<span id="cb101-9"><a href=""></a>gen_df <span class="ot">&lt;-</span> gen_df <span class="sc">%&gt;%</span> </span>
+<span id="cb101-10"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">gender_clean =</span> <span class="fu">case_when</span>(</span>
+<span id="cb101-11"><a href=""></a>    <span class="fu">str_detect</span>(<span class="fu">str_to_lower</span>(gender), <span class="st">"^(m)|^(male)$"</span>) <span class="sc">~</span> <span class="st">"Male"</span></span>
+<span id="cb101-12"><a href=""></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>        gender gender_clean
+1            M         Male
+2         male         Male
+3       FEMALE         &lt;NA&gt;
+4            f         &lt;NA&gt;
+5          Fem         &lt;NA&gt;
+6         maLe         Male
+7      Feemale         &lt;NA&gt;
+8         fem.         &lt;NA&gt;
+9         MALE         Male
+10          m.         Male
+11      femail         &lt;NA&gt;
+12     Unknown         &lt;NA&gt;
+13           ?         &lt;NA&gt;
+14           u         &lt;NA&gt;
+15          U.         &lt;NA&gt;
+16         N/A         &lt;NA&gt;
+17        none         &lt;NA&gt;
+18                     &lt;NA&gt;
+19       Other         &lt;NA&gt;
+20  prefer_not         &lt;NA&gt;
+21        MALE         Male
+22      femAle         &lt;NA&gt;
+23 Prefers not         &lt;NA&gt;
+24        Othr         &lt;NA&gt;
+25          na         &lt;NA&gt;</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 data-auto-animate="true" id="re-categorizing-in-a-data-set-5">Re-categorizing in a data set</h3>
+<div data-id="case">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href=""></a>gen_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">gender =</span> <span class="fu">c</span>(</span>
+<span id="cb103-2"><a href=""></a>  <span class="st">"M"</span>, <span class="st">"male"</span>, <span class="st">"FEMALE"</span>, <span class="st">"f"</span>, <span class="st">"Fem"</span>, <span class="st">"maLe"</span>, </span>
+<span id="cb103-3"><a href=""></a>  <span class="st">"Feemale"</span>, <span class="st">"fem."</span>, <span class="st">"MALE"</span>, <span class="st">"m."</span>, <span class="st">"femail"</span>, </span>
+<span id="cb103-4"><a href=""></a>  <span class="st">"Unknown"</span>, <span class="st">"?"</span>, <span class="st">"u"</span>, <span class="st">"U."</span>, <span class="st">"N/A"</span>, <span class="st">"none"</span>, <span class="st">""</span>, </span>
+<span id="cb103-5"><a href=""></a>  <span class="st">"Other"</span>,<span class="st">"prefer_not"</span>, </span>
+<span id="cb103-6"><a href=""></a>  <span class="st">"MALE"</span>, <span class="st">"femAle"</span>, <span class="st">"Prefers not"</span>, <span class="st">"Othr"</span>, <span class="st">"na"</span></span>
+<span id="cb103-7"><a href=""></a>))</span>
+<span id="cb103-8"><a href=""></a></span>
+<span id="cb103-9"><a href=""></a>gen_df <span class="ot">&lt;-</span> gen_df <span class="sc">%&gt;%</span> </span>
+<span id="cb103-10"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">gender_clean =</span> <span class="fu">case_when</span>(</span>
+<span id="cb103-11"><a href=""></a>    <span class="fu">str_detect</span>(<span class="fu">str_to_lower</span>(gender), <span class="st">"^(m)|^(male)$"</span>) <span class="sc">~</span> <span class="st">"Male"</span>, </span>
+<span id="cb103-12"><a href=""></a>    <span class="fu">str_detect</span>(<span class="fu">str_to_lower</span>(gender), <span class="st">"^(f|female)$|(^fem)|(^fe+m)"</span>) <span class="sc">~</span> <span class="st">"Female"</span></span>
+<span id="cb103-13"><a href=""></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 data-auto-animate="true" id="re-categorizing-in-a-data-set-6">Re-categorizing in a data set</h3>
+<div data-id="case">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href=""></a>gen_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">gender =</span> <span class="fu">c</span>(</span>
+<span id="cb104-2"><a href=""></a>  <span class="st">"M"</span>, <span class="st">"male"</span>, <span class="st">"FEMALE"</span>, <span class="st">"f"</span>, <span class="st">"Fem"</span>, <span class="st">"maLe"</span>, </span>
+<span id="cb104-3"><a href=""></a>  <span class="st">"Feemale"</span>, <span class="st">"fem."</span>, <span class="st">"MALE"</span>, <span class="st">"m"</span>, <span class="st">"femail"</span>, </span>
+<span id="cb104-4"><a href=""></a>  <span class="st">"Unknown"</span>, <span class="st">"?"</span>, <span class="st">"u"</span>, <span class="st">"U."</span>, <span class="st">"N/A"</span>, <span class="st">"none"</span>, <span class="st">""</span>, </span>
+<span id="cb104-5"><a href=""></a>  <span class="st">"Other"</span>,<span class="st">"prefer_not"</span>, </span>
+<span id="cb104-6"><a href=""></a>  <span class="st">"MALE"</span>, <span class="st">"femAle"</span>, <span class="st">"Prefers not"</span>, <span class="st">"Othr"</span>, <span class="st">"na"</span></span>
+<span id="cb104-7"><a href=""></a>))</span>
+<span id="cb104-8"><a href=""></a></span>
+<span id="cb104-9"><a href=""></a>gen_df <span class="ot">&lt;-</span> gen_df <span class="sc">%&gt;%</span> </span>
+<span id="cb104-10"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">gender_clean =</span> <span class="fu">case_when</span>(</span>
+<span id="cb104-11"><a href=""></a>    <span class="fu">str_detect</span>(<span class="fu">str_to_lower</span>(gender), <span class="st">"^(m)|^(male)$"</span>) <span class="sc">~</span> <span class="st">"Male"</span>, </span>
+<span id="cb104-12"><a href=""></a>    <span class="fu">str_detect</span>(<span class="fu">str_to_lower</span>(gender), <span class="st">"^(f|female)$|(^fem)|(^fe+m)"</span>) <span class="sc">~</span> <span class="st">"Female"</span></span>
+<span id="cb104-13"><a href=""></a>  ), </span>
+<span id="cb104-14"><a href=""></a>  <span class="at">gender_clean =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(gender_clean), <span class="st">"Unknown"</span>, gender_clean)</span>
+<span id="cb104-15"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>        gender gender_clean
+1            M         Male
+2         male         Male
+3       FEMALE       Female
+4            f       Female
+5          Fem       Female
+6         maLe         Male
+7      Feemale       Female
+8         fem.       Female
+9         MALE         Male
+10           m         Male
+11      femail       Female
+12     Unknown      Unknown
+13           ?      Unknown
+14           u      Unknown
+15          U.      Unknown
+16         N/A      Unknown
+17        none      Unknown
+18                  Unknown
+19       Other      Unknown
+20  prefer_not      Unknown
+21        MALE         Male
+22      femAle       Female
+23 Prefers not      Unknown
+24        Othr      Unknown
+25          na      Unknown</code></pre>
+</div>
+</div>
+</section>
+<section id="re-categorizing-in-a-data-set-7" class="slide level2">
+<h2>Re-categorizing in a data set</h2>
+<div class="medium">
+<p>Let’s break down the female regex a bit further.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href=""></a><span class="fu">str_detect</span>(<span class="fu">str_to_lower</span>(gender), <span class="st">"^(f|female)$|(^fem)|(^fe+m)"</span>) <span class="sc">~</span> <span class="st">"Female"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href=""></a>just_female <span class="ot">&lt;-</span> gen_df<span class="sc">$</span>gender[gen_df<span class="sc">$</span>gender_clean <span class="sc">==</span> <span class="st">"Female"</span>]</span>
+<span id="cb107-2"><a href=""></a><span class="fu">print</span>(just_female)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "FEMALE"  "f"       "Fem"     "Feemale" "fem."    "femail"  "femAle" </code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div class="small">
+<p>We know that <code>^f</code> means if the string STARTS with f (use with caution because this will capture everything that starts with f), and <code>female$</code> essentially just captures the appropriate string we would like. But,</p>
+<p><code>"^(f|female)$|(^fem)|(^fe+m)"</code> -&gt; what is this??</p>
+</div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href=""></a><span class="co"># if we set up our pattern the same way we set up the male example previously, we get:</span></span>
+<span id="cb109-2"><a href=""></a><span class="fu">str_detect</span>(<span class="fu">str_to_lower</span>(just_female), <span class="st">"^(f|female)$"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  TRUE  TRUE FALSE FALSE FALSE FALSE  TRUE</code></pre>
+</div>
+</div>
+<p>We need to capture: <code>Fem</code>, <code>Feemale</code>, <code>fem.</code>, and <code>femail</code> as well.</p>
+<ul>
+<li><p>Things I recognized:</p>
+<ul>
+<li>All of these started with <code>fem</code> , so : <code>^fem</code></li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb111"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href=""></a><span class="fu">str_detect</span>(<span class="fu">str_to_lower</span>(just_female), <span class="st">"^(f|female)$|(^fem)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE</code></pre>
+</div>
+</div>
+<p>However, we are still not capturing <code>Feemale</code> .</p>
+</div>
+<div class="fragment">
+<p>We will add in another condition</p>
+<ul>
+<li><code>^fe+m</code></li>
+<li>This states that the letter <code>e</code> can appear one or more times</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb113"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href=""></a><span class="fu">str_detect</span>(<span class="fu">str_to_lower</span>(just_female), <span class="st">"^(f|female)$|(^fem)|(^fe+m)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
+</div>
+</div>
+</div>
+</div>
 
 <script type="webr-data">
 eyJvcHRpb25zIjp7ImJhc2VVcmwiOiJodHRwczovL3dlYnIuci13YXNtLm9yZy92MC41LjQvIn0sInBhY2thZ2VzIjp7InBrZ3MiOlsiZXZhbHVhdGUiLCJrbml0ciIsImh0bWx0b29scyJdLCJyZXBvcyI6W119LCJyZW5kZXJfZGYiOiJkZWZhdWx0In0=

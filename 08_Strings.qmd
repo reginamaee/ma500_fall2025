@@ -1,0 +1,391 @@
+# Strings {.unnumbered}
+
+Often times, we come across messy or inconsistent data. This can be due to a number of potential reasons, but more often than not, it is due to lack of data validations, user-entry errors, etc. In order to formally analyze the data. it is imperative that the data be cleaned or put into a standard form.
+
+To manipulate, clean, or analyze string variables, we will be using the `stringr` library (which is part of the `tidyverse` universe!).
+
+```{r, echo = TRUE, results = 'hide'}
+library(tidyverse)
+```
+
+## Subsetting strings
+
+We can subset (grab portions of string variables) strings by using the `str_sub` function.
+
+### Using `str_sub()`
+
+::: callout-example-white
+```{r, echo = TRUE, eval = TRUE}
+x <- c("stats", "statistics", "math")
+str_sub(x, 1, 4)
+```
+
+-   `1` means start at the first position
+-   `4` means end at the fourth position
+
+We can also grab backwards
+
+```{r, echo = TRUE, eval = TRUE}
+str_sub(x, -3, -1)
+```
+
+-   `-3` means the 3rd to the last position
+
+-   `-1` means the last position
+
+Using `str_sub()` is useful when we need to split up strings! For example, let's say we have different flight codes: `UA1234", "DL845", "AA99"` where the first two letters correspond to an airline and the numbers indicate the flight number. We can use the function to split it up and create new variables to store it.
+
+```{r, echo = TRUE, eval = TRUE}
+df <- data.frame(flight = c("UA1234", "DL845", "AA99"))
+
+df <- df %>% mutate(
+  airline = str_sub(flight, 1,2),
+  flight_num = str_sub(flight, 3)
+)
+
+print(df)
+```
+:::
+
+## Detecting string matches
+
+Often times, we may want to iterate through different string variables by a specific pattern we recognize. We can do so by using the `str_detect()` function.
+
+### Using `str_detect()`
+
+::: callout-example-white
+```{r, echo = TRUE, eval = TRUE}
+x <- c("stats", "statistics", "math")
+str_detect(x, "stat")
+```
+
+The output returns a BOOLEAN variable that indicates if the variable at that position detects the given pattern. We can see that it returns `TRUE` for the first two elements and `FALSE` for the last.
+
+We can also specify if we want to find numbers or digits in the string.
+
+```{r, echo = TRUE, eval = TRUE}
+class <- c("MA500", "MA541","MATH")
+
+# detect if numbers exist in string
+str_detect(class, "[0-9]+")
+```
+
+This also returns `TRUE` for the first two elements and `FALSE` for the last, since the string `MATH` does not contain any digits.
+
+Since the output of `str_detect` is boolean, it is useful to use the function when we are filtering through data.
+
+```{r, echo. = TRUE, eval = TRUE}
+df %>% 
+  filter(str_detect(flight, "UA"))
+```
+:::
+
+## Regex Basics or Regular Expressions
+
+**What is Regex?**
+
+-   It is a concise language for describing patterns in strings
+
+Regex is most helpful for generalizing variations of text you see into one pattern. For instance, different spellings, abbreviations, typos, or characters can be captured into a regex rule, BUT the syntax can be a bit complex.
+
+::: callout-note
+### Some basic Regex syntax
+
+| Pattern | Description |
+|----|----|
+| `[0-9]` or `\\d` | any digit from 0 - 9 |
+| `[A-Z]` | any UPPERCASE letter from A - Z |
+| `[a-z]` | any LOWERCASE letter from A - Z |
+| `+` | one or more *(usually used in combination of above patterns)* |
+| `?` | zero or one |
+| `*` | zero or more |
+| `^` | start of string |
+| `$` | end of string |
+| `.` | every character except a new line |
+:::
+
+In our example above, to detect if the string variable contained digits we utilized `[0-9]` and a `+` at the end, meaning any digit and it can occur one or more times.
+
+::: callout-example-white
+Some regex patterns:
+
+```{r, echo = TRUE, eval=TRUE}
+df %>% 
+  filter(str_detect(flight, "^UA"))
+```
+
+The above code detects strings that START with `UA`.
+
+```{r, echo = TRUE, eval = TRUE}
+hobbies <- c("cooking", "reading", "eating", "dance", "sport")
+str_detect(hobbies, "ing$")
+```
+
+This code detects strings that END with `ing`. (these two functionalities can also be done with the functions: `str_starts()` and `str_ends()`)
+
+```{r}
+hobbies <- c("cooking", "reading", "eating", "dance", "sport")
+str_starts(hobbies, "cook")
+
+str_ends(hobbies, "ing")
+```
+:::
+
+## Mutating string variables
+
+The `str_sub()` function can be used to directly change the values we find/subset.
+
+::: callout-example-white
+In our `hobbies` vector, let's remove any `ing`.
+
+```{r, echo = TRUE, eval = TRUE}
+hobbies <- c("cooking", "reading", "eating")
+str_sub(hobbies, -3, -1) <- ""
+print(hobbies)
+```
+
+-   `str_sub(hobbies, -3,-1) <- ""` indicates that we want to replace the characters at the 3rd to the last position TO the last position with a blank.
+
+But, a more efficient way would be to remove `ing` by using the `str_replace()` function. This will allow us to avoid directly utilizing the positions of the pattern of interest.
+:::
+
+### Using `str_replace()`
+
+::: callout-example-white
+```{r, echo = TRUE, eval = TRUE}
+hobbies <- c("cooking", "reading", "eating")
+str_replace(hobbies, "ing", "")
+print(hobbies)
+
+hobbies <- str_replace(hobbies, "ing", "")
+print(hobbies)
+```
+
+-   `str_replace(hobbies, "ing", "")` indicates we want to replace `ing` with a blank
+
+Note: `str_replace` only replaces the **first** instance or the **first matched pattern** in each string. If you are interested in replacing *all* instances, use `str_replace_all`
+:::
+
+::: callout-warning
+If you notice from the examples above, `str_sub` directly affects the original vector, while `str_replace` does not change the original vector, but rather returns a modified copy. In order to retain these changes, we had to directly overwrite the hobbies vector.
+:::
+
+### Looking for multiple patterns at once
+
+Don't forget that logical operators exist! For example, if we want to subset only Math and Business classes (MA or BA):
+
+```{r, eval = TRUE, echo = TRUE}
+x <- c("MA500", "BA124", "MA354", "PY100")
+str_detect(x, "MA|BA")
+```
+
+But, for a more complex example:
+
+::: callout-example-white
+Let's detect string variables that match all possible iterations of Males.
+
+```{r, echo = TRUE, eval = TRUE}
+gender <- c("math", "MALE", "m", "female", "Male", "Female", "Male1")
+str_detect(gender, "m")
+```
+
+Notice, the second element returns `FALSE` but we expect it to be true. That is because our string detection is **case-sensitive.** Good practice is to first bring everything to lower case using the function `str_to_lower`.
+
+```{r, echo = TRUE, eval = TRUE}
+gender <- c("math", "MALE", "m", "female", "Male", "Female", "Male1") 
+str_detect(gender, "m")
+```
+
+Now, we see everything returns `TRUE` , but we expect the Female strings to be `FALSE`. That is because providing `str_detect` with only `m` will just check if the variable contains `m`.
+
+```{r, echo = TRUE, eval =  TRUE}
+gender <- c("math", "MALE", "m", "female", "Male", "Female", "Male1")
+str_detect(str_to_lower(gender), "^m")
+```
+
+We added in `^` to indicate the string should start with `m`, but it also returns `TRUE` for the first element. Let's fix this up one more time.
+
+```{r, echo = TRUE, eval = TRUE}
+gender <- c("math", "MALE", "m", "female", "Male", "Female", "Male1")
+str_detect(str_to_lower(gender), "^(m)$|^(male)")
+```
+
+-   `^(m)$`: means start with m and ends with m -\> so quite literally just `m`
+
+-   `^(male)`: means starts with `male`
+:::
+
+### Re-coding based off a variable in a data set
+
+For this example, we want to clean this gender vector: `gender = c( "M", "male", "FEMALE", "f", "Fem", "maLe", "Feemale", "fem.", "MALE", "m.", "femail", "Unknown", "?", "u", "U.", "N/A", "none", "", "Other","prefer_not", "MALE", "femAle", "Prefers not", "Othr", "na"` by standardizing its values — replacing each messy or inconsistent entry with a consistent label (e.g., ‘Male’ or ‘Female’). For this, we will use `case_when()` which is like an `ifelse` statement but easier to implement with many cases.
+
+The syntax for `case_when`: `condition ~ value`.
+
+::: callout-example-white
+
+1.  Create a new data frame with a column gender
+
+```{r, echo = TRUE}
+#| code-line-numbers: true
+
+gen_df <- data.frame(gender = c(
+  "M", "male", "FEMALE", "f", "Fem", "maLe", 
+  "Feemale", "fem.", "MALE", "m.", "femail", 
+  "Unknown", "?", "u", "U.", "N/A", "none", "", 
+  "Other","prefer_not", 
+  "MALE", "femAle", "Prefers not", "Othr", "na"
+))
+```
+
+2.  Set up a `mutate` call to create a new column `gender_clean` to store our categorized values in.
+
+```{r, echo = TRUE, eval = FALSE}
+#| code-line-numbers: true
+
+gen_df <- data.frame(gender = c(
+  "M", "male", "FEMALE", "f", "Fem", "maLe", 
+  "Feemale", "fem.", "MALE", "m.", "femail", 
+  "Unknown", "?", "u", "U.", "N/A", "none", "", 
+  "Other","prefer_not", 
+  "MALE", "femAle", "Prefers not", "Othr", "na"
+))
+
+gen_df <- gen_df %>% 
+  mutate(gender_clean = case_when(
+    
+  ))
+  
+```
+
+3.  Work on categorizing all potential male values (M, male, MaLe, MALE, m, MALE) to `Male`
+
+```{r, echo = TRUE}
+#| code-line-numbers: true
+
+gen_df <- data.frame(gender = c(
+  "M", "male", "FEMALE", "f", "Fem", "maLe", 
+  "Feemale", "fem.", "MALE", "m.", "femail", 
+  "Unknown", "?", "u", "U.", "N/A", "none", "", 
+  "Other","prefer_not", 
+  "MALE", "femAle", "Prefers not", "Othr", "na"
+))
+
+gen_df <- gen_df %>% 
+  mutate(gender_clean = case_when(
+    str_detect(str_to_lower(gender), "^(m[^A-Za-z0-9]*$)|^(male)$") ~ "Male"
+  ))
+
+print(gen_df)
+```
+
+Let's break this regex down a bit more:
+
+-   `^(m[^A-Za-z0-9]*$)` means detect the letter m or the letter m with other symbols that are NOT letters or digits.
+
+    -   Earlier, it was mentioned that `^(m)$` means starts with m and ends with m, so simply JUST the letter m.
+
+    -   However, we also included `[^A-Za-z0-9]` which means other symbols that are NOT letters or digits.
+
+        -   the NOT is given by the `^` INSIDE of the brackets `[]` -\> inside the brackets mean NEGATION.
+
+            -   `A-Za-z0-9` means any UPPERCASE letter, LOWERCASE letter, or digit so adding the `^` before that states we do NOT want these values.
+
+        -   `[^A-Za-z0-9]*` - the `*` at the end states that symbols other than letters or digits, such as `?`, `!`, `.`, can appear 0 or more times.
+
+    -   Lastly, we end everything with `$` because we do not want to accept anything else after what we state above.
+
+    For example:
+
+    ```{r, echo = TRUE}
+
+    # does m work? YES
+    str_detect("m", "^(m[^A-Za-z0-9]*$)|^(male)$")
+
+    # does mA work? NO
+    str_detect("mA", "^(m[^A-Za-z0-9]*$)|^(male)$")
+
+    # does m! work? YES
+    str_detect("m!", "^(m[^A-Za-z0-9]*$)|^(male)$")
+
+    # does m!a work? NO
+    str_detect("m!a", "^(m[^A-Za-z0-9]*$)|^(male)$")
+    ```
+
+4.  Our case above should have captured all `Males` so let's work on recoding `Female`.
+
+    ```{r, echo = TRUE}
+    #| code-line-numbers: true
+
+    gen_df <- data.frame(gender = c(
+      "M", "male", "FEMALE", "f", "Fem", "maLe", 
+      "Feemale", "fem.", "MALE", "m.", "femail", 
+      "Unknown", "?", "u", "U.", "N/A", "none", "", 
+      "Other","prefer_not", 
+      "MALE", "femAle", "Prefers not", "Othr", "na"
+    ))
+
+    gen_df <- gen_df %>% 
+      mutate(gender_clean = case_when(
+        str_detect(str_to_lower(gender), "^(m[^A-Za-z0-9]*$)|^(male)$") ~ "Male",
+        str_detect(str_to_lower(gender), "^(f|female)$|(^fem)|(^fe+m)") ~ "Female"
+      ))
+
+    print(gen_df)
+    ```
+
+Let's break this regex down a bit more:
+
+-   `^(f|female)$|(^fem)|(^fe+m)` means that we accept only `f` or only `female`, anything that starts with `fem` or anything that has `fe(with many letters of e)m` .
+
+    -   `(^fem)` anything that starts with `fem` (but can end with different things)
+
+        ```{r, echo = TRUE, eval = TRUE}
+        {r}
+        # does femail work? YES
+        str_detect("femail", "^fem")
+
+        # does femur work? YES
+        str_detect("femur", "^fem")
+        ```
+
+    -   `(^fe+m)` means starts with fe and can include one instance of e or many instances of e (`e+`) but must end with m after
+
+        ```{r, echo = TRUE, eval = TRUE}
+        # does feeem work? YES
+        str_detect("feem", "(^fe+m)")
+
+        # does feeemmm work? YES
+        str_detect("femmm", "(^fe+m)")
+        ```
+
+5.  Next, since the above pattern captured everything that should be Female, let's recategorize everything else into "Other".
+
+    ```{r}
+    #| code-line-numbers: true
+
+    gen_df <- data.frame(gender = c(
+      "M", "male", "FEMALE", "f", "Fem", "maLe", 
+      "Feemale", "fem.", "MALE", "m.", "femail", 
+      "Unknown", "?", "u", "U.", "N/A", "none", "", 
+      "Other","prefer_not", 
+      "MALE", "femAle", "Prefers not", "Othr", "na"
+    ))
+
+    gen_df <- gen_df %>% 
+      mutate(gender_clean = case_when(
+        str_detect(str_to_lower(gender), "^(m[^A-Za-z0-9]*$)|^(male)$") ~ "Male",
+        str_detect(str_to_lower(gender), "^(f|female)$|(^fem)|(^fe+m)") ~ "Female"
+      ), 
+        gender_clean = ifelse(is.na(gender_clean), "Unknown", gender_clean)
+      )
+
+    print(gen_df)
+    ```
+
+In the above code, I am not using another pattern to detect for values that do not belong in either the Male or Female category, instead after I create the cases, I check for what is `NA`. If the variable `gender_clean` is NA, I fill that with `Unknown`. If it is not `NA`, I retain the value already there.
+
+:::
+
+::: callout-note
+There are **many** ways you can detect your string, there is no **one pattern** or **one answer only!**
+:::

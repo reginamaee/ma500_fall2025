@@ -61,8 +61,19 @@
   margin: -1rem -1rem .6rem; /* aligns with your padding */
 }
 
+.mediumL {
+  font-size: 85%
+}
+.medium {
+  font-size: 70%;
+}
+
 .small {
   font-size: 60%;
+}
+
+.xsmall {
+  font-size: 45%;
 }
 
 

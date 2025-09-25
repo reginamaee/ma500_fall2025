@@ -12,6 +12,7 @@ book:
     - 05_Dataframes.qmd
     - 06_Visualizations.qmd
     - 07_EDA.qmd
+    - 08_Strings.qmd
     
 execute: 
   error: true

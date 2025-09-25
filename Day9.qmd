@@ -379,9 +379,9 @@ head(mtcars %>% filter(outlier_iqr == 1))
 head(mtcars %>% filter(outlier_pct == 1))
 ```
 
----
+------------------------------------------------------------------------
 
-### Effect of outliers 
+### Effect of outliers
 
 :::::: callout-example
 What is the correlation between `hp` and `qsec` after we remove outliers?
@@ -407,7 +407,7 @@ cor(mtcars$hp[mtcars$outlier_pct != 1],
 :::
 ::::::
 
----
+------------------------------------------------------------------------
 
 ### Covariance and Correlation
 
@@ -560,7 +560,7 @@ T*ransforming data*, not cleaning, re-arranging, or fixing typos, but taking the
 :::
 ::::
 
----
+------------------------------------------------------------------------
 
 ### Data Transformations
 
@@ -584,9 +584,9 @@ hist(log(diamonds$price), col="blue")
 hist(sqrt(diamonds$price), col="blue")
 ```
 
----
+------------------------------------------------------------------------
 
-### Data Transformation 
+### Data Transformation
 
 ::: fragment
 ```{r, echo = TRUE, eval = TRUE}
@@ -597,7 +597,7 @@ ggplot(diamonds, aes(x = carat, y = price)) +
 ```
 :::
 
----
+------------------------------------------------------------------------
 
 ### Data Transformation
 
@@ -609,7 +609,7 @@ ggplot(diamonds, aes(x = log(carat), y = log(price))) +
 ```
 :::
 
----
+------------------------------------------------------------------------
 
 ### Model Impacts
 
@@ -655,7 +655,7 @@ ggplot(diamonds, aes(x = log(carat), y = log(price))) +
 :::::
 ::::::
 
----
+------------------------------------------------------------------------
 
 ### Model Impacts
 
@@ -700,3 +700,662 @@ pretty_lm(lm(log(price) ~ log(carat),
 :::
 ::::
 :::::::
+
+------------------------------------------------------------------------
+
+### COVID-19 data set
+
+Your group assignment will be focused on data cleaning from a data set from the Guam Department of Public Health. This data set contains information about COVID-19 cases with specific demographic information such as: ethnicity, village, sex, case status, etc.
+
+::: fragment
+**Your task**: Clean the variables `ethnicity`, `village`, and `case_identification: How.was.case.identified?`.
+:::
+
+::: fragment
+**Ethnicity**
+
+We want all ethnicities to be grouped into:
+
+-   Chamorro
+-   Filipino
+-   White
+-   Chuukese
+-   other Pacific Islander
+-   other Asian
+-   Mixed
+:::
+
+::: fragment
+**Village**
+
+For villages, this will be by:
+
+-   all main Guam Villages
+
+-   OOJ (our of jurisdiction)
+:::
+
+<div>
+
+**Case Identifications**
+
+-   Clinical Evaluation
+
+-   Routine surveillance
+
+-   Contact Tracing
+
+</div>
+
+------------------------------------------------------------------------
+
+### String Manipulation
+
+:::: medium
+Often times, we come across *messy* or *inconsistent* data. This can be due to a number of potential reasons, but more often than not, it is due to lack of data validations, user-entry errors, etc. In order to formally analyze the data. it is imperative that the data be cleaned or put into a standard form.
+
+::: fragment
+To clean string data, we will be using the `stringr` package (which comes with `tidyverse`)
+:::
+::::
+
+------------------------------------------------------------------------
+
+### `stringr` functions - subsetting
+
+:::::::: medium
+```{r}
+#| echo: true
+#| eval: false
+#| code-line-numbers: "1|2|"
+x <- c("stats", "statistics", "math")
+str_sub(x, 1, 4)
+```
+
+::: fragment
+```{r}
+x <- c("stats", "statistics", "math")
+str_sub(x, 1, 4)
+```
+:::
+
+::: fragment
+```{r}
+#| echo: true
+#| eval: false
+#| code-line-numbers: "1|3-6"
+
+df <- data.frame(flight = c("UA1234", "DL845", "AA99"))
+
+df <- df %>% mutate(
+  airline = str_sub(flight, 1,2),
+  flight_num = str_sub(flight, 3)
+)
+
+print(df)
+```
+:::
+
+::: fragment
+```{r}
+df <- data.frame(flight = c("UA1234", "DL845", "AA99"))
+
+df <- df %>% mutate(
+  airline = str_sub(flight, 1,2),
+  flight_num = str_sub(flight, 3)
+)
+
+print(df)
+```
+:::
+
+:::: fragment
+::: callout-tip
+You can also use **negative values** to count backwards from the end of the string.
+
+```{r, echo = TRUE}
+# neg1 is the last character
+str_sub(x, -3, -1)
+```
+:::
+::::
+::::::::
+
+------------------------------------------------------------------------
+
+### `stringr` functions - detecting string matches
+
+::::::::: mediumL
+```{r}
+#| echo: true
+#| eval: false
+#| code-line-numbers: "1|2|"
+x <- c("stats", "statistics", "math")
+str_detect(x, "stat")
+```
+
+::: fragment
+```{r}
+x <- c("stats", "statistics", "math")
+str_detect(x, "stat")
+```
+:::
+
+::::::: fragment
+```{r}
+#| echo: true
+#| eval: false
+#| code-line-numbers: "1|3-4|"
+
+class <- c("MA500", "MA541","MATH")
+
+# detect if numbers exist in string
+str_detect(class, "[0-9]+")
+```
+
+::: fragment
+```{r}
+class <- c("MA500", "MA541","MATH")
+
+# detect if numbers exist in string
+str_detect(class, "[0-9]+")
+```
+:::
+
+::::: fragment
+`str_detect` returns BOOLEAN variables, so it is helpful to use when we are filtering. For example:
+
+::: fragment
+```{r}
+#| echo: true
+#| eval: false
+
+df %>% 
+  filter(str_detect(flight, "UA"))
+```
+:::
+
+::: fragment
+```{r}
+df %>% 
+  filter(str_detect(flight, "UA"))
+```
+:::
+:::::
+:::::::
+:::::::::
+
+------------------------------------------------------------------------
+
+### Regex Basics - Regular Expressions
+
+:::: medium
+**What is regex?**
+
+-   concise language for describing patterns in strings
+
+::: fragment
+| Pattern | Description |
+|----|----|
+| `[0-9]` or `\\d` | any digit from 0 - 9 |
+| `[A-Z]` | any UPPERCASE letter from A - Z |
+| `[a-z]` | any LOWERCASE letter from A - Z |
+| `+` | one or more *(usually used in combination of above patterns)* |
+| `?` | zero or more |
+| `*` | zero or more |
+| `^` | start of string |
+| `$` | end of string |
+| `.` | every character except a new line |
+:::
+::::
+
+------------------------------------------------------------------------
+
+### back to `str_detect` quickly
+
+:::::: mediumL
+```{r}
+#| echo: true
+#| eval: false
+
+df %>% 
+  filter(str_detect(flight, "^UA"))
+```
+
+::: fragment
+```{r}
+df %>% 
+  filter(str_detect(flight, "^UA"))
+```
+:::
+
+:::: fragment
+```{r}
+#| echo: true
+#| eval: false
+#| code-line-numbers: "1|2|3"
+hobbies <- c("cooking", "reading", "eating", "dance", "sport")
+str_detect(hobbies, "ing$")
+```
+
+::: fragment
+```{r}
+hobbies <- c("cooking", "reading", "eating", "dance", "sport")
+str_detect(hobbies, "ing$")
+```
+:::
+::::
+::::::
+
+------------------------------------------------------------------------
+
+### `stringr` functions - detecting string matches
+
+:::: medium
+We can also use the functions `str_starts` or `str_ends` to detect patterns in the beginning or end of strings.
+
+::: fragment
+```{r}
+#| echo: true
+#| eval: true
+
+hobbies <- c("cooking", "reading", "eating", "dance", "sport")
+str_starts(hobbies, "cook")
+
+str_ends(hobbies, "ing")
+
+```
+:::
+::::
+
+------------------------------------------------------------------------
+
+### `stringr` functions - mutating string matches
+
+::::::::: medium
+We can use `str_sub` to also change the content of the data.
+
+::: fragment
+```{r}
+#| echo: true
+#| eval: false
+#| code-line-numbers: "1|2|3|1-3"
+hobbies <- c("cooking", "reading", "eating")
+str_sub(hobbies, -3, -1) <- ""
+print(hobbies)
+```
+:::
+
+::: fragment
+```{r}
+hobbies <- c("cooking", "reading", "eating")
+str_sub(hobbies, -3, -1) <- ""
+print(hobbies)
+```
+:::
+
+::: fragment
+Let's try the same process but using `str_replace` instead
+:::
+
+::: fragment
+```{r}
+#| echo: true
+#| eval: true
+#| code-line-numbers: "1|2|3|1-6"
+hobbies <- c("cooking", "reading", "eating")
+str_replace(hobbies, "ing", "")
+print(hobbies)
+
+hobbies <- str_replace(hobbies, "ing", "")
+print(hobbies)
+```
+:::
+
+:::: fragment
+::: callout-note
+`str_replace` only replaces the **first** instance or the first matched pattern in each string - if you want to replace **all** instances, use `str_replace_all`
+:::
+::::
+:::::::::
+
+------------------------------------------------------------------------
+
+### Combing string detection with operators
+
+:::::::::::::::: medium
+::: small
+We can look for multiple patterns at once. For example,
+:::
+
+::: fragment
+```{r}
+#| echo: true
+#| eval: true
+x <- c("MA500", "BA124", "MA354", "PY100")
+str_detect(x, "MA|PY")
+```
+:::
+
+:::: fragment
+::: small
+Let's detect string variables that match only Males.
+:::
+
+```{r}
+#| echo: true
+#| eval: true
+
+gender <- c("math", "MALE", "m", "female", "Male", "Female", "Male1")
+str_detect(gender, "m")
+```
+::::
+
+:::: fragment
+::: small
+Notice, the second element returns `FALSE` but we expect it to be true. That is because our string detection is **case-sensitive.** Good practice is to first bring everything to lower case using the function `str_to_lower`.
+:::
+::::
+
+::: fragment
+```{r}
+#| echo: true
+#| eval: true
+
+gender <- c("math", "MALE", "m", "female", "Male", "Female", "Male1")
+str_detect(str_to_lower(gender), "m")
+```
+:::
+
+:::: fragment
+::: small
+Now, we see everything returns `TRUE` when we expect the Female strings to be `FALSE`. That is because providing `str_detect` with only `m` will just check if the variable contains `m`.
+:::
+::::
+
+::: fragment
+```{r}
+#| echo: true
+#| eval: true
+
+gender <- c("math", "MALE", "m", "female", "Male", "Female", "Male1")
+str_detect(str_to_lower(gender), "^m")
+```
+:::
+
+:::: fragment
+::: small
+We added in `^` to indicate the string should start with `m`, but it also returns `TRUE` for the first element. Let's fix this up one more time.
+:::
+::::
+
+::: fragment
+```{r}
+#| echo: true
+#| eval: true
+
+gender <- c("math", "MALE", "m", "female", "Male", "Female", "Male1", "Male1234")
+#str_detect(str_to_lower(gender), "^^(mal)|^(male)$")
+str_detect(str_to_lower(gender), "^(m|male)$|(male.+)")
+```
+:::
+::::::::::::::::
+
+------------------------------------------------------------------------
+
+### Re-categorizing in a data set {auto-animate="true"}
+
+::: medium
+Let's say we want to clean the gender vector by standardizing its values — replacing each messy or inconsistent entry with a consistent label (e.g., ‘Male’ or ‘Female’). For this, we will use `case_when()` which is like an `ifelse` statement but easier to implement with many cases.
+:::
+
+------------------------------------------------------------------------
+
+### Re-categorizing in a data set {auto-animate="true"}
+
+::: {data-id = "case"}
+
+```{r}
+#| echo: true
+#| eval: false
+
+gen_df <- data.frame(gender = c(
+  "M", "male", "FEMALE", "f", "Fem", "maLe", 
+  "Feemale", "fem.", "MALE", "m.", "femail", 
+  "Unknown", "?", "u", "U.", "N/A", "none", "", 
+  "Other","prefer_not", 
+  "MALE", "femAle", "Prefers not", "Othr", "na"
+))
+```
+
+:::
+
+------------------------------------------------------------------------
+
+### Re-categorizing in a data set {auto-animate="true"}
+
+::: {data-id = "case"}
+
+```{r}
+#| echo: true
+#| eval: false
+
+gen_df <- data.frame(gender = c(
+  "M", "male", "FEMALE", "f", "Fem", "maLe", 
+  "Feemale", "fem.", "MALE", "m.", "femail", 
+  "Unknown", "?", "u", "U.", "N/A", "none", "", 
+  "Other","prefer_not", 
+  "MALE", "femAle", "Prefers not", "Othr", "na"
+))
+
+gen_df <- gen_df %>% 
+  mutate(gender_clean = case_when(
+    
+  ))
+```
+
+:::
+
+------------------------------------------------------------------------
+
+### Re-categorizing in a data set {auto-animate="true"}
+
+::: {data-id = "case"}
+
+```{r}
+#| echo: true
+#| eval: false
+
+gen_df <- data.frame(gender = c(
+  "M", "male", "FEMALE", "f", "Fem", "maLe", 
+  "Feemale", "fem.", "MALE", "m.", "femail", 
+  "Unknown", "?", "u", "U.", "N/A", "none", "", 
+  "Other","prefer_not", 
+  "MALE", "femAle", "Prefers not", "Othr", "na"
+))
+
+gen_df <- gen_df %>% 
+  mutate(gender_clean = case_when(
+    str_detect(str_to_lower(gender), "^(m)|^(male)$")
+  ))
+```
+
+:::
+
+------------------------------------------------------------------------
+
+### Re-categorizing in a data set {auto-animate="true"}
+
+::: {data-id = "case"}
+
+```{r}
+#| echo: true
+#| eval: false
+
+gen_df <- data.frame(gender = c(
+  "M", "male", "FEMALE", "f", "Fem", "maLe", 
+  "Feemale", "fem.", "MALE", "m.", "femail", 
+  "Unknown", "?", "u", "U.", "N/A", "none", "", 
+  "Other","prefer_not", 
+  "MALE", "femAle", "Prefers not", "Othr", "na"
+))
+
+gen_df <- gen_df %>% 
+  mutate(gender_clean = case_when(
+    str_detect(str_to_lower(gender), "^(m)|^(male)$") ~ "Male"
+  ))
+```
+
+:::
+
+```{r}
+gen_df <- data.frame(gender = c(
+  "M", "male", "FEMALE", "f", "Fem", "maLe", 
+  "Feemale", "fem.", "MALE", "m.", "femail", 
+  "Unknown", "?", "u", "U.", "N/A", "none", "", 
+  "Other","prefer_not", 
+  "MALE", "femAle", "Prefers not", "Othr", "na"
+))
+
+gen_df <- gen_df %>% 
+  mutate(gender_clean = case_when(
+    str_detect(str_to_lower(gender), "^(m)|^(male)$") ~ "Male"
+  ))
+
+print(gen_df)
+```
+
+------------------------------------------------------------------------
+
+### Re-categorizing in a data set {auto-animate="true"}
+
+::: {data-id = "case"}
+
+```{r}
+#| echo: true
+#| eval: false
+
+gen_df <- data.frame(gender = c(
+  "M", "male", "FEMALE", "f", "Fem", "maLe", 
+  "Feemale", "fem.", "MALE", "m.", "femail", 
+  "Unknown", "?", "u", "U.", "N/A", "none", "", 
+  "Other","prefer_not", 
+  "MALE", "femAle", "Prefers not", "Othr", "na"
+))
+
+gen_df <- gen_df %>% 
+  mutate(gender_clean = case_when(
+    str_detect(str_to_lower(gender), "^(m)|^(male)$") ~ "Male", 
+    str_detect(str_to_lower(gender), "^(f|female)$|(^fem)|(^fe+m)") ~ "Female"
+  ))
+```
+
+:::
+
+------------------------------------------------------------------------
+
+### Re-categorizing in a data set {auto-animate="true"}
+
+::: {data-id = "case"}
+
+```{r}
+#| echo: true
+#| eval: false
+
+gen_df <- data.frame(gender = c(
+  "M", "male", "FEMALE", "f", "Fem", "maLe", 
+  "Feemale", "fem.", "MALE", "m", "femail", 
+  "Unknown", "?", "u", "U.", "N/A", "none", "", 
+  "Other","prefer_not", 
+  "MALE", "femAle", "Prefers not", "Othr", "na"
+))
+
+gen_df <- gen_df %>% 
+  mutate(gender_clean = case_when(
+    str_detect(str_to_lower(gender), "^(m)|^(male)$") ~ "Male", 
+    str_detect(str_to_lower(gender), "^(f|female)$|(^fem)|(^fe+m)") ~ "Female"
+  ), 
+  gender_clean = ifelse(is.na(gender_clean), "Unknown", gender_clean)
+  )
+```
+
+:::
+
+```{r}
+gen_df <- data.frame(gender = c(
+  "M", "male", "FEMALE", "f", "Fem", "maLe", 
+  "Feemale", "fem.", "MALE", "m", "femail", 
+  "Unknown", "?", "u", "U.", "N/A", "none", "", 
+  "Other","prefer_not", 
+  "MALE", "femAle", "Prefers not", "Othr", "na"
+))
+
+gen_df <- gen_df %>% 
+  mutate(gender_clean = case_when(
+    str_detect(str_to_lower(gender), "^(m)|^(male)$") ~ "Male", 
+    str_detect(str_to_lower(gender), "^(f|female)$|(^fem)|(^fe+m)") ~ "Female"
+  ), 
+  gender_clean = ifelse(is.na(gender_clean), "Unknown", gender_clean)
+  )
+
+print(gen_df)
+```
+
+------------------------------------------------------------------------
+
+## Re-categorizing in a data set
+
+::::::::: medium
+Let's break down the female regex a bit further.
+
+```{r, echo = TRUE, eval = FALSE}
+str_detect(str_to_lower(gender), "^(f|female)$|(^fem)|(^fe+m)") ~ "Female"
+```
+
+::: fragment
+```{r, echo = TRUE, eval = TRUE}
+just_female <- gen_df$gender[gen_df$gender_clean == "Female"]
+print(just_female)
+```
+:::
+
+:::: fragment
+::: small
+We know that `^f` means if the string STARTS with f (use with caution because this will capture everything that starts with f), and `female$` essentially just captures the appropriate string we would like. But,
+
+`"^(f|female)$|(^fem)|(^fe+m)"` -\> what is this??
+:::
+::::
+
+::: fragment
+```{r, echo = TRUE}
+# if we set up our pattern the same way we set up the male example previously, we get:
+str_detect(str_to_lower(just_female), "^(f|female)$")
+```
+
+We need to capture: `Fem`, `Feemale`, `fem.`, and `femail` as well.
+
+-   Things I recognized:
+
+    -   All of these started with `fem` , so : `^fem`
+:::
+
+::: fragment
+```{r, echo = TRUE}
+str_detect(str_to_lower(just_female), "^(f|female)$|(^fem)")
+```
+
+However, we are still not capturing `Feemale` .
+:::
+
+::: fragment
+We will add in another condition
+
+-   `^fe+m`
+-   This states that the letter `e` can appear one or more times
+
+```{r, echo = TRUE}
+str_detect(str_to_lower(just_female), "^(f|female)$|(^fem)|(^fe+m)")
+```
+:::
+:::::::::
