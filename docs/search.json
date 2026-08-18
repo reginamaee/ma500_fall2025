@@ -46,7 +46,7 @@
     "href": "index.html",
     "title": "MA500: Introduction to R",
     "section": "",
-    "text": "MA-500: Introduction to R\nFANUCHÅNAN 2025: 8/20/2025 - 10/11/2025\nInstructor Information\nRegina-Mae Dominguez | dominguezr@triton.uog.edu\nOffice Hours & Location: Online by Appointments",
+    "text": "MA-500: Introduction to R\nFANUCHÅNAN 2026: 8/19/2026 - 10/10/2026\nInstructor Information\nRegina-Mae Dominguez | dominguezr@triton.uog.edu\nOffice Hours & Location: Online by Appointments",
     "crumbs": [
       "MA-500: Introduction to R"
     ]
@@ -56,7 +56,7 @@
     "href": "index.html#course-introduction",
     "title": "MA500: Introduction to R",
     "section": "Course Introduction",
-    "text": "Course Introduction\nThis markdown site will include notes, guides, and resources, while Moodle will be the central hub for the course as well as the platform for uploading and submitting homework assignments. As the course progresses, this site will be regularly updated to ensure it’s helpful, easy to navigate, and accessible whenever you need a reference. While this resource is designed to be useful, I strongly encourage you to take your own notes for a more personalized and detailed study guide.",
+    "text": "Course Introduction\nThis markdown site will include notes, guides, and resources, while Moodle will be the central hub for the course as well as the platform for uploading and submitting homework assignments. As the course progresses, this site will be regularly updated to ensure it’s helpful, easy to navigate, and accessible whenever you need a reference. While this resource is designed to be useful, I strongly encourage you to take your own notes for a more personalized and detailed study guide.\nNice code-note-taking applications include:\n\nObsidian\nNotion\nor even just a .Rmd",
     "crumbs": [
       "MA-500: Introduction to R"
     ]
